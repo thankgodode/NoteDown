@@ -1,20 +1,21 @@
 import EditorComponent from "@/components/EditorComponent";
-import { readFile, writeFile } from "@/services/api";
+import { deleteFile, readFile, writeFile } from "@/services/api";
 import useFetch from "@/services/useFetch";
 import { useLocalSearchParams, useRouter } from "expo-router";
 
 import { useEffect, useState } from "react";
 
+import DeleteModal from "@/components/DeleteModal";
 
 export default function EditNote() {
     const [content, setContent] = useState("")
     const [title, setTitle] = useState("Untitled")
     const [favorite, setFavorite] = useState(false)
     const [folder, setFolder] = useState([])
+    const [showModal, setShowModal] = useState(false)
 
     const { id } = useLocalSearchParams()
     const { data } = useFetch(() => readFile())
-    console.log("Data ", data)
 
     const router = useRouter()
 
@@ -38,17 +39,26 @@ export default function EditNote() {
 
     }
 
+    const deleteOptions = () => {
+        setShowModal(!showModal)
+    }
+
     const deleteNote = async () => {
+
         const filtered = data.filter((el, i) => el.id !== parseInt(id))
+        
+        if (filtered.length < 1) {
+            await deleteFile()
+            router.push("/")
+            return
+        }
+
         const newData = filtered.map((el, i) => {
             return {
                 ...el,
                 id:i+1
             }
         })
-        
-        console.log("New Edit" , newData)
-        console.log("Delete" , filtered)
 
         await writeFile(JSON.stringify(newData))
         router.push("/")
@@ -68,19 +78,26 @@ export default function EditNote() {
 
 
 
-    return content===""? null: (
-        <EditorComponent
-            title={title}
-            setTitle={setTitle}
-            content={content}
-            setContent={setContent}
-            favorite={favorite}
-            setFavorite={setFavorite}
-            folder={folder}
-            setFolder={setFolder}
-            saveNote={editNote}
-            deleteNote={deleteNote}
+    return content === "" ? null : (
+        <>
+            <DeleteModal
+                showModal={showModal}
+                setShowModal={setShowModal}
+                deleteNote={deleteNote}
+            />
+            <EditorComponent
+                title={title}
+                setTitle={setTitle}
+                content={content}
+                setContent={setContent}
+                favorite={favorite}
+                setFavorite={setFavorite}
+                folder={folder}
+                setFolder={setFolder}
+                saveNote={editNote}
+                deleteNote={deleteOptions}
 
-        />
+            />
+        </>
     )
 }

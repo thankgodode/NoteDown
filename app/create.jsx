@@ -5,18 +5,31 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 
 export default function CreateNote() {
-  const [title, setTitle] = useState("Untitled")
-  const [content, setContent] = useState("<h1>Quill Editor for react-native</h1>")
+  const [title, setTitle] = useState("")
+  const [content, setContent] = useState("<p><br></p>")
   const [favorite, setFavorite] = useState(false)
   const [folder, setFolder] = useState([])
 
-
   const router = useRouter()
+
+  // Checks to know whether to save or not save newly created note file
 
   const createNote = async () => {
     const date = new Date().getTime()
-    // const title = title.length < 1 ? "Untitled" : title
-    // console.log(title)
+
+    const plainTextContent = content
+    .replace(/<[^>]+>/g, '') // remove HTML tags
+    .replace(/&nbsp;/g, '')  // remove non-breaking spaces
+    .trim();
+
+    const isTitleEmpty = title.trim() === "";
+    const isContentEmpty = plainTextContent.length < 1;
+
+    // If both are empty, skip saving
+    if (isTitleEmpty && isContentEmpty) {
+    router.push("/");
+    return;
+    }
 
     try {
       const data = await readFile()
@@ -50,6 +63,7 @@ export default function CreateNote() {
       folder={folder}
       setFolder={setFolder}
       saveNote={createNote}
+      route={"create"}
     />
   );
 }

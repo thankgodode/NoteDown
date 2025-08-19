@@ -26,3 +26,11 @@ export const writeFile = async (fileContents) => {
     
 }
 
+export const deleteFile = async() => {
+    const fileUri = await FileSystem.documentDirectory + 'data.json';
+
+    const contents = await FileSystem.deleteAsync(fileUri, {
+        encoding: FileSystem.EncodingType.UTF8,
+    });
+    
+}

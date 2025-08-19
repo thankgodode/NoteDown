@@ -51,23 +51,14 @@ export default function Index() {
         },
     ]
 
-    const {data}  = useFetch(() => readFile())
-
-    // useEffect(() => {
-    //     const file = async () => {
-    //         const rawData = await readFile()
-    //         setData(JSON.parse(rawData))
-    //     }
-
-    //     file()
-    // }, [])
-      
+    const { data } = useFetch(() => readFile())
+    
     return (
         <View style={{flex:1}}>
             <ThemeProvider>
                 <SideMenuProvider>
                     <NavBar title="All notes"/>
-                    <SideMenu />
+                    <SideMenu data={data} />
                     <NoteList data={data} width={width} />
                     <CreateButton />
                 </SideMenuProvider>

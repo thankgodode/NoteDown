@@ -11,7 +11,8 @@ export default function EditorComponent({
     favorite,
     setFavorite,
     saveNote,
-    deleteNote
+    deleteNote,
+    route
 }) {
     const _editor = createRef();  
 
@@ -33,7 +34,7 @@ export default function EditorComponent({
               }
               </TouchableOpacity>
               <TouchableOpacity onPress={deleteNote}>
-                  <MaterialCommunityIcons name="delete-sweep" size={24} color="red"/>
+              {route !== "create" && <MaterialCommunityIcons name="delete-sweep" size={24} color="red" />}
               </TouchableOpacity>
             </View>
             </View>

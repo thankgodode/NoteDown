@@ -11,9 +11,10 @@ import Animated, {
   withTiming
 } from 'react-native-reanimated';
 
-export default function SideMenu() {
+export default function SideMenu({data}) {
   const {visible, setVisible} = useContext(SideMenuContext)
   const [isActive, setIsActive] = useState("")
+  const [content, setContent] = useState("")
 
   const [hide, setHide] = useState(false)
 
@@ -59,8 +60,14 @@ export default function SideMenu() {
     };
   });
 
+   useEffect(() => {
+        if (data) {
+            setContent(data)
+        }
+    }, [data]);
   
-  return (
+  return content === "" ? null :
+    (
     <Animated.View
       style={[styles.sideContainer, animatedStyles]}>
       <TouchableOpacity
@@ -72,7 +79,7 @@ export default function SideMenu() {
             All notes
         </Text>
         <Text style={{color:"white"}}>
-            7
+            {data.length}
         </Text>
         </TouchableOpacity>
       <TouchableOpacity
@@ -84,7 +91,7 @@ export default function SideMenu() {
             Folders
         </Text>
         <Text style={{color:"white"}}>
-            5
+            {data.filter((el, i) => el.folder.length>0).length}
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -96,7 +103,7 @@ export default function SideMenu() {
             Favorites
         </Text>
         <Text style={{color:"white"}}>
-            50
+            {data.filter((el, i) => el.favorite===true).length}
         </Text>
       </TouchableOpacity>
     </Animated.View>
