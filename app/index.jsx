@@ -6,7 +6,8 @@ import { SideMenuProvider } from "@/context/SideMenuContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { readFile } from '@/services/api';
 import useFetch from "@/services/useFetch";
-import { StyleSheet, useWindowDimensions, View } from "react-native";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { FlatList, StyleSheet, Text, useWindowDimensions, View } from "react-native";
 
 export default function Index() {
     const {width,height} = useWindowDimensions()
@@ -59,10 +60,37 @@ export default function Index() {
                 <SideMenuProvider>
                     <NavBar title="All notes"/>
                     <SideMenu data={data} />
-                    <NoteList data={data} width={width} />
+                    <FlatList
+                        numColumns={2}
+                        data={data}
+                        keyExtractor={(item)=> item.id}
+                        columnWrapperStyle={{
+                            gap: 15,
+                            paddingRight: 5,
+                            marginBottom: 5,
+                            justifyContent: "center",
+                        }}
+                        contentContainerStyle={{
+                            paddingBottom: 100,
+                            
+                        }}
+                        renderItem={({item}) =>
+                            <NoteList item={item} width={width} />
+                        }
+                        ListEmptyComponent={<EmptyComponent/>}
+                    />
                     <CreateButton />
                 </SideMenuProvider>
             </ThemeProvider>
+        </View>
+    )
+}
+
+export const EmptyComponent = () => {
+    return (
+        <View style={{height:500, justifyContent:"center", alignItems:"center"}}>
+            <FontAwesome5 name="box-open" size={100} color="black"/>
+            <Text style={{fontSize:20}}>No note file found...</Text>
         </View>
     )
 }

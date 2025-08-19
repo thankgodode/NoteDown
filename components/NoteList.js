@@ -1,59 +1,39 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import { Link, useRouter } from "expo-router";
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Link } from "expo-router";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { WebView } from "react-native-webview";
 
-export default function NoteList({ data, width }) {
-    const router = useRouter()
 
+export default function NoteList({ item }) {
     return (
-        <FlatList
-            numColumns={2}
-            data={data}
-            keyExtractor={(item)=> item.id}
-            columnWrapperStyle={{
-                gap: 15,
-                paddingRight: 5,
-                marginBottom: 5,
-                justifyContent: "center",
-            }}
-            contentContainerStyle={{
-                paddingBottom: 100,
-                
-            }}
-            renderItem={({item}) => {
-                return (
-                    <Link href={`/edit/${item.id}`} asChild>
-                        <TouchableOpacity>
-                            <View>
-                                <View style={styles.fileContainer}>
-                                    <View style={{flex:1}}>
-                                        <WebView
-                                            style={{
-                                                backgroundColor: "transparent",
-                                                overflowY: "hidden",
-                                                overflowX: "hidden",
-                                            }}
-                                            source={{ html: item.content }}
-                                            scalesPageToFit={false}
-                                        />
-                                    </View>
-                                </View>
-                                <View style={styles.detailsWrapper}>
-                                    <Text style={{fontWeight:"bold",fontSize:15}}>{item.title.length<1?"Untitled":item.title}</Text>
-                                    <Text>
-                                        <View style={{flexDirection:"row",gap:10,alignItems:"center"}}>
-                                            <Text>{new Date(item.createdAt).toLocaleDateString()}</Text>
-                                            <Text>{item.favorite && <MaterialIcons name="favorite" size={24} color="#edcc11ff" />}</Text>
-                                        </View>
-                                    </Text>
-                                </View>
+        <Link href={`/edit/${item.id}`} asChild>
+            <Pressable onLongPress={()=> console.log("ID: ", item.id)}>
+                <View>
+                    <View style={styles.fileContainer}>
+                        <View style={{flex:1}}>
+                            <WebView
+                                style={{
+                                    backgroundColor: "transparent",
+                                    overflowY: "hidden",
+                                    overflowX: "hidden",
+                                }}
+                                source={{ html: item.content }}
+                                scalesPageToFit={false}
+                            />
+                        </View>
+                    </View>
+                    <View style={styles.detailsWrapper}>
+                        <Text style={{fontWeight:"bold",fontSize:15}}>{item.title.length<1?"Untitled":item.title}</Text>
+                        <Text>
+                            <View style={{flexDirection:"row",gap:10,alignItems:"center"}}>
+                                <Text>{new Date(item.createdAt).toLocaleDateString()}</Text>
+                                <Text>{item.favorite && <MaterialIcons name="favorite" size={24} color="#edcc11ff" />}</Text>
                             </View>
-                        </TouchableOpacity>
-                    </Link>
-                )
-            }}
-        />
+                        </Text>
+                    </View>
+                </View>
+            </Pressable>
+        </Link>
     )
 }
 
