@@ -1,13 +1,16 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { WebView } from "react-native-webview";
 
-
 export default function NoteList({ item }) {
+    const router = useRouter()
+
     return (
         <Link href={`/edit/${item.id}`} asChild>
-            <Pressable onLongPress={()=> console.log("ID: ", item.id)}>
+            <Pressable onLongPress={() => {
+                router.push(`/edit/${item.id}`)
+            }}>
                 <View>
                     <View style={styles.fileContainer}>
                         <View style={{flex:1}}>

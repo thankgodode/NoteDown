@@ -2,14 +2,18 @@ import CreateButton from "@/components/CreateButton";
 import NavBar from "@/components/NavBar";
 import NoteList from "@/components/NoteList";
 import SideMenu from "@/components/SideMenu";
+
 import { SideMenuProvider } from "@/context/SideMenuContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { readFile } from '@/services/api';
 import useFetch from "@/services/useFetch";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { useState } from "react";
 import { FlatList, StyleSheet, Text, useWindowDimensions, View } from "react-native";
 
 export default function Index() {
+    const [isPressed, setIsPressed] = useState(false)
+    const [defaultSelection, setDefaultSelection] = useState(null)
     const {width,height} = useWindowDimensions()
     const placeholder = [
         {
@@ -74,9 +78,16 @@ export default function Index() {
                             paddingBottom: 100,
                             
                         }}
-                        renderItem={({item}) =>
-                            <NoteList item={item} width={width} />
-                        }
+                        renderItem={({ item }) => {
+                            return (
+                                <>
+                                   <NoteList
+                                        item={item}
+                                        width={width}
+                                    />
+                                </>
+                            )
+                        }}
                         ListEmptyComponent={<EmptyComponent/>}
                     />
                     <CreateButton />

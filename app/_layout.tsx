@@ -9,6 +9,7 @@ export default function RootLayout() {
             <Stack.Screen name="folders" options={{headerShown:false}}/>
             <Stack.Screen name="create" options={{headerShown:false}}/>
             <Stack.Screen name="edit/[id]" options={{headerShown:false}}/>
+            <Stack.Screen name="edit/[manage]" options={{headerShown:false}}/>
         </Stack>
     )
 }

@@ -66,8 +66,7 @@ export default function SideMenu({data}) {
         }
     }, [data]);
   
-  return content === "" ? null :
-    (
+  return (
     <Animated.View
       style={[styles.sideContainer, animatedStyles]}>
       <TouchableOpacity
@@ -79,7 +78,7 @@ export default function SideMenu({data}) {
             All notes
         </Text>
         <Text style={{color:"white"}}>
-            {data.length}
+            {data ? data.length : 0}
         </Text>
         </TouchableOpacity>
       <TouchableOpacity
@@ -91,7 +90,7 @@ export default function SideMenu({data}) {
             Folders
         </Text>
         <Text style={{color:"white"}}>
-            {data.filter((el, i) => el.folder.length>0).length}
+            {data ? data.filter((el, i) => el.folder.length>0).length :0}
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -103,7 +102,7 @@ export default function SideMenu({data}) {
             Favorites
         </Text>
         <Text style={{color:"white"}}>
-            {data.filter((el, i) => el.favorite===true).length}
+            {data? data.filter((el, i) => el.favorite===true).length:0}
         </Text>
       </TouchableOpacity>
     </Animated.View>
