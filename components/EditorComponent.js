@@ -1,4 +1,4 @@
-import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { createRef } from 'react';
 import { KeyboardAvoidingView, Platform, SafeAreaView, StatusBar, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import QuillEditor, { QuillToolbar } from 'react-native-cn-quill';
@@ -34,7 +34,7 @@ export default function EditorComponent({
               }
               </TouchableOpacity>
               <TouchableOpacity onPress={deleteNote}>
-              {route !== "create" && <MaterialCommunityIcons name="delete-sweep" size={24} color="red" />}
+              {route !== "create" && <MaterialIcons name="delete" size={24} color="red" />}
               </TouchableOpacity>
             </View>
             </View>

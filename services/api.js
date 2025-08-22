@@ -32,5 +32,4 @@ export const deleteFile = async() => {
     const contents = await FileSystem.deleteAsync(fileUri, {
         encoding: FileSystem.EncodingType.UTF8,
     });
-    
 }

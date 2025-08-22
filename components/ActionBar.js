@@ -1,3 +1,4 @@
+import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 
@@ -5,16 +6,20 @@ export default function ActionBar() {
     return (
         <>
             <View style={styles.container}>
-                <Pressable>
+                <Pressable style={styles.actionBtn} disabled={true}>
+                    <MaterialIcons name="drive-file-move" size={24} color="black"/>
                     <Text>Move</Text>
                 </Pressable>
-                <Pressable>
+                <Pressable style={styles.actionBtn}>
+                    <MaterialIcons name="favorite" size={24} color="black"/>
                     <Text>Favorite</Text>
                 </Pressable>
-                <Pressable>
+                <Pressable style={styles.actionBtn}>
+                    <MaterialIcons name="delete" size={24} color="red" />
                     <Text>Delete All</Text>
                 </Pressable>
-                <Pressable>
+                <Pressable style={styles.actionBtn}>
+                    <Entypo name="save" size={24} color="black"/>
                     <Text>Save as</Text>
                 </Pressable>
             </View>
@@ -25,9 +30,21 @@ export default function ActionBar() {
 const styles =
     StyleSheet.create({
       container: {
-        width:200,
-        heigh:200,
+        marginHorizontal:"auto",
+        width: "100%",
+        height:120,
         backgroundColor:"orange",
-        position:"fixed"
+        flexDirection:"row",
+        justifyContent: "space-between",
+        paddingLeft: 30,
+        paddingRight: 30,
+        paddingTop: 15,
+        
+      },
+      actionBtn:{
+          alignItems:"center"
       }
+      
+    
+    
   })

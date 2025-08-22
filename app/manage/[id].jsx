@@ -73,7 +73,7 @@ export default function Manage() {
                     )
                 }}
             />
-            <ActionBar/>
+            {selected.length>0 && <ActionBar />}
         </>
     )
 }
