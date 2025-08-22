@@ -9,7 +9,7 @@ import { readFile } from '@/services/api';
 import useFetch from "@/services/useFetch";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useState } from "react";
-import { FlatList, StyleSheet, Text, useWindowDimensions, View } from "react-native";
+import { FlatList, Text, useWindowDimensions, View } from "react-native";
 
 export default function Index() {
     const [isPressed, setIsPressed] = useState(false)
@@ -62,7 +62,7 @@ export default function Index() {
         <View style={{flex:1}}>
             <ThemeProvider>
                 <SideMenuProvider>
-                    <NavBar title="All notes"/>
+                    <NavBar title="All notes" page="home"/>
                     <SideMenu data={data} />
                     <FlatList
                         numColumns={2}
@@ -107,20 +107,20 @@ export const EmptyComponent = () => {
 }
 
 
-const styles = StyleSheet.create({
-    fileContainer: {
-        padding: 14,
-        borderRadius: 15,
-        backgroundColor: "#e3e7f3ff",
-        marginTop: 20,
-        width: 180,
-        height: 250,
-        overflow: "hidden",
-        position:"relative"
-    },
-    detailsWrapper: {
-        padding:8,
-        alignItems: "center"
+// const styles = StyleSheet.create({
+//     fileContainer: {
+//         padding: 14,
+//         borderRadius: 15,
+//         backgroundColor: "#e3e7f3ff",
+//         marginTop: 20,
+//         width: 180,
+//         height: 250,
+//         overflow: "hidden",
+//         position:"relative"
+//     },
+//     detailsWrapper: {
+//         padding:8,
+//         alignItems: "center"
         
-    }
-})
+//     }
+// })

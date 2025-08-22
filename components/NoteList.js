@@ -9,7 +9,7 @@ export default function NoteList({ item }) {
     return (
         <Link href={`/edit/${item.id}`} asChild>
             <Pressable onLongPress={() => {
-                router.push(`/edit/${item.id}`)
+                router.push(`/manage/${item.id}`)
             }}>
                 <View>
                     <View style={styles.fileContainer}>

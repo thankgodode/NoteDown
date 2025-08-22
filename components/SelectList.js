@@ -1,24 +1,24 @@
 import { Feather, MaterialIcons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { WebView } from "react-native-webview";
 
-export default function SelectList({item,defaultSelection}) {
-    const [selected, setSelected] = useState([defaultSelection])
+export default function SelectList({ item, defaultSelection,selected,setSelected }) {
 
+    useEffect(() => {
+       setSelected([defaultSelection]) 
+    },[])
+    
     const selection = (id) => {
-        console.log("ID: ", id)
-        
-        if (selected.length < 1) {
-            setSelected([id])
-        }else{
-            setSelected([...selected,id])
-        }
+
+        setSelected([...selected,id])
 
         if (selected.includes(id)) {
-            const toggle = selected.filter((el,i) => el!==id)
+            const toggle = selected.filter((el,i) => el !== id)
             setSelected(toggle)
         }
+
+        console.log(selected)
     }
 
     return (
@@ -35,7 +35,7 @@ export default function SelectList({item,defaultSelection}) {
                             style={{
                                 backgroundColor: "transparent",
                                 overflowY: "hidden",
-                                overflowX: "hidden",
+                                overflowX: "hidden"
                             }}
                             source={{ html: item.content }}
                             scalesPageToFit={false}
@@ -55,7 +55,6 @@ export default function SelectList({item,defaultSelection}) {
         </Pressable>
     )
 }
-
 
 const styles = StyleSheet.create({
     fileContainer: {
