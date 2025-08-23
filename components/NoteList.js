@@ -3,13 +3,15 @@ import { Link, useRouter } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { WebView } from "react-native-webview";
 
-export default function NoteList({ item }) {
+export default function NoteList({ item,setIsPressed,setDefaultSelection }) {
     const router = useRouter()
 
     return (
         <Link href={`/edit/${item.id}`} asChild>
             <Pressable onLongPress={() => {
-                router.push(`/manage/${item.id}`)
+                // router.push(`/manage/${item.id}`)
+                setDefaultSelection(item.id)
+                setIsPressed(true)
             }}>
                 <View>
                     <View style={styles.fileContainer}>
@@ -30,7 +32,7 @@ export default function NoteList({ item }) {
                         <Text>
                             <View style={{flexDirection:"row",gap:10,alignItems:"center"}}>
                                 <Text>{new Date(item.createdAt).toLocaleDateString()}</Text>
-                                <Text>{item.favorite && <MaterialIcons name="favorite" size={24} color="#edcc11ff" />}</Text>
+                                <Text>{item.favorite && <MaterialIcons name="favorite" size={24} color="#edaf11e4" />}</Text>
                             </View>
                         </Text>
                     </View>

@@ -44,7 +44,6 @@ export default function EditNote() {
     }
 
     const deleteNote = async () => {
-
         const filtered = data.filter((el, i) => el.id !== parseInt(id))
         
         if (filtered.length < 1) {
@@ -53,14 +52,7 @@ export default function EditNote() {
             return
         }
 
-        const newData = filtered.map((el, i) => {
-            return {
-                ...el,
-                id:i+1
-            }
-        })
-
-        await writeFile(JSON.stringify(newData))
+        await writeFile(JSON.stringify(filtered))
         router.push("/")
     }
 
@@ -96,7 +88,6 @@ export default function EditNote() {
                 setFolder={setFolder}
                 saveNote={editNote}
                 deleteNote={deleteOptions}
-
             />
         </>
     )

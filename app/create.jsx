@@ -27,8 +27,8 @@ export default function CreateNote() {
 
     // If both are empty, skip saving
     if (isTitleEmpty && isContentEmpty) {
-    router.push("/");
-    return;
+      router.push("/");
+      return;
     }
 
     try {

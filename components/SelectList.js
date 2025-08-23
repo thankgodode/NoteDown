@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { WebView } from "react-native-webview";
 
-export default function SelectList({ item, defaultSelection,selected,setSelected }) {
+export default function SelectList({ item, defaultSelection,selected,setSelected}) {
 
     useEffect(() => {
        setSelected([defaultSelection]) 
@@ -47,7 +47,7 @@ export default function SelectList({ item, defaultSelection,selected,setSelected
                     <Text>
                         <View style={{flexDirection:"row",gap:10,alignItems:"center"}}>
                             <Text>{new Date(item.createdAt).toLocaleDateString()}</Text>
-                            <Text>{item.favorite && <MaterialIcons name="favorite" size={24} color="#edcc11ff" />}</Text>
+                            <Text>{item.favorite && <MaterialIcons name="favorite" size={24} color="#edaf11e4" />}</Text>
                         </View>
                     </Text>
                 </View>

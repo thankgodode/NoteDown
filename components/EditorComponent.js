@@ -29,7 +29,7 @@ export default function EditorComponent({
             <View style={styles.nav}>
               <TouchableOpacity onPress={()=>setFavorite(!favorite)}>
               {favorite
-                ? <MaterialIcons name="favorite" size={24} color="#edab11ff" />
+                ? <MaterialIcons name="favorite" size={24} color="#edaf11e4" />
                 : <MaterialIcons name="favorite" size={24} color="grey" />
               }
               </TouchableOpacity>

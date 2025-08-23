@@ -23,7 +23,6 @@ export const writeFile = async (fileContents) => {
     await FileSystem.writeAsStringAsync(filePath, fileContents, {
         encoding: FileSystem.EncodingType.UTF8,
     });
-    
 }
 
 export const deleteFile = async() => {

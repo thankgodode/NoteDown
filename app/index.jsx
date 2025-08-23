@@ -1,6 +1,9 @@
+import ActionBar from "@/components/ActionBar";
 import CreateButton from "@/components/CreateButton";
 import NavBar from "@/components/NavBar";
 import NoteList from "@/components/NoteList";
+import SelectAll from "@/components/SelectAll";
+import SelectList from "@/components/SelectList";
 import SideMenu from "@/components/SideMenu";
 
 import { SideMenuProvider } from "@/context/SideMenuContext";
@@ -8,65 +11,63 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import { readFile } from '@/services/api';
 import useFetch from "@/services/useFetch";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { useState } from "react";
-import { FlatList, Text, useWindowDimensions, View } from "react-native";
+import { useEffect, useState } from "react";
+import { BackHandler, FlatList, Text, useWindowDimensions, View } from "react-native";
 
 export default function Index() {
+    const { data } = useFetch(() => readFile())
+
+    const [content, setContent] = useState(data)
     const [isPressed, setIsPressed] = useState(false)
     const [defaultSelection, setDefaultSelection] = useState(null)
-    const {width,height} = useWindowDimensions()
-    const placeholder = [
-        {
-            content: "Title",
-            fileName: "File name",
-            createdAt: "August 12",
-            id:1
-        },
-        {
-            content: "Title",
-            fileName: "File name",
-            createdAt: "August 12",
-            id:2,
-        },
-        {
-            content: "Title",
-            fileName: "File name",
-            createdAt: "August 12",
-            id:3
-        },
-        {
-            content: "Title",
-            fileName: "File name",
-            createdAt: "August 12",
-            id:4
-        },
-        {
-            content: "Title",
-            fileName: "File name",
-            createdAt: "August 12",
-            id:5
-            
-        },
-        {
-            content: "Title",
-            fileName: "File name",
-            createdAt: "August 12",
-            id:6
-            
-        },
-    ]
+    const [selected, setSelected] = useState([])
+    const [isSelectedAll, setIsSelectedAll] = useState(false)
 
-    const { data } = useFetch(() => readFile())
+    const selectAll = () => {
+        const arr = []
+        data.forEach((el) => {
+            arr.push(el.id)
+        })
+
+        setSelected(arr)
+        setIsSelectedAll(true)
+    }
+
+    const deselectAll = () => {
+        setSelected([])
+        setIsSelectedAll(false)
+    }
+
+    const { width, height } = useWindowDimensions()
     
+    useEffect(() => {
+        const backAction = () => {
+            BackHandler.exitApp()
+            return true
+        }
+
+        const handler = BackHandler.addEventListener("hardwareBackPress", backAction)
+
+        return () => handler.remove()
+    },[])
+
+    useEffect(() => {
+        setContent(data)
+    },[data])
+    
+
     return (
+        <>
+        {/* <DeleteModal showModal={showModal} setShowModal={setShowModal}/> */}
         <View style={{flex:1}}>
             <ThemeProvider>
                 <SideMenuProvider>
-                    <NavBar title="All notes" page="home"/>
-                    <SideMenu data={data} />
+                    {!isPressed && <NavBar title="All notes" />}
+                    {isPressed && <SelectAll isSelectedAll={isSelectedAll} selectAll={selectAll} deselectAll={deselectAll} selected={selected} />}
+                    <SideMenu data={content} />
                     <FlatList
                         numColumns={2}
-                        data={data}
+                        data={content}
                         keyExtractor={(item)=> item.id}
                         columnWrapperStyle={{
                             gap: 15,
@@ -81,19 +82,38 @@ export default function Index() {
                         renderItem={({ item }) => {
                             return (
                                 <>
-                                   <NoteList
-                                        item={item}
-                                        width={width}
-                                    />
+                                    {!isPressed &&
+                                        <NoteList
+                                            item={item}
+                                            width={width}
+                                            setIsPressed={setIsPressed}
+                                            setDefaultSelection={setDefaultSelection}
+                                        />
+                                    }
+                                    {isPressed &&
+                                        <SelectList
+                                            item={item}
+                                            defaultSelection={defaultSelection}
+                                            selected={selected}
+                                            setSelected={setSelected}
+                                        />
+                                    }
                                 </>
                             )
                         }}
                         ListEmptyComponent={<EmptyComponent/>}
                     />
+                    {isPressed && <ActionBar
+                        selected={selected}
+                        content={content}
+                        setContent={setContent}
+                        setIsPressed={setIsPressed} />
+                    }
                     <CreateButton />
                 </SideMenuProvider>
             </ThemeProvider>
         </View>
+        </>
     )
 }
 
@@ -105,22 +125,3 @@ export const EmptyComponent = () => {
         </View>
     )
 }
-
-
-// const styles = StyleSheet.create({
-//     fileContainer: {
-//         padding: 14,
-//         borderRadius: 15,
-//         backgroundColor: "#e3e7f3ff",
-//         marginTop: 20,
-//         width: 180,
-//         height: 250,
-//         overflow: "hidden",
-//         position:"relative"
-//     },
-//     detailsWrapper: {
-//         padding:8,
-//         alignItems: "center"
-        
-//     }
-// })
