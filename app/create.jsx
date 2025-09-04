@@ -1,8 +1,9 @@
 import { readFile, writeFile } from '@/services/api';
 
 import EditorComponent from "@/components/EditorComponent";
+import { DeleteModalContext } from '@/context/DeleteModalContext';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
 export default function CreateNote() {
   const [title, setTitle] = useState("")
@@ -10,6 +11,7 @@ export default function CreateNote() {
   const [favorite, setFavorite] = useState(false)
   const [folder, setFolder] = useState([])
 
+  const { showModal, setShowModal } = useContext(DeleteModalContext)
   const router = useRouter()
 
   // Checks to know whether to save or not save newly created note file
@@ -53,18 +55,20 @@ export default function CreateNote() {
   }
 
   return (
-    <EditorComponent
-      title={title}
-      setTitle={setTitle}
-      content={content}
-      setContent={setContent}
-      favorite={favorite}
-      setFavorite={setFavorite}
-      folder={folder}
-      setFolder={setFolder}
-      saveNote={createNote}
-      route={"create"}
-    />
+    <>
+      <EditorComponent
+        title={title}
+        setTitle={setTitle}
+        content={content}
+        setContent={setContent}
+        favorite={favorite}
+        setFavorite={setFavorite}
+        folder={folder}
+        setFolder={setFolder}
+        saveNote={createNote}
+        route={"create"}
+        />
+    </>
   );
 }
 

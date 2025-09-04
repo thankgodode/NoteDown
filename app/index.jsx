@@ -1,5 +1,6 @@
 import ActionBar from "@/components/ActionBar";
 import CreateButton from "@/components/CreateButton";
+import DeleteModal from "@/components/DeleteModal";
 import NavBar from "@/components/NavBar";
 import NoteList from "@/components/NoteList";
 import SelectAll from "@/components/SelectAll";
@@ -22,6 +23,7 @@ export default function Index() {
     const [defaultSelection, setDefaultSelection] = useState(null)
     const [selected, setSelected] = useState([])
     const [isSelectedAll, setIsSelectedAll] = useState(false)
+    const [showModal, setShowModal] = useState(false)
 
     const selectAll = () => {
         const arr = []
@@ -58,26 +60,26 @@ export default function Index() {
 
     return (
         <>
-        {/* <DeleteModal showModal={showModal} setShowModal={setShowModal}/> */}
+        <DeleteModal showModal={showModal} setShowModal={setShowModal}/>
         <View style={{flex:1}}>
             <ThemeProvider>
                 <SideMenuProvider>
                     {!isPressed && <NavBar title="All notes" />}
                     {isPressed && <SelectAll isSelectedAll={isSelectedAll} selectAll={selectAll} deselectAll={deselectAll} selected={selected} />}
-                    <SideMenu data={content} />
+                        <SideMenu data={content} />
                     <FlatList
                         numColumns={2}
                         data={content}
                         keyExtractor={(item)=> item.id}
                         columnWrapperStyle={{
                             gap: 15,
-                            paddingRight: 5,
                             marginBottom: 5,
                             justifyContent: "center",
+                            marginHorizontal: "auto",
+                            width: 100,
                         }}
                         contentContainerStyle={{
                             paddingBottom: 100,
-                            
                         }}
                         renderItem={({ item }) => {
                             return (
@@ -103,12 +105,16 @@ export default function Index() {
                         }}
                         ListEmptyComponent={<EmptyComponent/>}
                     />
-                    {isPressed && <ActionBar
-                        selected={selected}
-                        content={content}
-                        setContent={setContent}
-                        setIsPressed={setIsPressed} />
+                    {isPressed && 
+                        <ActionBar
+                            selected={selected}
+                            content={content}
+                            setContent={setContent}
+                            setIsPressed={setIsPressed}
+                            defaultSelection={defaultSelection}
+                        />
                     }
+                            
                     <CreateButton />
                 </SideMenuProvider>
             </ThemeProvider>

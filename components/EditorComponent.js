@@ -11,54 +11,59 @@ export default function EditorComponent({
     favorite,
     setFavorite,
     saveNote,
-    deleteNote,
+    setShowModal,
+    showModal,
     route
 }) {
-    const _editor = createRef();  
+  
+  const _editor = createRef();  
 
-    return (
-        <SafeAreaView style={styles.root}>
-            <StatusBar style="auto" />
-            <View style={styles.navWrapper}>
-              <View style={styles.nav}>
-                <TouchableOpacity onPress={saveNote}>
-                <Ionicons name="chevron-back" size={24} color="black" />
-              </TouchableOpacity>
-              <TextInput placeholder="Title" value={title} onChangeText={setTitle} style={styles.textInput} maxLength={25}/>
-            </View>
-            <View style={styles.nav}>
-              <TouchableOpacity onPress={()=>setFavorite(!favorite)}>
-              {favorite
-                ? <MaterialIcons name="favorite" size={24} color="#edaf11e4" />
-                : <MaterialIcons name="favorite" size={24} color="grey" />
-              }
-              </TouchableOpacity>
-              <TouchableOpacity onPress={deleteNote}>
-              {route !== "create" && <MaterialIcons name="delete" size={24} color="red" />}
-              </TouchableOpacity>
-            </View>
-            </View>
-            <KeyboardAvoidingView
-              behavior={Platform.OS === "ios" ? "padding" : "height"}
-              style={{ flex: 1 }}
-              keyboardVerticalOffset={Platform.OS==="ios" ? 64 : 0}
-            >
-              <QuillEditor
-                // key={content}
-                webview={{
-                    dataDetectorTypes:["none"]
-                }}
-                style={styles.editor}
-                ref={_editor}
-                initialHtml={content}
-                onHtmlChange={(text) => setContent(text.html)}
-                // onTextChange={(text) => }
-              />
-              <View style={{marginBottom:30}}>
-                <QuillToolbar style={{marginBottom:50}} editor={_editor} options="full" theme="light" />
-              </View>
-            </KeyboardAvoidingView>
-        </SafeAreaView>
+  return (
+    <>
+      <SafeAreaView style={styles.root}>
+        <StatusBar style="auto" />
+        <View style={styles.navWrapper}>
+          <View style={styles.nav}>
+            <TouchableOpacity onPress={saveNote}>
+            <Ionicons name="chevron-back" size={24} color="black" />
+          </TouchableOpacity>
+          <TextInput placeholder="Title" value={title} onChangeText={setTitle} style={styles.textInput} maxLength={25}/>
+        </View>
+        <View style={styles.nav}>
+          <TouchableOpacity onPress={()=>setFavorite(!favorite)}>
+          {favorite
+            ? <MaterialIcons name="favorite" size={24} color="#edaf11e4" />
+            : <MaterialIcons name="favorite" size={24} color="grey" />
+          }
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setShowModal(!showModal)}>
+            {route !== "create" && <MaterialIcons name="delete" size={24} color="red" />}
+          </TouchableOpacity>
+        </View>
+        </View>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={{ flex: 1 }}
+          keyboardVerticalOffset={Platform.OS==="ios" ? 64 : 0}
+        >
+          <QuillEditor
+            // key={content}
+            webview={{
+                dataDetectorTypes:["none"]
+            }}
+            style={styles.editor}
+            ref={_editor}
+            initialHtml={content}
+            onHtmlChange={(text) => setContent(text.html)}
+            // onTextChange={(text) => }
+          />
+          <View style={{marginBottom:30}}>
+            <QuillToolbar style={{marginBottom:50}} editor={_editor} options="full" theme="light" />
+          </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </>
+      
     )
 }
 
@@ -89,16 +94,16 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     gap: 10,
-    position:"fixed"
+    position: "fixed",
   },
   nav: {
     flexDirection: "row",
-    alignItems:"center",
+    alignItems: "center",
     gap: 20,
-    padding:5,
+    padding: 5,
   },
   textInput: {
-    width: 250,
+    width: 200,
     fontSize: 20,
     paddingTop: 5,
     paddingBottom:5

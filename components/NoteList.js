@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         backgroundColor: "#e3e7f3ff",
         marginTop: 20,
-        width: 180,
+        width: 165,
         height: 250,
         overflow: "hidden",
     },

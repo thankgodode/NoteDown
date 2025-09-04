@@ -67,45 +67,49 @@ export default function SideMenu({data}) {
     }, [data]);
   
   return (
-    <Animated.View
-      style={[styles.sideContainer, animatedStyles]}>
-      <TouchableOpacity
-        style={[styles.menusItems, { backgroundColor: routePath.name==="index" ? "skyblue" : "transparent" }]}
-        onPress={clickNotes}
-      >
-        <MaterialCommunityIcons name="note" size={24} color="white" />
-        <Text style={{color:"white", flex:1}}>
-            All notes
-        </Text>
-        <Text style={{color:"white"}}>
-            {data ? data.length : 0}
-        </Text>
-        </TouchableOpacity>
-      <TouchableOpacity
-        onPress={clickFolders}
-        style={[styles.menusItems, { backgroundColor: routePath.name==="folders" ? "skyblue" : "transparent" }]}
-      > 
-        <AntDesign name="folder1" size={24} color="white"/>
-        <Text style={{color:"white", flex:1}}>
-            Folders
-        </Text>
-        <Text style={{color:"white"}}>
-            {data ? data.filter((el, i) => el.folder.length>0).length :0}
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={clickFavorites}
-        style={[styles.menusItems, { backgroundColor: routePath.name==="favorites" ? "skyblue" : "transparent" }]}
-      >
-        <Fontisto name="favorite" size={24} color="white" />
-        <Text style={{color:"white", flex:1}}>
-            Favorites
-        </Text>
-        <Text style={{color:"white"}}>
-            {data? data.filter((el, i) => el.favorite===true).length:0}
-        </Text>
-      </TouchableOpacity>
-    </Animated.View>
+    <>
+      {visible &&
+        <Animated.View
+          style={[styles.sideContainer, animatedStyles]}>
+          <TouchableOpacity
+            style={[styles.menusItems, { backgroundColor: routePath.name==="index" ? "skyblue" : "transparent" }]}
+            onPress={clickNotes}
+          >
+            <MaterialCommunityIcons name="note" size={24} color="white" />
+            <Text style={{color:"white", flex:1}}>
+                All notes
+            </Text>
+            <Text style={{color:"white"}}>
+                {data ? data.length : 0}
+            </Text>
+            </TouchableOpacity>
+          <TouchableOpacity
+            onPress={clickFolders}
+            style={[styles.menusItems, { backgroundColor: routePath.name === "folders" ? "skyblue" : "transparent" }]}
+            disabled={true}
+          > 
+            <AntDesign name="folder1" size={24} color="white"/>
+            <Text style={{color:"white", flex:1}}>
+                Folders
+            </Text>
+            <Text style={{color:"white"}}>
+                {data ? data.filter((el, i) => el.folder.length>0).length :0}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={clickFavorites}
+            style={[styles.menusItems, { backgroundColor: routePath.name==="favorites" ? "skyblue" : "transparent" }]}
+          >
+            <Fontisto name="favorite" size={24} color="white" />
+            <Text style={{color:"white", flex:1}}>
+                Favorites
+            </Text>
+            <Text style={{color:"white"}}>
+                {data? data.filter((el, i) => el.favorite===true).length:0}
+            </Text>
+          </TouchableOpacity>
+        </Animated.View>}
+      </>
   );
 }
 
@@ -119,7 +123,7 @@ const styles = StyleSheet.create({
     left: 0,
     padding: 8,
     borderRadius: 10,
-    zIndex:10
+    zIndex: 10,
   },
   menusItems: {
     width: "100%",

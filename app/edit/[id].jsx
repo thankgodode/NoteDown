@@ -87,6 +87,8 @@ export default function EditNote() {
                 folder={folder}
                 setFolder={setFolder}
                 saveNote={editNote}
+                setShowModal={setShowModal}
+                showModal={showModal}
                 deleteNote={deleteOptions}
             />
         </>
