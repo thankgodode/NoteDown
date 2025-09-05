@@ -5,7 +5,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import DeleteModal from "./DeleteModal";
 
 
-export default function ActionBar({ selected, content, setContent,setIsPressed,defaultSelection }) {
+export default function ActionBar({ selected, content, setContent,setIsPressed,defaultSelection,screen}) {
     const [showModal, setShowModal] = useState(false)
     const [isFavorite, setIsFavorite] = useState(null)
 
@@ -23,7 +23,7 @@ export default function ActionBar({ selected, content, setContent,setIsPressed,d
             setIsPressed(false)
             return
         }
-        
+
         await writeFile(JSON.stringify(noteSelected))
         setContent(noteSelected)
         setIsPressed(false)
@@ -41,13 +41,10 @@ export default function ActionBar({ selected, content, setContent,setIsPressed,d
             return el
         })
 
-        console.log("Fav ", favorite)
         setIsFavorite(!isFavorite)
-
         setContent(favorite)
         setIsPressed(false)
         await writeFile(JSON.stringify(favorite))
-
     }
 
     useEffect(() => {

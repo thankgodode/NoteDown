@@ -13,35 +13,25 @@ import Animated, {
 
 export default function SideMenu({data}) {
   const {visible, setVisible} = useContext(SideMenuContext)
-  const [isActive, setIsActive] = useState("")
-  const [content, setContent] = useState("")
-
   const [hide, setHide] = useState(false)
 
   const router = useRouter()
   const routePath = useRoute();
 
   const clickNotes = () => {
-      setIsActive("notes")
       router.push("/")
       setHide(!hide)
   }
     
   const clickFolders = () => {
-      setIsActive("folders")
       router.push("/folders")
       setHide(!hide)
   }
     
   const clickFavorites = () => {
-      setIsActive("favorite")
       router.push("/favorites")
       setHide(!hide)
   }
-
-  useEffect(() => {
-    setIsActive()
-  },[hide])
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
@@ -60,12 +50,6 @@ export default function SideMenu({data}) {
     };
   });
 
-   useEffect(() => {
-        if (data) {
-            setContent(data)
-        }
-    }, [data]);
-  
   return (
     <>
       {visible &&

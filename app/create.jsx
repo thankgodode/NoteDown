@@ -11,14 +11,12 @@ export default function CreateNote() {
   const [favorite, setFavorite] = useState(false)
   const [folder, setFolder] = useState([])
 
-  const { showModal, setShowModal } = useContext(DeleteModalContext)
   const router = useRouter()
-
-  // Checks to know whether to save or not save newly created note file
 
   const createNote = async () => {
     const date = new Date().getTime()
 
+    // Checks to know whether to save or not save newly created note file
     const plainTextContent = content
     .replace(/<[^>]+>/g, '') // remove HTML tags
     .replace(/&nbsp;/g, '')  // remove non-breaking spaces
@@ -67,7 +65,7 @@ export default function CreateNote() {
         setFolder={setFolder}
         saveNote={createNote}
         route={"create"}
-        />
+      />
     </>
   );
 }

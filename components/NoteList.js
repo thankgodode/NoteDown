@@ -1,11 +1,59 @@
 import { MaterialIcons } from "@expo/vector-icons";
+
 import { Link, useRouter } from "expo-router";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { WebView } from "react-native-webview";
 
-export default function NoteList({ item,setIsPressed,setDefaultSelection }) {
+import SelectList from "@/components/SelectList";
+
+import { FontAwesome5 } from "@expo/vector-icons";
+
+
+export default function NoteList({ content,isPressed,setIsPressed,defaultSelection,setDefaultSelection,selected,setSelected }) {
     const router = useRouter()
 
+    return (
+        <FlatList
+            numColumns={2}
+            data={content}
+            keyExtractor={(item)=> item.id}
+            columnWrapperStyle={{
+                gap: 15,
+                marginBottom: 5,
+                justifyContent: "center",
+                marginHorizontal: "auto",
+                width: 100,
+            }}
+            contentContainerStyle={{
+                paddingBottom: 100,
+            }}
+            renderItem={({ item }) => {
+                return (
+                    <>
+                        {!isPressed &&
+                            <Items
+                                item={item}
+                                setIsPressed={setIsPressed}
+                                setDefaultSelection={setDefaultSelection}
+                            />
+                        }
+                        {isPressed &&
+                            <SelectList
+                                item={item}
+                                defaultSelection={defaultSelection}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                        }
+                    </>
+                )
+            }}
+            ListEmptyComponent={<EmptyComponent/>}
+        />
+    )
+}
+
+export const Items = ({item,setIsPressed,setDefaultSelection}) => {
     return (
         <Link href={`/edit/${item.id}`} asChild>
             <Pressable onLongPress={() => {
@@ -39,6 +87,15 @@ export default function NoteList({ item,setIsPressed,setDefaultSelection }) {
                 </View>
             </Pressable>
         </Link>
+    )
+}
+
+const EmptyComponent = () => {
+    return (
+        <View style={{height:500, justifyContent:"center", alignItems:"center"}}>
+            <FontAwesome5 name="box-open" size={100} color="black"/>
+            <Text style={{fontSize:20}}>No note file found...</Text>
+        </View>
     )
 }
 

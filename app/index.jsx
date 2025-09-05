@@ -4,16 +4,14 @@ import DeleteModal from "@/components/DeleteModal";
 import NavBar from "@/components/NavBar";
 import NoteList from "@/components/NoteList";
 import SelectAll from "@/components/SelectAll";
-import SelectList from "@/components/SelectList";
 import SideMenu from "@/components/SideMenu";
 
 import { SideMenuProvider } from "@/context/SideMenuContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { readFile } from '@/services/api';
 import useFetch from "@/services/useFetch";
-import { FontAwesome5 } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import { BackHandler, FlatList, Text, useWindowDimensions, View } from "react-native";
+import { BackHandler, View } from "react-native";
 
 export default function Index() {
     const { data } = useFetch(() => readFile())
@@ -40,8 +38,6 @@ export default function Index() {
         setIsSelectedAll(false)
     }
 
-    const { width, height } = useWindowDimensions()
-    
     useEffect(() => {
         const backAction = () => {
             BackHandler.exitApp()
@@ -66,44 +62,15 @@ export default function Index() {
                 <SideMenuProvider>
                     {!isPressed && <NavBar title="All notes" />}
                     {isPressed && <SelectAll isSelectedAll={isSelectedAll} selectAll={selectAll} deselectAll={deselectAll} selected={selected} />}
-                        <SideMenu data={content} />
-                    <FlatList
-                        numColumns={2}
-                        data={content}
-                        keyExtractor={(item)=> item.id}
-                        columnWrapperStyle={{
-                            gap: 15,
-                            marginBottom: 5,
-                            justifyContent: "center",
-                            marginHorizontal: "auto",
-                            width: 100,
-                        }}
-                        contentContainerStyle={{
-                            paddingBottom: 100,
-                        }}
-                        renderItem={({ item }) => {
-                            return (
-                                <>
-                                    {!isPressed &&
-                                        <NoteList
-                                            item={item}
-                                            width={width}
-                                            setIsPressed={setIsPressed}
-                                            setDefaultSelection={setDefaultSelection}
-                                        />
-                                    }
-                                    {isPressed &&
-                                        <SelectList
-                                            item={item}
-                                            defaultSelection={defaultSelection}
-                                            selected={selected}
-                                            setSelected={setSelected}
-                                        />
-                                    }
-                                </>
-                            )
-                        }}
-                        ListEmptyComponent={<EmptyComponent/>}
+                    <SideMenu data={content} />
+                    <NoteList
+                        content={content}
+                        isPressed={isPressed}
+                        setIsPressed={setIsPressed}
+                        defaultSelection={defaultSelection}
+                        setDefaultSelection={setDefaultSelection}
+                        selected={selected}
+                        setSelected={setSelected}
                     />
                     {isPressed && 
                         <ActionBar
@@ -112,10 +79,10 @@ export default function Index() {
                             setContent={setContent}
                             setIsPressed={setIsPressed}
                             defaultSelection={defaultSelection}
+                            screen="index"
                         />
                     }
-                            
-                    <CreateButton />
+                    {!isPressed && <CreateButton />}
                 </SideMenuProvider>
             </ThemeProvider>
         </View>
@@ -123,11 +90,3 @@ export default function Index() {
     )
 }
 
-export const EmptyComponent = () => {
-    return (
-        <View style={{height:500, justifyContent:"center", alignItems:"center"}}>
-            <FontAwesome5 name="box-open" size={100} color="black"/>
-            <Text style={{fontSize:20}}>No note file found...</Text>
-        </View>
-    )
-}
