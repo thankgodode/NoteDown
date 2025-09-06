@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import DeleteModal from "./DeleteModal";
 
+import convertToWord from "../utils/convertToWord"
 
 export default function ActionBar({ selected, content, setContent,setIsPressed,defaultSelection,screen}) {
     const [showModal, setShowModal] = useState(false)
@@ -31,7 +32,6 @@ export default function ActionBar({ selected, content, setContent,setIsPressed,d
 
     const addFavorites = async () => {
         const favorite = content.map((el, i) => {
-
             if (selected.includes(el.id)) {
                 return {
                     ...el, favorite: !isFavorite
@@ -49,6 +49,7 @@ export default function ActionBar({ selected, content, setContent,setIsPressed,d
 
     useEffect(() => {
         const df = content.filter((el, i) => el.id === defaultSelection)
+        
         if (df[0].favorite) {
             setIsFavorite(true)
         } else {
@@ -96,7 +97,7 @@ export default function ActionBar({ selected, content, setContent,setIsPressed,d
                     {selected.length>1 && <Text style={{fontSize:12}}>Delete All</Text>}
                     {selected.length <= 1 && <Text style={{fontSize:12}}>Delete</Text>}
                 </Pressable>
-                <Pressable style={styles.actionBtn}>
+                <Pressable style={styles.actionBtn} onPress={()=>convertToWord(content)}>
                     <Entypo name="save" size={24} color="black"/>
                     <Text style={{fontSize:12}}>Save as</Text>
                 </Pressable>

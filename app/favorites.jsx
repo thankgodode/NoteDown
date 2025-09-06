@@ -45,32 +45,32 @@ export default function Favorites() {
     return content === "" ? null :
         (
             <>
-            <DeleteModal showModal={showModal} setShowModal={setShowModal}/>
-            <View style={{flex:1}}>
-                <SideMenuProvider>
-                    {!isPressed && <NavBar title="Favorites" />}
-                    {isPressed && <SelectAll isSelectedAll={isSelectedAll} selectAll={selectAll} deselectAll={deselectAll} selected={selected} />}
-                    <SideMenu data={content} />
-                    <NoteList
-                        content={content.filter((el,i) => el.favorite===true)}
-                        isPressed={isPressed}
-                        setIsPressed={setIsPressed}
-                        defaultSelection={defaultSelection}
-                        setDefaultSelection={setDefaultSelection}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
-                    {isPressed && 
-                        <ActionBar
-                            selected={selected}
-                            content={content}
-                            setContent={setContent}
+                <DeleteModal showModal={showModal} setShowModal={setShowModal}/>
+                <View style={{flex:1}}>
+                    <SideMenuProvider>
+                        {!isPressed && <NavBar title="Favorites" />}
+                        {isPressed && <SelectAll isSelectedAll={isSelectedAll} selectAll={selectAll} deselectAll={deselectAll} selected={selected} />}
+                        <SideMenu data={content} />
+                        <NoteList
+                            content={content.filter((el,i) => el.favorite===true)}
+                            isPressed={isPressed}
                             setIsPressed={setIsPressed}
                             defaultSelection={defaultSelection}
-                            screen="favorites"
+                            setDefaultSelection={setDefaultSelection}
+                            selected={selected}
+                            setSelected={setSelected}
                         />
-                    }
-                </SideMenuProvider>
+                        {isPressed && 
+                            <ActionBar
+                                selected={selected}
+                                content={content}
+                                setContent={setContent}
+                                setIsPressed={setIsPressed}
+                                defaultSelection={defaultSelection}
+                                screen="favorites"
+                            />
+                        }
+                    </SideMenuProvider>
                 </View>
             </>
         )
