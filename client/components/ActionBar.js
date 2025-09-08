@@ -47,6 +47,11 @@ export default function ActionBar({ selected, content, setContent,setIsPressed,d
         await writeFile(JSON.stringify(favorite))
     }
 
+    const saveAsWord = () => {
+        const toWrite = content.filter((el, i) => el.id === selected[0])
+        convertToWord(toWrite[0])
+    }
+
     useEffect(() => {
         const df = content.filter((el, i) => el.id === defaultSelection)
         
@@ -79,27 +84,26 @@ export default function ActionBar({ selected, content, setContent,setIsPressed,d
                 <Pressable style={styles.actionBtn} disabled={selected.length<1} onPress={addFavorites}>
                     {isFavorite &&
                         <>
-                            <MaterialIcons name="favorite" size={24} color="#edaf11e4" />
+                            <MaterialIcons name="favorite" size={24} color={selected.length<1 ? "#ccc" :"#edaf11e4"} />
                             <Text style={{fontSize:12}}>Unfavorite</Text>
                         </>
                     }
                     
                     {!isFavorite &&
                         <>
-                            <MaterialIcons name="favorite" size={24} color="grey" />
+                        <MaterialIcons name="favorite" size={24} color={selected.length<1 ? "#ccc" :"grey"} />
                             <Text style={{fontSize:12}}>Favorite</Text>
                         </>
                     }
-
                 </Pressable>
                 <Pressable style={styles.actionBtn} onPress={deleteOptions} disabled={selected.length<1}>
                     <MaterialIcons name="delete" size={24} color={selected.length<1?"#ccc":"red"} />
                     {selected.length>1 && <Text style={{fontSize:12}}>Delete All</Text>}
                     {selected.length <= 1 && <Text style={{fontSize:12}}>Delete</Text>}
                 </Pressable>
-                <Pressable style={styles.actionBtn} onPress={()=>convertToWord(content)}>
-                    <Entypo name="save" size={24} color="black"/>
-                    <Text style={{fontSize:12}}>Save as</Text>
+                <Pressable style={styles.actionBtn} onPress={saveAsWord} disabled={selected.length>1}>
+                    <Entypo name="save" size={24} color={selected.length>1 || selected.length<1?"#ccc":"black"}/>
+                    <Text style={{fontSize:12}}>Save as Word</Text>
                 </Pressable>
             </View>
         </>
