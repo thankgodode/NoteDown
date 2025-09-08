@@ -1,14 +1,13 @@
 const HtmlToDocx = require("html-to-docx")
 
 const convertToDocx = async(req, res) => {
-    const { content } = req.body;
+    const { html } = req.body;
 
     try {
-        console.log("Posted")
-        const docxBuffer = await HtmlToDocx(content);
-        console.log("Docbuffer ", docxBuffer)
+        const docxBuffer = await HtmlToDocx(html);
+        const string = Buffer.from(docxBuffer).toString("base64")
         
-        res.status(200).json({message:docxBuffer})
+        res.status(200).json({message:string})
     } catch (error) {
         console.error(error)
         res.status(500).json({error:"Failed to generate document"})

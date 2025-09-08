@@ -12,11 +12,13 @@
       "supportsTablet": true
     },
     "android": {
+      "permissions":["READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.dtech01.NoteDown"
     },
     "web": {
       "bundler": "metro",
@@ -37,6 +39,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "7604bf80-6519-498a-a986-837d572b9a9f"
+      }
+    },
+    "owner": "dtech01"
   }
 }
