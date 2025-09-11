@@ -72,11 +72,3 @@ const styless = StyleSheet.create({
         marginLeft: 0,
     }
 })
-
-// const MyTabs = createBottomTabNavigator({
-//   tabBar: (props) => <MyTabBar {...props} />,
-//   screens: {
-//     Home: HomeScreen,
-//     Profile: ProfileScreen,
-//   },
-// });

@@ -1,7 +1,7 @@
 import { deleteFile, writeFile } from "@/services/api";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import DeleteModal from "./DeleteModal";
 import SuccessModal from "./SuccessModal"
 
@@ -55,6 +55,10 @@ export default function ActionBar({ selected, content, setContent,setIsPressed,d
         convertToWord(selectedNote[0])
     }
 
+    const saveAsPDF = () => {
+        
+    }
+
     useEffect(() => {
         const df = content.filter((el, i) => el.id === defaultSelection)
         setSelectedNote(df)
@@ -93,11 +97,11 @@ export default function ActionBar({ selected, content, setContent,setIsPressed,d
             <SuccessModal message={message}/>
             <DeleteModal showModal={showModal} setShowModal={setShowModal} deleteNote={deleteSelected}/>
             <View style={styles.container}>
-                <Pressable style={styles.actionBtn} onPress={()=> setIsPressed(false)}>
+                <TouchableOpacity style={styles.actionBtn} onPress={()=> setIsPressed(false)}>
                     <MaterialIcons name="close" size={24} color="red"/>
                     <Text style={{fontSize:12}}>Escape</Text>
-                </Pressable>
-                <Pressable style={styles.actionBtn} disabled={selected.length<1} onPress={addFavorites}>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.actionBtn} disabled={selected.length<1} onPress={addFavorites}>
                     {isFavorite &&
                         <>
                             <MaterialIcons name="favorite" size={24} color={selected.length<1 ? "#ccc" :"#edaf11e4"} />
@@ -111,16 +115,16 @@ export default function ActionBar({ selected, content, setContent,setIsPressed,d
                             <Text style={{fontSize:12}}>Favorite</Text>
                         </>
                     }
-                </Pressable>
-                <Pressable style={styles.actionBtn} onPress={deleteOptions} disabled={selected.length<1}>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.actionBtn} onPress={deleteOptions} disabled={selected.length<1}>
                     <MaterialIcons name="delete" size={24} color={selected.length<1?"#ccc":"red"} />
                     {selected.length>1 && <Text style={{fontSize:12}}>Delete All</Text>}
                     {selected.length <= 1 && <Text style={{fontSize:12}}>Delete</Text>}
-                </Pressable>
-                <Pressable style={styles.actionBtn} onPress={saveAsWord} disabled={selected.length>1}>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.actionBtn} onPress={saveAsWord} disabled={selected.length>1}>
                     <Entypo name="save" size={24} color={selected.length>1 || selected.length<1?"#ccc":"black"}/>
                     <Text style={{fontSize:12}}>Save as Word</Text>
-                </Pressable>
+                </TouchableOpacity>
             </View>
         </>
     )
