@@ -20,6 +20,7 @@ export default function Favorites() {
     const [selected, setSelected] = useState([])
     const [isSelectedAll, setIsSelectedAll] = useState(false)
     const [showModal, setShowModal] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const selectAll = () => {
         const arr = []
@@ -45,6 +46,14 @@ export default function Favorites() {
     return content === "" ? null :
         (
             <>
+                {loading &&
+                    <ActivityIndicator
+                        size="large"
+                        color="#0000ff"
+                        style={{alignSelf:"center", marginTop:20}}
+                    />
+                }
+                {loading && <Text style={{fontSize:18,marginHorizontal:"auto",marginTop:30}}>Saving file...</Text>}
                 <DeleteModal showModal={showModal} setShowModal={setShowModal}/>
                 <View style={{flex:1}}>
                     <SideMenuProvider>
@@ -67,20 +76,12 @@ export default function Favorites() {
                                 setContent={setContent}
                                 setIsPressed={setIsPressed}
                                 defaultSelection={defaultSelection}
-                                screen="favorites"
+                                loading={loading}
+                                setLoading={setLoading}
                             />
                         }
                     </SideMenuProvider>
                 </View>
             </>
         )
-}
-
-export const EmptyComponent = () => {
-    return (
-        <View style={{height:500, justifyContent:"center", alignItems:"center"}}>
-            <FontAwesome5 name="box-open" size={100} color="black"/>
-            <Text style={{fontSize:20}}>No note file found...</Text>
-        </View>
-    )
 }

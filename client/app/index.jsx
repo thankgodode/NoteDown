@@ -5,16 +5,17 @@ import NavBar from "@/components/NavBar";
 import NoteList from "@/components/NoteList";
 import SelectAll from "@/components/SelectAll";
 import SideMenu from "@/components/SideMenu";
+import SuccessModal from "@/components/SuccessModal";
 
 import { SideMenuProvider } from "@/context/SideMenuContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { readFile } from '@/services/api';
 import useFetch from "@/services/useFetch";
 import { useEffect, useState } from "react";
-import { BackHandler, View } from "react-native";
+import { BackHandler, View, ActivityIndicator } from "react-native";
 
 export default function Index() {
-    const { data } = useFetch(() => readFile())
+    const { data, loading} = useFetch(() => readFile())
 
     const [content, setContent] = useState(data)
     const [isPressed, setIsPressed] = useState(false)
@@ -56,6 +57,15 @@ export default function Index() {
 
     return (
         <>
+        {loading &&
+            (
+                <ActivityIndicator
+                    size="large"
+                    color="#0000ff"
+                    style={{ alignSelf: "center", marginTop: 20 }}
+                />
+            )
+        }
         <DeleteModal showModal={showModal} setShowModal={setShowModal}/>
         <View style={{flex:1}}>
             <ThemeProvider>
@@ -79,7 +89,6 @@ export default function Index() {
                             setContent={setContent}
                             setIsPressed={setIsPressed}
                             defaultSelection={defaultSelection}
-                            screen="index"
                         />
                     }
                     {!isPressed && <CreateButton />}

@@ -1,32 +1,7 @@
 import { PermissionsAndroid } from "react-native"
-
 import RNFS from "react-native-fs"
 
-async function convertToWord(data) {
-    try {
-        const response = await fetch("http://192.168.43.38:5000/api/toDocx",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type":"application/json"
-                },
-                body:JSON.stringify({html:data.content})
-            }
-        )
-
-        const result = await response.json()
-
-        const permission = await requestPermission()
-
-        if (permission === true) {
-            writeToFile(data.title,result.message)
-        }
-    } catch (error) {
-        console.error("Sorry an error just occured ", error)
-    }
-}
-
-const requestPermission = async() => {
+export const requestPermission = async () => {
     try {
         const granted = await PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
@@ -51,9 +26,8 @@ const requestPermission = async() => {
     }
 }
 
-const writeToFile = async(fileName,buffer) => {
+export const writeToFile = async(fileName,buffer) => {
     const path = RNFS.ExternalDirectoryPath + `//${fileName}.docx`
-    console.log("Path ", path)
     
     try {
         await RNFS.writeFile(path, buffer, "base64")
@@ -62,5 +36,3 @@ const writeToFile = async(fileName,buffer) => {
         console.error("File write error: ", error)
     }
 }
-
-export default convertToWord

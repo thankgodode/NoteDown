@@ -1,14 +1,18 @@
 import { deleteFile, writeFile } from "@/services/api";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import DeleteModal from "./DeleteModal";
+import SuccessModal from "./SuccessModal"
 
-import convertToWord from "../utils/convertToWord"
+import useConvertToWord from "../services/useConvertToWord"
 
-export default function ActionBar({ selected, content, setContent,setIsPressed,defaultSelection,screen}) {
+export default function ActionBar({ selected, content, setContent,setIsPressed,defaultSelection}) {
     const [showModal, setShowModal] = useState(false)
     const [isFavorite, setIsFavorite] = useState(null)
+    const [selectedNote, setSelectedNote] = useState([])
+
+    const { convertToWord, loading, message } = useConvertToWord()
 
     const deleteOptions = () => {
         setShowModal(!showModal)
@@ -31,7 +35,7 @@ export default function ActionBar({ selected, content, setContent,setIsPressed,d
     }
 
     const addFavorites = async () => {
-        const favorite = content.map((el, i) => {
+        const toggleFavorite = content.map((el, i) => {
             if (selected.includes(el.id)) {
                 return {
                     ...el, favorite: !isFavorite
@@ -42,19 +46,19 @@ export default function ActionBar({ selected, content, setContent,setIsPressed,d
         })
 
         setIsFavorite(!isFavorite)
-        setContent(favorite)
+        setContent(toggleFavorite)
         setIsPressed(false)
-        await writeFile(JSON.stringify(favorite))
+        await writeFile(JSON.stringify(toggleFavorite))
     }
 
     const saveAsWord = () => {
-        const toWrite = content.filter((el, i) => el.id === selected[0])
-        convertToWord(toWrite[0])
+        convertToWord(selectedNote[0])
     }
 
     useEffect(() => {
         const df = content.filter((el, i) => el.id === defaultSelection)
-        
+        setSelectedNote(df)
+
         if (df[0].favorite) {
             setIsFavorite(true)
         } else {
@@ -64,6 +68,8 @@ export default function ActionBar({ selected, content, setContent,setIsPressed,d
     
     useEffect(() => {
         const df = content.filter((el, i) => el.id === selected[0])
+        setSelectedNote(df)
+
         if (df.length>0) {
             if (df[0].favorite) {
                 setIsFavorite(true)
@@ -75,6 +81,16 @@ export default function ActionBar({ selected, content, setContent,setIsPressed,d
 
     return (
         <>
+            {loading &&
+                (
+                    <ActivityIndicator
+                        size="large"
+                        color="#0000ff"
+                        style={{ alignSelf: "center", marginTop: 20 }}
+                    />
+                )
+            }
+            <SuccessModal message={message}/>
             <DeleteModal showModal={showModal} setShowModal={setShowModal} deleteNote={deleteSelected}/>
             <View style={styles.container}>
                 <Pressable style={styles.actionBtn} onPress={()=> setIsPressed(false)}>
