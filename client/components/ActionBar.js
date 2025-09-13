@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import DeleteModal from "./DeleteModal";
 import SuccessModal from "./SuccessModal"
+import {SaveAsOptions} from "./SaveDropDown"
 
 import useConvertToWord from "../services/useConvertToWord"
 
@@ -40,6 +41,7 @@ export default function ActionBar({ selected, content, setContent,setIsPressed,d
                 return {
                     ...el, favorite: !isFavorite
                 }
+
             }
 
             return el
@@ -121,11 +123,16 @@ export default function ActionBar({ selected, content, setContent,setIsPressed,d
                     {selected.length>1 && <Text style={{fontSize:12}}>Delete All</Text>}
                     {selected.length <= 1 && <Text style={{fontSize:12}}>Delete</Text>}
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.actionBtn} onPress={saveAsWord} disabled={selected.length>1}>
+                {/* <TouchableOpacity style={styles.actionBtn} onPress={saveAsWord} disabled={selected.length>1}>
                     <Entypo name="save" size={24} color={selected.length>1 || selected.length<1?"#ccc":"black"}/>
                     <Text style={{fontSize:12}}>Save as Word</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
+                <SaveAsOptions
+                    toWord={convertToWord}
+                    
+                />
             </View>
+
         </>
     )
 }

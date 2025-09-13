@@ -10,8 +10,6 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 
 export default function NoteList({ content,isPressed,setIsPressed,defaultSelection,setDefaultSelection,selected,setSelected }) {
-    const router = useRouter()
-
     return (
         <FlatList
             numColumns={2}
