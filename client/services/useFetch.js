@@ -3,15 +3,17 @@ import { useEffect, useState } from "react"
 
 export default function useFetch(fetchFunction) {
     const [data, setData] = useState(null)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
 
 
     const fetchData = async () => {
         try {
-            setLoading(true)
             const request = await fetchFunction()
             const response = JSON.parse(request)
-            setLoading(false)
+
+            setTimeout(() => {
+                setLoading(false)
+            },500)
             
             setData(response)
         } catch (error) {

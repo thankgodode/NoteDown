@@ -1,15 +1,36 @@
 import { MaterialIcons } from "@expo/vector-icons";
 
 import { Link, useRouter } from "expo-router";
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { WebView } from "react-native-webview";
 
 import SelectList from "@/components/SelectList";
 
 import { FontAwesome5 } from "@expo/vector-icons";
+import { useContext } from "react";
+import {InteractionContext} from "@/context/InteractionContext";
 
 
-export default function NoteList({ content,isPressed,setIsPressed,defaultSelection,setDefaultSelection,selected,setSelected }) {
+export default function NoteList({content, setContent,loading}) {
+    const {
+        isPressed,
+        setIsPressed,
+        defaultSelection,
+        setDefaultSelection,
+        selected,
+        setSelected,
+    } = useContext(InteractionContext)
+
+    if (loading) {
+        return (
+            <ActivityIndicator
+                size="large"
+                color="#0000ff"
+                style={{ alignSelf: "center", marginTop: 20 }}
+            />
+        )
+    }
+
     return (
         <FlatList
             numColumns={2}
