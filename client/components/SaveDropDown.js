@@ -1,6 +1,5 @@
 import {
     SafeAreaView,
-    StyleSheet,
     Text,
     TouchableWithoutFeedback,
     Modal,
@@ -8,13 +7,18 @@ import {
     View,
     TouchableOpacity,
 } from "react-native";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { Entypo } from "@expo/vector-icons";
+import {InteractionContext} from "@/context/InteractionContext";
+import useConvertToWord from "@/services/useConvertToWord";
+import SuccessModal from "./SuccessModal";
 
 const deviceHeight = Dimensions.get("window").height
 
-export const SaveAsOptions = ({}) => {
+export const SaveAsOptions = () => {
     const [show, setShow] = useState(false)
-
+    const { selected } = useContext(InteractionContext)
+    
     const onShow = () => {
         setShow(true)   
     }
@@ -23,13 +27,15 @@ export const SaveAsOptions = ({}) => {
         setShow(false)
     }
 
-
     return (
         <SafeAreaView>
             <TouchableWithoutFeedback onPress={onShow}>
-                <Text>
-                    Show Popup
-                </Text>
+                <View style={{alignItems:"center"}}>
+                    <Entypo name="save" size={24} color={selected.length>1 || selected.length<1?"#ccc":"black"}/>
+                    <Text>
+                        Save as
+                    </Text>
+                </View>
             </TouchableWithoutFeedback>
             <OptionsMenu
                 onTouchOutside={onClose}
@@ -41,6 +47,8 @@ export const SaveAsOptions = ({}) => {
 }
 
 const OptionsMenu = ({show, onTouchOutside,title}) => {
+    const { selectedNote } = useContext(InteractionContext)
+    const { convertToWord, isSaved } = useConvertToWord()
 
     const renderOutsideTouchable = (isShow) => {
         const view = <View style={{ flex: 1, width:"100%"}} />
@@ -54,9 +62,22 @@ const OptionsMenu = ({show, onTouchOutside,title}) => {
         )
     }
 
+    const saveAsWord = () => {
+        convertToWord(selectedNote[0])
+        onTouchOutside()
+    }
+
+    const saveAsPDF = () => {
+        
+    }
+
+    if (isSaved) {
+        return <SuccessModal message="File successfully saved!" isSaved={isSaved}/>
+    }
+
     return (
         <Modal
-            animationType="none"
+            animationType="slide"
             transparent={true}
             visible={show}
             onRequestClose={onTouchOutside}
@@ -95,7 +116,7 @@ const OptionsMenu = ({show, onTouchOutside,title}) => {
                         <TouchableOpacity onPress={onTouchOutside}> 
                             <Text style={{fontSize:18}}>To PDF</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={onTouchOutside}>
+                        <TouchableOpacity onPress={saveAsWord}>
                             <Text style={{fontSize:18}}>To Word</Text>
                         </TouchableOpacity>
                     </View>

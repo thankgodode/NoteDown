@@ -50,7 +50,7 @@ export default function Favorites() {
                 content={content.filter((el, i) => el.favorite === true)}
                 loading={loading}
             />
-            {isPressed && <ActionBar/>}
+            {isPressed && <ActionBar content={content} setContent={setContent}/>}
         </>
     )
 }

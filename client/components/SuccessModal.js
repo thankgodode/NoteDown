@@ -1,14 +1,13 @@
 import {
-    Modal, StyleSheet, Text, TouchableOpacity,
+    Modal, StyleSheet, Text,
     View
 } from "react-native";
 
-export default function SuccessModal({message}) {
-    
+export default function SuccessModal({message,isSaved}) {
     return (
-        <Modal transparent={true} animationType="fade" backdropColor="red" visible={message && true}>
+        <Modal transparent={true} animationType="fade" backdropColor="red" visible={isSaved}>
             <View style={styles.modalView}>
-                <Text style={styles.message}>{message}</Text>
+                <Text style={styles.message}>{ }{message}</Text>
             </View>
         </Modal>
     )
@@ -16,21 +15,22 @@ export default function SuccessModal({message}) {
 
 const styles = StyleSheet.create({
     modalView: {
-        backgroundColor: "#003a01ff",
+        backgroundColor: "#c7f1c8ff",
         marginHorizontal: "auto",
         marginVertical: "auto",
-        paddingTop: 20,
-        paddingBottom: 20,
-        paddingLeft: 20,
-        paddingRight: 20,
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 15,
+        paddingRight: 15,
         boxShadow: "2px 2px 15px rgba(0,0,0,0.4)",
-        width: 300,
+        width: 200,
+        top:200,
         borderRadius:10
     },
     message:{
-        fontSize: 20,
+        fontSize: 15,
         fontWeight: 300,
         fontWeight:"400",
-        color: "#b7ebb8ff",
+        color: "black"
      },
 })

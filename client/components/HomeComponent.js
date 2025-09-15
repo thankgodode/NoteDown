@@ -57,8 +57,7 @@ export default function Home() {
 
       <SideMenu data={content} />
       <NoteList content={content} setContent={setContent} loading={loading} />
-
-      {isPressed && <ActionBar />}
+      {isPressed && <ActionBar content={content} setContent={setContent} />}
       {!isPressed && <CreateButton />}
     </>
   );

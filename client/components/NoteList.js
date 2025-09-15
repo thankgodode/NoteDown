@@ -11,7 +11,7 @@ import { useContext } from "react";
 import {InteractionContext} from "@/context/InteractionContext";
 
 
-export default function NoteList({content, setContent,loading}) {
+export default function NoteList({content,loading}) {
     const {
         isPressed,
         setIsPressed,
@@ -35,7 +35,7 @@ export default function NoteList({content, setContent,loading}) {
         <FlatList
             numColumns={2}
             data={content}
-            keyExtractor={(item)=> item.id}
+            keyExtractor={(item) => item.id}
             columnWrapperStyle={{
                 gap: 15,
                 marginBottom: 5,
@@ -67,7 +67,7 @@ export default function NoteList({content, setContent,loading}) {
                     </>
                 )
             }}
-            ListEmptyComponent={<EmptyComponent/>}
+            ListEmptyComponent={<EmptyComponent />}
         />
     )
 }

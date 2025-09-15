@@ -1,19 +1,22 @@
 import { deleteFile, writeFile } from "@/services/api";
-import { Entypo, MaterialIcons } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
-import { ActivityIndicator, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
+import { useContext, useEffect, useState } from "react";
+import {StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import DeleteModal from "./DeleteModal";
-import SuccessModal from "./SuccessModal"
 import {SaveAsOptions} from "./SaveDropDown"
 
-import useConvertToWord from "../services/useConvertToWord"
+import {InteractionContext} from "@/context/InteractionContext";
 
-export default function ActionBar({ selected, content, setContent,setIsPressed,defaultSelection}) {
+export default function ActionBar({content,setContent}) {
     const [showModal, setShowModal] = useState(false)
     const [isFavorite, setIsFavorite] = useState(null)
-    const [selectedNote, setSelectedNote] = useState([])
 
-    const { convertToWord, loading, message } = useConvertToWord()
+    const {
+        selected,
+        setIsPressed,
+        defaultSelection,
+        setSelectedNote
+    } = useContext(InteractionContext)
 
     const deleteOptions = () => {
         setShowModal(!showModal)
@@ -41,7 +44,6 @@ export default function ActionBar({ selected, content, setContent,setIsPressed,d
                 return {
                     ...el, favorite: !isFavorite
                 }
-
             }
 
             return el
@@ -51,14 +53,6 @@ export default function ActionBar({ selected, content, setContent,setIsPressed,d
         setContent(toggleFavorite)
         setIsPressed(false)
         await writeFile(JSON.stringify(toggleFavorite))
-    }
-
-    const saveAsWord = () => {
-        convertToWord(selectedNote[0])
-    }
-
-    const saveAsPDF = () => {
-        
     }
 
     useEffect(() => {
@@ -83,20 +77,10 @@ export default function ActionBar({ selected, content, setContent,setIsPressed,d
                 setIsFavorite(false)
             }
         }
-    },[selected])
+    }, [selected])
 
     return (
         <>
-            {loading &&
-                (
-                    <ActivityIndicator
-                        size="large"
-                        color="#0000ff"
-                        style={{ alignSelf: "center", marginTop: 20 }}
-                    />
-                )
-            }
-            <SuccessModal message={message}/>
             <DeleteModal showModal={showModal} setShowModal={setShowModal} deleteNote={deleteSelected}/>
             <View style={styles.container}>
                 <TouchableOpacity style={styles.actionBtn} onPress={()=> setIsPressed(false)}>
@@ -123,14 +107,7 @@ export default function ActionBar({ selected, content, setContent,setIsPressed,d
                     {selected.length>1 && <Text style={{fontSize:12}}>Delete All</Text>}
                     {selected.length <= 1 && <Text style={{fontSize:12}}>Delete</Text>}
                 </TouchableOpacity>
-                {/* <TouchableOpacity style={styles.actionBtn} onPress={saveAsWord} disabled={selected.length>1}>
-                    <Entypo name="save" size={24} color={selected.length>1 || selected.length<1?"#ccc":"black"}/>
-                    <Text style={{fontSize:12}}>Save as Word</Text>
-                </TouchableOpacity> */}
-                <SaveAsOptions
-                    toWord={convertToWord}
-                    
-                />
+                <SaveAsOptions/>
             </View>
 
         </>

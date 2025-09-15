@@ -1,5 +1,3 @@
-import { readFile } from "@/services/api";
-import useFetch from "@/services/useFetch";
 import { createContext, useEffect, useState} from "react";
 
 export const InteractionContext = createContext({})
@@ -9,7 +7,7 @@ export default InteractionProvider = ({ children }) => {
     const [defaultSelection, setDefaultSelection] = useState(null)
     const [selected, setSelected] = useState([])
     const [isSelectedAll, setIsSelectedAll] = useState(false)
-    
+    const [selectedNote, setSelectedNote] = useState([])
     
     return (
         <InteractionContext.Provider
@@ -22,6 +20,8 @@ export default InteractionProvider = ({ children }) => {
                 isSelectedAll,
                 setIsSelectedAll,
                 setSelected,
+                selectedNote,
+                setSelectedNote
             }}
         >
             {children}
