@@ -2,11 +2,13 @@ import { SideMenuContext } from "@/context/SideMenuContext";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { useRouter } from "expo-router";
 import { useContext } from "react";
 import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function NavBar({title}) {
     const { visible, setVisible } = useContext(SideMenuContext)
+    const router = useRouter()
     
     const styles = createStyles();
     return (
@@ -25,7 +27,7 @@ export default function NavBar({title}) {
                 <Text style={styles.text}>{title}</Text>
             </View>
             <View style={styles.leftSide}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=>router.push("/search")}>
                     <FontAwesome name="search" size={23} color="black"/>
                 </TouchableOpacity>
                 <TouchableOpacity>
