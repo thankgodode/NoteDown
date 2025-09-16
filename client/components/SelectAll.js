@@ -1,7 +1,15 @@
+import {InteractionContext} from "@/context/InteractionContext"
 import { Feather } from "@expo/vector-icons"
+import { useContext } from "react"
 import { Pressable, StatusBar, StyleSheet, Text, View } from "react-native"
 
-export default function SelectAll({ isSelectedAll, selectAll, deselectAll,selected }) {
+export default function SelectAll({content}) {
+    const {
+        isSelectedAll,
+        selectAll,
+        deselectAll, selected
+    }  = useContext(InteractionContext)
+
     return (
         <View style={styles.navContainer}>
             <Text style={{fontSize:20}}>{selected.length} Selected</Text>
@@ -16,7 +24,7 @@ export default function SelectAll({ isSelectedAll, selectAll, deselectAll,select
             }
             {
                 !isSelectedAll &&
-                <Pressable onPress={selectAll} style={{ alignItems: "center" }}>
+                <Pressable onPress={()=>selectAll(content)} style={{ alignItems: "center" }}>
                      <View style={{flexDirection:"row", gap:5}}>
                         <Text>All</Text>
                         <Feather name="circle" size={24} color="black" />

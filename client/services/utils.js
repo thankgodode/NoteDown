@@ -26,13 +26,23 @@ export const requestPermission = async () => {
     }
 }
 
-export const writeToFile = async(fileName,buffer) => {
-    const path = RNFS.ExternalDirectoryPath + `//${fileName}.docx`
+export const writeToFile = async(fileName,buffer,format) => {
+    const path = RNFS.ExternalDirectoryPath + `//${fileName}.${format}`
     
     try {
         await RNFS.writeFile(path, buffer, "base64")
         console.log("File written at: ", path)
     } catch (error) {
         console.error("File write error: ", error)
+    }
+}
+
+export const moveFile = async (path,format) => {
+    const destPath = RNFS.ExternalDirectoryPath +`//${fileName}.${format}`
+    try {
+        await RNFS.moveFile(path, destPath)
+        console.log("File moved to: ", destPath)
+    } catch (error) {
+        console.error("File move error: ", error)
     }
 }

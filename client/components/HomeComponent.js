@@ -17,26 +17,7 @@ export default function Home() {
 
   const {
     isPressed,
-    isSelectedAll,
-    selected,
-    setSelected,
-    setIsSelectedAll
   } = useContext(InteractionContext);
-
-  const selectAll = () => {
-    const arr = [];
-    data.forEach((el) => {
-      arr.push(el.id);
-    });
-
-    setSelected(arr);
-    setIsSelectedAll(true);
-  };
-
-  const deselectAll = () => {
-    setSelected([]);
-    setIsSelectedAll(false);
-  };
 
   useEffect(() => {
     setContent(data);
@@ -45,16 +26,7 @@ export default function Home() {
   return (
     <>
       {!isPressed && <NavBar title="All notes" />}
-
-      {isPressed && (
-        <SelectAll
-          isSelectedAll={isSelectedAll}
-          selectAll={selectAll}
-          deselectAll={deselectAll}
-          selected={selected}
-        />
-      )}
-
+      {isPressed &&<SelectAll content={content}/>}
       <SideMenu data={content} />
       <NoteList content={content} setContent={setContent} loading={loading} />
       {isPressed && <ActionBar content={content} setContent={setContent} />}

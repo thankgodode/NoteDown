@@ -10,7 +10,7 @@ import {
 import { useContext, useState } from "react";
 import { Entypo } from "@expo/vector-icons";
 import {InteractionContext} from "@/context/InteractionContext";
-import useConvertToWord from "@/services/useConvertToWord";
+import useConvertFormat from "@/services/useConvertFormat";
 import SuccessModal from "./SuccessModal";
 
 const deviceHeight = Dimensions.get("window").height
@@ -48,7 +48,7 @@ export const SaveAsOptions = () => {
 
 const OptionsMenu = ({show, onTouchOutside,title}) => {
     const { selectedNote } = useContext(InteractionContext)
-    const { convertToWord, isSaved } = useConvertToWord()
+    const { convertToWord, convertToPDF, isSaved } = useConvertFormat()
 
     const renderOutsideTouchable = (isShow) => {
         const view = <View style={{ flex: 1, width:"100%"}} />
@@ -66,9 +66,10 @@ const OptionsMenu = ({show, onTouchOutside,title}) => {
         convertToWord(selectedNote[0])
         onTouchOutside()
     }
-
+    
     const saveAsPDF = () => {
-        
+        convertToPDF(selectedNote[0])
+        onTouchOutside()
     }
 
     if (isSaved) {
@@ -113,7 +114,7 @@ const OptionsMenu = ({show, onTouchOutside,title}) => {
                         </Text>
                     </View>
                     <View style={{marginTop:10,gap:14}}>
-                        <TouchableOpacity onPress={onTouchOutside}> 
+                        <TouchableOpacity onPress={saveAsPDF}> 
                             <Text style={{fontSize:18}}>To PDF</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={saveAsWord}>

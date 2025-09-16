@@ -76,7 +76,6 @@ export const Items = ({item,setIsPressed,setDefaultSelection}) => {
     return (
         <Link href={`/edit/${item.id}`} asChild>
             <Pressable onLongPress={() => {
-                // router.push(`/manage/${item.id}`)
                 setDefaultSelection(item.id)
                 setIsPressed(true)
             }}>

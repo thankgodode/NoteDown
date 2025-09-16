@@ -8,6 +8,21 @@ export default InteractionProvider = ({ children }) => {
     const [selected, setSelected] = useState([])
     const [isSelectedAll, setIsSelectedAll] = useState(false)
     const [selectedNote, setSelectedNote] = useState([])
+
+    const selectAll = (data) => {
+        const arr = []
+        data.forEach((el) => {
+            arr.push(el.id)
+        })
+
+        setSelected(arr)
+        setIsSelectedAll(true)
+    }
+    
+    const deselectAll = () => {
+        setSelected([])
+        setIsSelectedAll(false)
+    }
     
     return (
         <InteractionContext.Provider
@@ -21,7 +36,9 @@ export default InteractionProvider = ({ children }) => {
                 setIsSelectedAll,
                 setSelected,
                 selectedNote,
-                setSelectedNote
+                setSelectedNote,
+                selectAll,
+                deselectAll
             }}
         >
             {children}

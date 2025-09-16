@@ -14,40 +14,19 @@ export default function Favorites() {
     
     const {
         isPressed,
-        isSelectedAll,
-        selected,
-        setSelected,
-        setIsSelectedAll
     } = useContext(InteractionContext)
 
-    const selectAll = () => {
-        const arr = []
-        data.forEach((el) => {
-            arr.push(el.id)
-        })
-
-        setSelected(arr)
-        setIsSelectedAll(true)
-    }
-
-    const deselectAll = () => {
-        setSelected([])
-        setIsSelectedAll(false)
-    }
-
     useEffect(() => {
-        if (data) {
-            setContent(data)
-        }
+        setContent(data)
     }, [data]);
 
-    return content === null ? "" :(
+    return (
         <>
             {!isPressed && <NavBar title="Favorites" />}
-            {isPressed && <SelectAll isSelectedAll={isSelectedAll} selectAll={selectAll} deselectAll={deselectAll} selected={selected} />}
+            {isPressed && <SelectAll content={content}/>}
             <SideMenu data={content} />
             <NoteList
-                content={content.filter((el, i) => el.favorite === true)}
+                content={content ? content.filter((el, i) => el.favorite === true) : null}
                 loading={loading}
             />
             {isPressed && <ActionBar content={content} setContent={setContent}/>}
