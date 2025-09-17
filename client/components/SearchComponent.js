@@ -1,4 +1,4 @@
-import { StatusBar, StyleSheet, TextInput, TouchableOpacity, View } from "react-native"
+import { FlatListComponent, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from "expo-router";
@@ -9,11 +9,15 @@ import {InteractionContext} from "@/context/InteractionContext";
 import { useContext, useEffect, useState } from "react";
 import SelectAll from "@/components/SelectAll";
 import ActionBar from "./ActionBar";
+import NoteList from "./NoteList";
+import { useNavigation } from "@react-navigation/native";
 
 export default function SearchComponent() {
     const { data, loading } = useFetch(() => readFile());
-    const [content, setContent] = useState(data);
+    const [content, setContent] = useState([])
+    const [searchQuery, setSearchQuery] = useState("")
 
+    const router = useRouter()
     const {
         isPressed,
     } = useContext(InteractionContext);
@@ -21,33 +25,70 @@ export default function SearchComponent() {
     useEffect(() => {
         setContent(data);
     }, [data]);
-
+    
     return (
-        <View>
+        <>
             <StatusBar style="auto" />
-            {isPressed && <SelectAll content={content}/>}
-            {!isPressed && <SearchBar />}
+            {isPressed && <SelectAll content={content} />}
+            {/* Search bar/Searched content */}
+            {!isPressed && 
+                <View style={styles.searchBar}>
+                    <View>
+                        <TouchableOpacity onPress={()=> router.push("/")}>
+                            <Ionicons name="chevron-back" size={24} color="black" />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.searchBox}>
+                        <FontAwesome name="search" size={16} color="black" />
+                        <TextInput style={styles.textInput} placeholder="Search notes" value={searchQuery} onChangeText={setSearchQuery}/>
+                    </View>
+                </View>
+            }
+            {content && <SearchedContent
+                content={content ? content.filter((el, i) => el.title.includes(searchQuery)) : []}
+                loading={loading}
+            />}
+            {!content && <Text>Empty</Text>}
             {isPressed && <ActionBar content={content} setContent={setContent} />}
-        </View>
+        </>
     )
 }
 
-export const SearchBar = () => {
-    const [searchQuery, setSearchQuery] = useState("")
-    const router = useRouter()
+// export const SearchBar = () => {
+//     const [content, setContent] = useState(data);
+
+//     const { data, loading } = useFetch(() => readFile());
+
+
+//     useEffect(() => {
+//         setContent(data);
+//     }, [data]);
+
     
+//     return (
+//         <View style={styles.searchBar}>
+//             <View>
+//                 <TouchableOpacity onPress={()=> router.push("/")}>
+//                     <Ionicons name="chevron-back" size={24} color="black" />
+//                 </TouchableOpacity>
+//             </View>
+//             <View style={styles.searchBox}>
+//                 <FontAwesome name="search" size={16} color="black" />
+//                 <TextInput style={styles.textInput} placeholder="Search notes" value={searchQuery} onChangeText={setSearchQuery}/>
+//             </View>
+//             <SearchedContent content={content}/>
+//         </View>
+//     )
+// }
+
+export const SearchedContent = ({content,loading}) => {
     return (
-        <View style={styles.searchBar}>
-            <View>
-                <TouchableOpacity onPress={()=> router.push("/")}>
-                    <Ionicons name="chevron-back" size={24} color="black" />
-                </TouchableOpacity>
-            </View>
-            <View style={styles.searchBox}>
-                <FontAwesome name="search" size={16} color="black" />
-                <TextInput style={styles.textInput} placeholder="Search notes" value={searchQuery} onChangeText={setSearchQuery}/>
-            </View>
-        </View>
+        <>
+            <NoteList
+                content={content}
+                loading={loading}
+            /> 
+        </>
     )
 }
 
