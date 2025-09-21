@@ -1,4 +1,6 @@
 import { SideMenuContext } from "@/context/SideMenuContext";
+import { ThemeContext } from "@/context/ThemeContext";
+import { FontAwesome6, MaterialCommunityIcons } from "@expo/vector-icons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -8,9 +10,12 @@ import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-nativ
 
 export default function NavBar({title}) {
     const { visible, setVisible } = useContext(SideMenuContext)
+    const { toggleLayout, layout} = useContext(ThemeContext)
+
     const router = useRouter()
     
     const styles = createStyles();
+    
     return (
         <View style={styles.navContainer}>
             <StatusBar style="auto" />
@@ -30,8 +35,10 @@ export default function NavBar({title}) {
                 <TouchableOpacity onPress={()=>router.push("/search")}>
                     <FontAwesome name="search" size={23} color="black"/>
                 </TouchableOpacity>
-                <TouchableOpacity>
-                    <Entypo name="dots-three-vertical" size={24} color="black"/>
+                <TouchableOpacity onPress={()=> toggleLayout()}>
+                    {layout==="large" && <Entypo name="grid" size={24} color="black" />}
+                    {layout==="small" && <MaterialCommunityIcons name="dots-grid" size={24} color="black" />}
+                    {layout==="list" && <FontAwesome6 name="list-ul" size={20} color="black" />}
                 </TouchableOpacity>
             </View>
         </View>

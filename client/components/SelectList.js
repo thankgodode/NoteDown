@@ -2,8 +2,12 @@ import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { useEffect } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { WebView } from "react-native-webview";
+import { Dimensions } from "react-native";
 
-export default function SelectList({ item, defaultSelection,selected,setSelected}) {
+const {width} = Dimensions.get("window")
+
+export default function SelectList({ item, defaultSelection,selected,setSelected,layout}) {
+    const styles = styleFunc(layout)
 
     useEffect(() => {
        setSelected([defaultSelection]) 
@@ -23,12 +27,12 @@ export default function SelectList({ item, defaultSelection,selected,setSelected
 
     return (
         <Pressable onPress={()=> selection(item.id)}>
-            <View>
+            <View style={styles.wrapper}>
                 <View style={styles.fileContainer}>
                 {selected.includes(item.id) ?
-                    <Feather name="check-circle" size={24} color="black" />
+                    <Feather name="check-circle" size={layout==="large" ? 24 : layout==="small" ? 20 :15} color="black" />
                     :
-                    <Feather name="circle" size={24} color="black"/>
+                    <Feather name="circle" size={layout==="large" ? 24 : layout==="small" ? 20 :15} color="black" />
                 }
                     <View style={{flex:1}}>
                         <WebView
@@ -39,6 +43,7 @@ export default function SelectList({ item, defaultSelection,selected,setSelected
                             }}
                             source={{ html: item.content }}
                             scalesPageToFit={false}
+                            textZoom={layout === "list"? 50 : layout==="small" ? 100 : 150}
                         />
                     </View>
                 </View>
@@ -56,18 +61,30 @@ export default function SelectList({ item, defaultSelection,selected,setSelected
     )
 }
 
-const styles = StyleSheet.create({
-    fileContainer: {
-        padding: 14,
-        borderRadius: 15,
-        backgroundColor: "#e3e7f3ff",
-        marginTop: 20,
-        width: 180,
-        height: 250,
-        overflow: "hidden",
-    },
-    detailsWrapper: {
-        padding:8,
-        alignItems: "center"
-    }
-})
+function styleFunc(layout) {
+    return (
+        StyleSheet.create({
+            wrapper:{
+                marginBottom: layout==="list" && 35,
+                flexDirection: layout === "list" && "row",
+                marginBottom:25,
+                gap: 10,
+            },
+            fileContainer: {
+                padding: 14,
+                borderRadius: 15,
+                backgroundColor: "#e3e7f3ff",
+                height:100,
+                width: layout==="large" ?  (width/2)-15 : layout=== "small" ? (width/3)-12:60,
+                height: layout === "large" ? 250 : layout==="small" ? 150: 60,
+                overflow: "hidden",
+                textAlign: "center",
+                zIndex:10
+            },
+            detailsWrapper:{
+                width: layout === "large" ? (width / 2) - 15 : layout === "small" ? (width / 3) - 12 : width,
+                alignItems: layout==="list" ? "left" :"center",
+            },
+        })
+    )
+}

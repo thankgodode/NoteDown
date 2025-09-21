@@ -8,10 +8,17 @@ import SelectList from "@/components/SelectList";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useContext } from "react";
-import {InteractionContext} from "@/context/InteractionContext";
+import { InteractionContext } from "@/context/InteractionContext";
+
+import { Dimensions } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { ThemeContext } from "@/context/ThemeContext";
+
+const {width} = Dimensions.get("window")
 
 
-export default function NoteList({content,loading}) {
+export default function NoteList({ content, loading }) {
+    const {layout} = useContext(ThemeContext)
     const {
         isPressed,
         setIsPressed,
@@ -32,19 +39,17 @@ export default function NoteList({content,loading}) {
     }
 
     return (
+        <SafeAreaProvider>
+        <SafeAreaView>
         <FlatList
-            numColumns={2}
             data={content}
             keyExtractor={(item) => item.id}
-            columnWrapperStyle={{
-                gap: 15,
-                marginBottom: 5,
-                justifyContent: "center",
-                marginHorizontal: "auto",
-                width: 100,
-            }}
             contentContainerStyle={{
-                paddingBottom: 100,
+                flexDirection:"row",
+                paddingBottom: 50,
+                padding: 10,
+                flexWrap: "wrap",
+                gap: 8,
             }}
             renderItem={({ item }) => {
                 return (
@@ -54,6 +59,7 @@ export default function NoteList({content,loading}) {
                                 item={item}
                                 setIsPressed={setIsPressed}
                                 setDefaultSelection={setDefaultSelection}
+                                layout={layout}
                             />
                         }
                         {isPressed &&
@@ -62,42 +68,49 @@ export default function NoteList({content,loading}) {
                                 defaultSelection={defaultSelection}
                                 selected={selected}
                                 setSelected={setSelected}
+                                layout={layout}
                             />
                         }
                     </>
                 )
             }}
             ListEmptyComponent={<EmptyComponent />}
+            removeClippedSubviews={false}
         />
+        </SafeAreaView>
+        </SafeAreaProvider>
+
     )
 }
 
-export const Items = ({item,setIsPressed,setDefaultSelection}) => {
+export const Items = ({ item, setIsPressed, setDefaultSelection, layout }) => {
+    const styles = styleFunc(layout)
+    
     return (
         <Link href={`/edit/${item.id}`} asChild>
             <Pressable onLongPress={() => {
                 setDefaultSelection(item.id)
                 setIsPressed(true)
             }}>
-                <View>
+                <View style={styles.wrapper}>
                     <View style={styles.fileContainer}>
-                        <View style={{flex:1}}>
-                            <WebView
-                                style={{
-                                    backgroundColor: "transparent",
-                                    overflowY: "hidden",
-                                    overflowX: "hidden",
-                                }}
-                                source={{ html: item.content }}
-                                scalesPageToFit={false}
-                            />
-                        </View>
+                        <WebView
+                            style={{
+                                backgroundColor: "transparent",
+                                overflowY: "hidden",
+                                overflowX: "hidden",
+                                overscrollBehavior:"none"
+                            }}
+                            source={{ html: item.content }}
+                            scalesPageToFit={false}
+                            textZoom={layout === "list"? 50 : layout==="small" ? 100 : 150}
+                        />
                     </View>
                     <View style={styles.detailsWrapper}>
-                        <Text style={{fontWeight:"bold",fontSize:15}}>{item.title.length<1?"Untitled":item.title}</Text>
+                        <Text style={styles.title}>{item.title.length<1?"Untitled":item.title}</Text>
                         <Text>
                             <View style={{flexDirection:"row",gap:10,alignItems:"center"}}>
-                                <Text>{new Date(item.createdAt).toLocaleDateString()}</Text>
+                                <Text >{new Date(item.createdAt).toLocaleDateString()}</Text>
                                 <Text>{item.favorite && <MaterialIcons name="favorite" size={24} color="#edaf11e4" />}</Text>
                             </View>
                         </Text>
@@ -110,7 +123,7 @@ export const Items = ({item,setIsPressed,setDefaultSelection}) => {
 
 const EmptyComponent = () => {
     return (
-        <View style={{height:500, justifyContent:"center", alignItems:"center"}}>
+        <View style={{height:500, justifyContent:"center", alignItems:"center",flex:1}}>
             <FontAwesome5 name="box-open" size={100} color="black"/>
             <Text style={{fontSize:20}}>No note file found...</Text>
         </View>
@@ -118,18 +131,34 @@ const EmptyComponent = () => {
 }
 
 
-const styles = StyleSheet.create({
-    fileContainer: {
-        padding: 14,
-        borderRadius: 15,
-        backgroundColor: "#e3e7f3ff",
-        marginTop: 20,
-        width: 165,
-        height: 250,
-        overflow: "hidden",
-    },
-    detailsWrapper: {
-        padding:8,
-        alignItems: "center"
-    }
-})
+function styleFunc(layout) {
+    return (
+        StyleSheet.create({
+        wrapper:{
+            marginBottom: layout==="list" && 35,
+            flexDirection: layout === "list" && "row",
+            marginBottom:25,
+            gap: 10,
+        },
+        fileContainer: {
+            padding: 14,
+            borderRadius: 15,
+            backgroundColor: "#e3e7f3ff",
+            height:100,
+            width: layout==="large" ?  (width/2)-15 : layout=== "small" ? (width/3)-12:60,
+            height: layout === "large" ? 250 : layout==="small" ? 150: 60,
+            overflow: "hidden",
+            textAlign: "center",
+            zIndex:10
+        },
+        detailsWrapper:{
+            width: layout === "large" ? (width / 2) - 15 : layout === "small" ? (width / 3) - 12 : width,
+            alignItems: layout==="list" ? "left" :"center",
+        },
+        title: {
+            fontWeight: "bold",
+            fontSize: 15,
+            textAlign: layout==="list" ? "left":"center"
+        }
+    }))
+}
