@@ -15,7 +15,8 @@ export default function ActionBar({content,setContent}) {
         selected,
         setIsPressed,
         defaultSelection,
-        setSelectedNote
+        setSelectedNote,
+        setIsSelectedAll
     } = useContext(InteractionContext)
 
     const deleteOptions = () => {
@@ -83,7 +84,11 @@ export default function ActionBar({content,setContent}) {
         <>
             <DeleteModal showModal={showModal} setShowModal={setShowModal} deleteNote={deleteSelected}/>
             <View style={styles.container}>
-                <TouchableOpacity style={styles.actionBtn} onPress={()=> setIsPressed(false)}>
+                <TouchableOpacity style={styles.actionBtn} onPress={() => {
+                    setIsPressed(false)
+                    setIsSelectedAll(false)
+                }
+                }>
                     <MaterialIcons name="close" size={24} color="red"/>
                     <Text style={{fontSize:12}}>Escape</Text>
                 </TouchableOpacity>

@@ -1,13 +1,16 @@
 import { Feather, MaterialIcons } from "@expo/vector-icons";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { WebView } from "react-native-webview";
 import { Dimensions } from "react-native";
+import {InteractionContext} from "@/context/InteractionContext";
 
 const {width} = Dimensions.get("window")
 
-export default function SelectList({ item, defaultSelection,selected,setSelected,layout}) {
+export default function SelectList({ item, defaultSelection, selected, setSelected, layout }) {
+    const {isSelectedAll, setIsSelectedAll} = useContext(InteractionContext)
     const styles = styleFunc(layout)
+
 
     useEffect(() => {
        setSelected([defaultSelection]) 
@@ -15,11 +18,17 @@ export default function SelectList({ item, defaultSelection,selected,setSelected
     
     const selection = (id) => {
 
-        setSelected([...selected,id])
-
+        setSelected([...selected, id])
+        
+        
         if (selected.includes(id)) {
             const toggle = selected.filter((el,i) => el !== id)
             setSelected(toggle)
+
+            if (isSelectedAll) {
+                setIsSelectedAll(!isSelectedAll)
+                console.log("jsdflskjfk ", isSelectedAll)
+            }
         }
 
         console.log(selected)

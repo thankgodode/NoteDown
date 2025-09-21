@@ -14,7 +14,7 @@ export default function SelectAll({content}) {
         <View style={styles.navContainer}>
             <Text style={{fontSize:20}}>{selected.length} Selected</Text>
             {
-                isSelectedAll &&
+                isSelectedAll  &&
                 <Pressable onPress={deselectAll} style={{ alignItems: "center" }}>
                     <View style={{flexDirection:"row", gap:5}}>
                         <Text>All</Text>
