@@ -48,7 +48,7 @@ export default function SearchComponent() {
                 content={content ? content.filter((el, i) => el.title.includes(searchQuery)) : []}
                 loading={loading}
             />}
-            {!content && <Text>Empty</Text>}
+            {!content && <Text style={{fontSize:20,textAlign:"center",margin:50}}>Your note is empty...</Text>}
             {isPressed && <ActionBar content={content} setContent={setContent} />}
         </>
     )
