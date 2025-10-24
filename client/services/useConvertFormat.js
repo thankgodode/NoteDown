@@ -1,13 +1,26 @@
 import { useState } from "react"
 import { requestPermission, writeToFile } from "./utils"
-import * as Print from "expo-print"
 import { shareAsync } from "expo-sharing"
+import { ToastAndroid } from "react-native"
+import {useNetInfo} from "@react-native-community/netinfo"
 import {generatePDF} from "react-native-html-to-pdf"
 
 export default useConvertFormat = () => {
-    const [isSaved, setIsSaved] = useState(false)
+    const {type, isConnected} = useNetInfo()
 
     async function convertToWord(data) {
+        console.log(type, isConnected)
+        if (!isConnected) {
+            ToastAndroid.showWithGravityAndOffset(
+                'Please connect to the internet to access this feature.',
+                ToastAndroid.LONG,
+                ToastAndroid.BOTTOM,
+                25,
+                50,
+            );
+
+            return
+        }
 
         try {
             const response = await fetch("http://192.168.43.38:5000/api/toDocx",
@@ -19,21 +32,27 @@ export default useConvertFormat = () => {
                     body:JSON.stringify({html:data.content})
                 }
             )
-
             const result = await response.json()
-
             const permission = await requestPermission()
 
             if (permission === true) {
-                await writeToFile(data.title, result.message,"docx")
-                setIsSaved(true)
-
-                setTimeout(() => {
-                    setIsSaved(false)
-                },1000)
+                await writeToFile(data.title, result.message, "docx")
+                ToastAndroid.showWithGravityAndOffset(
+                    'Successfully saved as Word!',
+                    ToastAndroid.LONG,
+                    ToastAndroid.BOTTOM,
+                    25,
+                    50,
+                );
             }
         } catch (error) {
-            console.error("Sorry an error just occured ", error)
+            ToastAndroid.showWithGravityAndOffset(
+                'Sorry, an unexpected error occured...',
+                ToastAndroid.LONG,
+                ToastAndroid.BOTTOM,
+                25,
+                50,
+            )
         }
     }
 
@@ -47,22 +66,29 @@ export default useConvertFormat = () => {
         }
         try {
             const result = await generatePDF(options)
-         
             const permission = await requestPermission()
 
             if (permission === true) {
-                await writeToFile(data.title, result.base64,"pdf")
-                setIsSaved(true)
-
-                setTimeout(() => {
-                    setIsSaved(false)
-                },1000)
+                await writeToFile(data.title, result.base64, "pdf")
+                 ToastAndroid.showWithGravityAndOffset(
+                    'Successfully saved as PDF!',
+                    ToastAndroid.LONG,
+                    ToastAndroid.BOTTOM,
+                    25,
+                    50,
+                );
             }
-
         } catch (error) {
+            ToastAndroid.showWithGravityAndOffset(
+                'Sorry, an unexpected error occured...',
+                ToastAndroid.LONG,
+                ToastAndroid.BOTTOM,
+                25,
+                50,
+            );
             console.error(error)
         }
     }
 
-    return {convertToWord,convertToPDF, isSaved}
+    return {convertToWord,convertToPDF}
 }
