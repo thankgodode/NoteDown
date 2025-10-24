@@ -6,12 +6,13 @@ import {
     Dimensions,
     View,
     TouchableOpacity,
+    ToastAndroid
 } from "react-native";
 import { useContext, useState } from "react";
 import { Entypo } from "@expo/vector-icons";
 import {InteractionContext} from "@/context/InteractionContext";
 import useConvertFormat from "@/services/useConvertFormat";
-import SuccessModal from "./SuccessModal";
+import Message from "./SuccessModal";
 
 const deviceHeight = Dimensions.get("window").height
 
@@ -46,9 +47,9 @@ export const SaveAsOptions = () => {
     )
 }
 
-const OptionsMenu = ({show, onTouchOutside,title}) => {
+const OptionsMenu = ({ show, onTouchOutside, title }) => {
     const { selectedNote } = useContext(InteractionContext)
-    const { convertToWord, convertToPDF, isSaved } = useConvertFormat()
+    const { convertToWord, convertToPDF, msg } = useConvertFormat()
 
     const renderOutsideTouchable = (isShow) => {
         const view = <View style={{ flex: 1, width:"100%"}} />
@@ -70,10 +71,6 @@ const OptionsMenu = ({show, onTouchOutside,title}) => {
     const saveAsPDF = () => {
         convertToPDF(selectedNote[0])
         onTouchOutside()
-    }
-
-    if (isSaved) {
-        return <SuccessModal message="File successfully saved!" isSaved={isSaved}/>
     }
 
     return (
