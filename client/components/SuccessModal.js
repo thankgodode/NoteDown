@@ -3,9 +3,9 @@ import {
     View
 } from "react-native";
 
-export default function SuccessModal({message,isSaved}) {
+export default function Message({message}) {
     return (
-        <Modal transparent={true} animationType="fade" backdropColor="red" visible={isSaved}>
+        <Modal transparent={true} animationType="fade" backdropColor="red" visible={message&&true}>
             <View style={styles.modalView}>
                 <Text style={styles.message}>{ }{message}</Text>
             </View>
