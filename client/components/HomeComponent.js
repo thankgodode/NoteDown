@@ -26,7 +26,7 @@ export default function Home() {
   return (
     <>
       {!isPressed && <NavBar title="All notes" />}
-      {isPressed &&<SelectAll content={content}/>}
+      {isPressed && <SelectAll content={content}/>}
       <SideMenu data={content} />
       <NoteList content={content} setContent={setContent} loading={loading} />
       {isPressed && <ActionBar content={content} setContent={setContent} />}
