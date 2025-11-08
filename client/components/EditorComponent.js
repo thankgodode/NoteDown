@@ -1,5 +1,6 @@
+import { ThemeContext } from '@/context/ThemeContext';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { createRef } from 'react';
+import { createRef, useContext } from 'react';
 import { KeyboardAvoidingView, Platform, SafeAreaView, StatusBar, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import QuillEditor, { QuillToolbar } from 'react-native-cn-quill';
 
@@ -15,31 +16,32 @@ export default function EditorComponent({
     showModal,
     route
 }) {
-  
+  const {theme} = useContext(ThemeContext)
+  const styles = createStyles(theme)
   const _editor = createRef();  
 
   return (
     <>
-      <SafeAreaView style={styles.root}>
+      <SafeAreaView style={{...styles.root}}>
         <StatusBar style="auto" />
-        <View style={styles.navWrapper}>
+        <View style={{...styles.navWrapper,backgroundColor:theme.fill}}>
           <View style={styles.nav}>
             <TouchableOpacity onPress={saveNote}>
-            <Ionicons name="chevron-back" size={24} color="black" />
-          </TouchableOpacity>
-          <TextInput placeholder="Title" value={title} onChangeText={setTitle} style={styles.textInput} maxLength={25}/>
-        </View>
-        <View style={styles.nav}>
-          <TouchableOpacity onPress={()=>setFavorite(!favorite)}>
-          {favorite
-            ? <MaterialIcons name="favorite" size={24} color="#edaf11e4" />
-            : <MaterialIcons name="favorite" size={24} color="grey" />
-          }
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setShowModal(!showModal)}>
-            {route !== "create" && <MaterialIcons name="delete" size={24} color="red" />}
-          </TouchableOpacity>
-        </View>
+              <Ionicons name="chevron-back" size={24} color="black" />
+            </TouchableOpacity>
+            <TextInput placeholder="Title" value={title} onChangeText={setTitle} style={styles.textInput} maxLength={25}/>
+          </View>
+          <View style={styles.nav}>
+            <TouchableOpacity onPress={()=>setFavorite(!favorite)}>
+            {favorite
+              ? <MaterialIcons name="favorite" size={24} color="#edaf11e4" />
+              : <MaterialIcons name="favorite" size={24} color="grey" />
+            }
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setShowModal(!showModal)}>
+              {route !== "create" && <MaterialIcons name="delete" size={24} color="red" />}
+            </TouchableOpacity>
+          </View>
         </View>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -58,7 +60,7 @@ export default function EditorComponent({
             // onTextChange={(text) => }
           />
           <View style={{marginBottom:30}}>
-            <QuillToolbar style={{marginBottom:50}} editor={_editor} options="full" theme="light" />
+            <QuillToolbar style={{marginBottom:50,backgroundColor:"red"}} editor={_editor} options="full" theme="light" />
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
@@ -67,45 +69,47 @@ export default function EditorComponent({
     )
 }
 
-const styles = StyleSheet.create({
-  title: {
-    fontWeight: 'bold',
-    alignSelf: 'center',
-    paddingVertical: 10,
-  },
-  root: {
-    flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
-    backgroundColor: '#eaeaea',
-  },
-  editor: {
-    flex: 1,
-    padding: 0,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginHorizontal: 30,
-    marginVertical: 5,
-    backgroundColor: 'white',
-  },
-  navWrapper: {
-    padding:5,
-    backgroundColor: "#eaeaeaff",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: 10,
-    position: "fixed",
-  },
-  nav: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 20,
-    padding: 5,
-  },
-  textInput: {
-    width: 200,
-    fontSize: 20,
-    paddingTop: 5,
-    paddingBottom:5
-  }
-});
+function createStyles(theme) {
+  return StyleSheet.create({
+    title: {
+      fontWeight: 'bold',
+      alignSelf: 'center',
+      paddingVertical: 10,
+    },
+    root: {
+      flex: 1,
+      marginTop: StatusBar.currentHeight || 0,
+      backgroundColor: theme.fill,
+    },
+    editor: {
+      flex: 1,
+      padding: 0,
+      borderColor: 'grey',
+      borderWidth: 1,
+      marginHorizontal: 30,
+      marginVertical: 5,
+      backgroundColor: 'white',
+    },
+    navWrapper: {
+      padding:5,
+      backgroundColor: "#eaeaeaff",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      gap: 10,
+      position: "fixed",
+    },
+    nav: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 20,
+      padding: 5,
+    },
+    textInput: {
+      width: 200,
+      fontSize: 20,
+      paddingTop: 5,
+      paddingBottom:5
+    }
+  })
+}

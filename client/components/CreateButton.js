@@ -22,7 +22,7 @@ export default function CreateButton() {
       <TouchableOpacity
         onPress={navCreateNote}  
       >
-        <FontAwesome6 name="notes-medical" size={25} color="white" />
+        <FontAwesome6 name="notes-medical" size={25} color={theme.createBtnIcon} />
       </TouchableOpacity>
     </View>
   );
@@ -32,12 +32,14 @@ function createStyles(theme) {
   return (
     StyleSheet.create({
       container: {
-        backgroundColor: theme.color,
+        backgroundColor: theme.createBtn,
         position: "absolute",
+        zIndex:500,
         right: 40,
         top:580,
-        padding: 10,
-        borderRadius: 50
+        padding: 15,
+        borderRadius: 50,
+        boxShadow:"1px 5px 15px #ccc"
       }
   }))
 }

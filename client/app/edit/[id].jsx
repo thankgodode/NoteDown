@@ -6,6 +6,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 
 import DeleteModal from "@/components/DeleteModal";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 export default function EditNote() {
     const [content, setContent] = useState("")
@@ -77,20 +78,22 @@ export default function EditNote() {
                 setShowModal={setShowModal}
                 deleteNote={deleteNote}
             />
-            <EditorComponent
-                title={title}
-                setTitle={setTitle}
-                content={content}
-                setContent={setContent}
-                favorite={favorite}
-                setFavorite={setFavorite}
-                folder={folder}
-                setFolder={setFolder}
-                saveNote={editNote}
-                setShowModal={setShowModal}
-                showModal={showModal}
-                deleteNote={deleteOptions}
-            />
+            <ThemeProvider>
+                <EditorComponent
+                    title={title}
+                    setTitle={setTitle}
+                    content={content}
+                    setContent={setContent}
+                    favorite={favorite}
+                    setFavorite={setFavorite}
+                    folder={folder}
+                    setFolder={setFolder}
+                    saveNote={editNote}
+                    setShowModal={setShowModal}
+                    showModal={showModal}
+                    deleteNote={deleteOptions}
+                />
+            </ThemeProvider>
         </>
     )
 }

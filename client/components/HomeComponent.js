@@ -10,8 +10,11 @@ import SideMenu from "./SideMenu";
 import useFetch from "@/services/useFetch";
 import { readFile } from "@/services/api";
 import { InteractionContext } from "@/context/InteractionContext";
+import { Text, View } from "react-native";
+import { ThemeContext } from "@/context/ThemeContext";
 
 export default function Home() {
+  const {theme} = useContext(ThemeContext)
   const { data, loading } = useFetch(() => readFile());
   const [content, setContent] = useState(data);
 
@@ -23,14 +26,16 @@ export default function Home() {
     setContent(data);
   }, [data]);
 
+  console.log(theme)
+
   return (
-    <>
+    <View style={{flex:1,backgroundColor:theme.background}}>
       {!isPressed && <NavBar title="All notes" />}
       {isPressed && <SelectAll content={content}/>}
       <SideMenu data={content} />
       <NoteList content={content} setContent={setContent} loading={loading} />
       {isPressed && <ActionBar content={content} setContent={setContent} />}
-      {!isPressed && <CreateButton />}
-    </>
+      <CreateButton />
+    </View>
   );
 }

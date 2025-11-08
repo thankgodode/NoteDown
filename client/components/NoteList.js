@@ -12,7 +12,7 @@ import { InteractionContext } from "@/context/InteractionContext";
 
 import { Dimensions } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { ThemeContext } from "@/context/ThemeContext";
+import { ThemeContext, ThemeProvider } from "@/context/ThemeContext";
 
 const {width} = Dimensions.get("window")
 
@@ -84,7 +84,8 @@ export default function NoteList({ content, loading }) {
 }
 
 export const Items = ({ item, setIsPressed, setDefaultSelection, layout }) => {
-    const styles = styleFunc(layout)
+    const {theme} = useContext(ThemeContext)
+    const styles = styleFunc(layout,theme)
     
     return (
         <Link href={`/edit/${item.id}`} asChild>
@@ -110,7 +111,7 @@ export const Items = ({ item, setIsPressed, setDefaultSelection, layout }) => {
                         <Text style={styles.title}>{item.title.length<1?"Untitled":item.title}</Text>
                         <Text>
                             <View style={{flexDirection:"row",gap:10,alignItems:"center"}}>
-                                <Text >{new Date(item.createdAt).toLocaleDateString()}</Text>
+                                <Text style={{color:theme.color}}>{new Date(item.createdAt).toLocaleDateString()}</Text>
                                 <Text>{item.favorite && <MaterialIcons name="favorite" size={24} color="#edaf11e4" />}</Text>
                             </View>
                         </Text>
@@ -122,16 +123,18 @@ export const Items = ({ item, setIsPressed, setDefaultSelection, layout }) => {
 }
 
 const EmptyComponent = () => {
+    const { theme } = useContext(ThemeContext)
+    
     return (
         <View style={{height:500, justifyContent:"center", alignItems:"center",flex:1}}>
-            <FontAwesome5 name="box-open" size={100} color="black"/>
-            <Text style={{fontSize:20}}>No note file found...</Text>
+            <FontAwesome5 name="box-open" size={100} color={theme.color} />
+            <Text style={{color:theme.color,fontSize:20}}>No note file found...</Text>
         </View>
     )
 }
 
 
-function styleFunc(layout) {
+function styleFunc(layout,theme) {
     return (
         StyleSheet.create({
         wrapper:{
@@ -158,6 +161,7 @@ function styleFunc(layout) {
         title: {
             fontWeight: "bold",
             fontSize: 15,
+            color:theme.noteTitle,
             textAlign: layout==="list" ? "left":"center"
         }
     }))

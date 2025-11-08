@@ -11,17 +11,13 @@ export default function FavoritesRoute() {
   const [showModal, setShowModal] = useState(false);
 
   return (
-    <>
+    <ThemeProvider>
       <DeleteModal showModal={showModal} setShowModal={setShowModal} />
-      <View style={{ flex: 1 }}>
-        <ThemeProvider>
-          <SideMenuProvider>
-            <InteractionProvider>
-              <Favorites />
-            </InteractionProvider>
-          </SideMenuProvider>
-        </ThemeProvider>
-      </View>
-    </>
+        <SideMenuProvider>
+          <InteractionProvider>
+            <Favorites />
+          </InteractionProvider>
+        </SideMenuProvider>
+    </ThemeProvider>
   );
 }

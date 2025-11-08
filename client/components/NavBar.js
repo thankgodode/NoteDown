@@ -8,13 +8,13 @@ import { useRouter } from "expo-router";
 import { useContext } from "react";
 import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-export default function NavBar({title}) {
+export default function NavBar({ title }) {
     const { visible, setVisible } = useContext(SideMenuContext)
-    const { toggleLayout, layout} = useContext(ThemeContext)
+    const { toggleLayout, layout, theme} = useContext(ThemeContext)
 
     const router = useRouter()
     
-    const styles = createStyles();
+    const styles = createStyles(theme);
     
     return (
         <View style={styles.navContainer}>
@@ -24,28 +24,28 @@ export default function NavBar({title}) {
                     setVisible(!visible)
                 }}>
                     {!visible ?
-                        <AntDesign name="menu-fold" size={24} color="black" />
+                        <AntDesign name="menu-fold" size={24} color={theme.color} />
                         :
-                        <AntDesign name="closecircleo" size={24} color="black" />
+                        <AntDesign name="closecircleo" size={24} color={theme.color} />
                     }
                 </TouchableOpacity>
                 <Text style={styles.text}>{title}</Text>
             </View>
             <View style={styles.leftSide}>
                 <TouchableOpacity onPress={()=>router.push("/search")}>
-                    <FontAwesome name="search" size={23} color="black"/>
+                    <FontAwesome name="search" size={23} color={theme.color} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={()=> toggleLayout()}>
-                    {layout==="large" && <Entypo name="grid" size={24} color="black" />}
-                    {layout==="small" && <MaterialCommunityIcons name="dots-grid" size={24} color="black" />}
-                    {layout==="list" && <FontAwesome6 name="list-ul" size={20} color="black" />}
+                    {layout==="large" && <Entypo name="grid" size={24} color={theme.color} />}
+                    {layout==="small" && <MaterialCommunityIcons name="dots-grid" size={24} color={theme.color} />}
+                    {layout==="list" && <FontAwesome6 name="list-ul" size={20} color={theme.color} />}
                 </TouchableOpacity>
             </View>
         </View>
     )
 }
 
-function createStyles() {
+function createStyles(theme) {
     return (
         StyleSheet.create({
             navContainer: {
@@ -68,7 +68,8 @@ function createStyles() {
                 gap:20
             },
             text: {
-                fontSize:20
+                fontSize: 20,
+                color:theme.color
             }
         })
     )
