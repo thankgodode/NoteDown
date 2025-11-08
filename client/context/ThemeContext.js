@@ -11,7 +11,7 @@ export const ThemeProvider = ({ children }) => {
     const [layout, setLayout] = useState("large")
     
     const layoutOptions = ["large", "small", "list"]
-    const theme = colorScheme === "dark" ? Colors.dark : Colors.light;
+    const theme = Colors.dark
 
     const toggleLayout = async () => {
         if (count >= 2) {

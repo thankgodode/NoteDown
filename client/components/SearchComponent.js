@@ -11,23 +11,27 @@ import SelectAll from "@/components/SelectAll";
 import ActionBar from "./ActionBar";
 import NoteList from "./NoteList";
 import { useNavigation } from "@react-navigation/native";
+import { ThemeContext } from "@/context/ThemeContext";
 
 export default function SearchComponent() {
     const { data, loading } = useFetch(() => readFile());
     const [content, setContent] = useState([])
     const [searchQuery, setSearchQuery] = useState("")
+    const {theme} = useContext(ThemeContext)
 
     const router = useRouter()
     const {
         isPressed,
     } = useContext(InteractionContext);
 
+    const styles = createStyles(theme)
+
     useEffect(() => {
         setContent(data);
     }, [data]);
     
     return (
-        <>
+        <View style={{flex:1, backgroundColor:theme.background}}>
             <StatusBar style="auto" />
             {isPressed && <SelectAll content={content} />}
             {/* Search bar/Searched content */}
@@ -35,12 +39,12 @@ export default function SearchComponent() {
                 <View style={styles.searchBar}>
                     <View>
                         <TouchableOpacity onPress={()=> router.push("/")}>
-                            <Ionicons name="chevron-back" size={24} color="black" />
+                            <Ionicons name="chevron-back" size={24} color={theme.color} />
                         </TouchableOpacity>
                     </View>
                     <View style={styles.searchBox}>
-                        <FontAwesome name="search" size={16} color="black" />
-                        <TextInput style={styles.textInput} placeholder="Search notes" value={searchQuery} onChangeText={setSearchQuery}/>
+                        <FontAwesome name="search" size={16} color={theme.color} />
+                        <TextInput style={styles.textInput} placeholderTextColor={theme.color} placeholder="Search notes" value={searchQuery} onChangeText={setSearchQuery}/>
                     </View>
                 </View>
             }
@@ -48,9 +52,9 @@ export default function SearchComponent() {
                 content={content ? content.filter((el, i) => el.title.includes(searchQuery)) : []}
                 loading={loading}
             />}
-            {!content && <Text style={{fontSize:20,textAlign:"center",margin:50}}>Your note is empty...</Text>}
+            {!content && <Text style={{fontSize:20,textAlign:"center",margin:50,color:theme.color}}>Your note is empty...</Text>}
             {isPressed && <ActionBar content={content} setContent={setContent} />}
-        </>
+        </View>
     )
 }
 
@@ -92,31 +96,36 @@ export const SearchedContent = ({content,loading}) => {
     )
 }
 
-const styles = StyleSheet.create({
-    searchBar: {
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingTop: 10,
-        paddingBottom:10,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        marginTop: StatusBar.currentHeight || 0,
-        gap: 30,
-    },
-    searchBox: {
-        backgroundColor: "#cccdc989",
-        flex:1,
-        flexDirection: "row",
-        alignItems:"center",
-        gap: 5,
-        paddingLeft: 10,
-        paddingRight: 10,
-        borderRadius:8,
-        overflow:"hidden"
-    },
-    textInput: {
-        flex: 1,
-        fontSize:12,
-    }
-})
+function createStyles(theme) {
+    return StyleSheet.create({
+        searchBar: {
+            paddingLeft: 10,
+            paddingRight: 10,
+            paddingTop: 10,
+            paddingBottom:10,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginTop: StatusBar.currentHeight || 0,
+            gap: 30,
+        },
+        searchBox: {
+            backgroundColor: "transparent",
+            borderWidth: 1,
+            borderColor:theme.hairline,
+            flex:1,
+            flexDirection: "row",
+            alignItems:"center",
+            gap: 5,
+            paddingLeft: 10,
+            paddingRight: 10,
+            borderRadius:20,
+            overflow:"hidden"
+        },
+        textInput: {
+            flex: 1,
+            fontSize: 12,
+            color:theme.color
+        }
+    })
+}

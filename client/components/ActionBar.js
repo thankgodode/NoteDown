@@ -6,6 +6,7 @@ import DeleteModal from "./DeleteModal";
 import {SaveAsOptions} from "./SaveDropDown"
 
 import {InteractionContext} from "@/context/InteractionContext";
+import { ThemeContext, ThemeProvider } from "@/context/ThemeContext";
 
 export default function ActionBar({content,setContent}) {
     const [showModal, setShowModal] = useState(false)
@@ -18,6 +19,9 @@ export default function ActionBar({content,setContent}) {
         setSelectedNote,
         setIsSelectedAll
     } = useContext(InteractionContext)
+    const {theme} = useContext(ThemeContext)
+
+    const styles = createStyles(theme)
 
     const deleteOptions = () => {
         setShowModal(!showModal)
@@ -90,27 +94,27 @@ export default function ActionBar({content,setContent}) {
                 }
                 }>
                     <MaterialIcons name="close" size={24} color="red"/>
-                    <Text style={{fontSize:12}}>Escape</Text>
+                    <Text style={{color:theme.color, fontSize:12}}>Escape</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.actionBtn} disabled={selected.length<1} onPress={addFavorites}>
                     {isFavorite &&
                         <>
                             <MaterialIcons name="favorite" size={24} color={selected.length<1 ? "#ccc" :"#edaf11e4"} />
-                            <Text style={{fontSize:12}}>Unfavorite</Text>
+                            <Text style={{color:theme.color, fontSize:12}}>Unfavorite</Text>
                         </>
                     }
                     
                     {!isFavorite &&
                         <>
                         <MaterialIcons name="favorite" size={24} color={selected.length<1 ? "#ccc" :"grey"} />
-                            <Text style={{fontSize:12}}>Favorite</Text>
+                            <Text style={{color:theme.color, fontSize:12}}>Favorite</Text>
                         </>
                     }
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.actionBtn} onPress={deleteOptions} disabled={selected.length<1}>
                     <MaterialIcons name="delete" size={24} color={selected.length<1?"#ccc":"red"} />
-                    {selected.length>1 && <Text style={{fontSize:12}}>Delete All</Text>}
-                    {selected.length <= 1 && <Text style={{fontSize:12}}>Delete</Text>}
+                    {selected.length>1 && <Text style={{color:theme.color, fontSize:12}}>Delete All</Text>}
+                    {selected.length <= 1 && <Text style={{color:theme.color, fontSize:12}}>Delete</Text>}
                 </TouchableOpacity>
                 <SaveAsOptions/>
             </View>
@@ -119,21 +123,23 @@ export default function ActionBar({content,setContent}) {
     )
 }
 
-const styles =
-    StyleSheet.create({
-      container: {
-        marginHorizontal:"auto",
-        width: "100%",
-        height:120,
-        backgroundColor:"#e9e7e7ff",
-        flexDirection:"row",
-        justifyContent: "space-between",
-        paddingLeft: 30,
-        paddingRight: 30,
-        paddingTop: 15,
-        
-      },
-      actionBtn:{
-          alignItems:"center"
+function createStyles(theme) {
+    return StyleSheet.create({
+        container: {
+            marginHorizontal:"auto",
+            width: "100%",
+            height:120,
+            backgroundColor: theme.fill,
+            flexDirection:"row",
+            justifyContent: "space-between",
+            paddingLeft: 30,
+            paddingRight: 30,
+            paddingTop: 15,
+        },
+        actionBtn:{
+            alignItems:"center"
       }
-  })
+    })
+}
+
+

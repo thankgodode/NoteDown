@@ -13,11 +13,13 @@ import { Entypo } from "@expo/vector-icons";
 import {InteractionContext} from "@/context/InteractionContext";
 import useConvertFormat from "@/services/useConvertFormat";
 import Message from "./SuccessModal";
+import { ThemeContext } from "@/context/ThemeContext";
 
 const deviceHeight = Dimensions.get("window").height
 
 export const SaveAsOptions = () => {
     const [show, setShow] = useState(false)
+    const {theme} = useContext(ThemeContext)
     const { selected } = useContext(InteractionContext)
     
     const onShow = () => {
@@ -30,10 +32,10 @@ export const SaveAsOptions = () => {
 
     return (
         <SafeAreaView>
-            <TouchableWithoutFeedback onPress={onShow}>
+            <TouchableWithoutFeedback onPress={onShow} disabled={selected.length > 1 ? true:selected.length<1 ? true:false}>
                 <View style={{alignItems:"center"}}>
-                    <Entypo name="save" size={24} color={selected.length>1 || selected.length<1?"#ccc":"black"}/>
-                    <Text>
+                    <Entypo name="save" size={24} color={selected.length>1 || selected.length<1?"#ccc":"deepskyblue"}/>
+                    <Text style={{color:theme.color}}>
                         Save as
                     </Text>
                 </View>

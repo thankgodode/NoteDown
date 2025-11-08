@@ -27,9 +27,9 @@ export default function EditorComponent({
         <View style={{...styles.navWrapper,backgroundColor:theme.fill}}>
           <View style={styles.nav}>
             <TouchableOpacity onPress={saveNote}>
-              <Ionicons name="chevron-back" size={24} color="black" />
+              <Ionicons name="chevron-back" size={24} color={theme.color} />
             </TouchableOpacity>
-            <TextInput placeholder="Title" value={title} onChangeText={setTitle} style={styles.textInput} maxLength={25}/>
+            <TextInput placeholderTextColor={theme.color} placeholder="Title" value={title} onChangeText={setTitle} style={styles.textInput} maxLength={25}/>
           </View>
           <View style={styles.nav}>
             <TouchableOpacity onPress={()=>setFavorite(!favorite)}>
@@ -60,7 +60,7 @@ export default function EditorComponent({
             // onTextChange={(text) => }
           />
           <View style={{marginBottom:30}}>
-            <QuillToolbar style={{marginBottom:50,backgroundColor:"red"}} editor={_editor} options="full" theme="light" />
+            <QuillToolbar editor={_editor} options="full" theme={theme.theme} />
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
@@ -106,6 +106,7 @@ function createStyles(theme) {
       padding: 5,
     },
     textInput: {
+      color: theme.color,
       width: 200,
       fontSize: 20,
       paddingTop: 5,

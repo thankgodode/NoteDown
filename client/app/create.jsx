@@ -4,6 +4,7 @@ import EditorComponent from "@/components/EditorComponent";
 import { DeleteModalContext } from '@/context/DeleteModalContext';
 import { useRouter } from 'expo-router';
 import { useContext, useState } from 'react';
+import { ThemeProvider } from '@/context/ThemeContext';
 
 export default function CreateNote() {
   const [title, setTitle] = useState("")
@@ -54,18 +55,20 @@ export default function CreateNote() {
 
   return (
     <>
-      <EditorComponent
-        title={title}
-        setTitle={setTitle}
-        content={content}
-        setContent={setContent}
-        favorite={favorite}
-        setFavorite={setFavorite}
-        folder={folder}
-        setFolder={setFolder}
-        saveNote={createNote}
-        route={"create"}
-      />
+      <ThemeProvider>
+        <EditorComponent
+          title={title}
+          setTitle={setTitle}
+          content={content}
+          setContent={setContent}
+          favorite={favorite}
+          setFavorite={setFavorite}
+          folder={folder}
+          setFolder={setFolder}
+          saveNote={createNote}
+          route={"create"}
+        />
+      </ThemeProvider>
     </>
   );
 }

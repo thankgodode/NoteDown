@@ -1,5 +1,7 @@
 export const Colors = {
     dark: {
+        theme: "dark",
+        hairline:"#0023d2ff",
         background: "#0d1125ff",
         color:"#fff",
         text: "#fff",
@@ -10,6 +12,8 @@ export const Colors = {
         tab: "skyblue",
     },
     light: {
+        theme: "light",
+        hairline:"#ccc",
         background: "white",
         color:"#000",
         noteTitle: "#000",
@@ -19,6 +23,6 @@ export const Colors = {
         tab: "#fff",
         sideMenuText: "#000",
         sideMenuIcon: "#000",
-        navIcon: "#000"
+        navIcon: "#000",
     }
 }

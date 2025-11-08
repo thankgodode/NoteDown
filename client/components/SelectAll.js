@@ -1,4 +1,5 @@
 import {InteractionContext} from "@/context/InteractionContext"
+import { ThemeContext } from "@/context/ThemeContext"
 import { Feather } from "@expo/vector-icons"
 import { useContext } from "react"
 import { Pressable, StatusBar, StyleSheet, Text, View } from "react-native"
@@ -8,17 +9,19 @@ export default function SelectAll({content}) {
         isSelectedAll,
         selectAll,
         deselectAll, selected
-    }  = useContext(InteractionContext)
+    } = useContext(InteractionContext)
+    
+    const {theme} = useContext(ThemeContext)
 
     return (
         <View style={styles.navContainer}>
-            <Text style={{fontSize:20}}>{selected.length} Selected</Text>
+            <Text style={{fontSize:20,color:theme.color}}>{selected.length} Selected</Text>
             {
                 isSelectedAll  &&
                 <Pressable onPress={deselectAll} style={{ alignItems: "center" }}>
                     <View style={{flexDirection:"row", gap:5}}>
-                        <Text>All</Text>
-                        <Feather name="check-circle" size={24} color="black" />
+                        <Text style={{color:theme.color}}>All</Text>
+                        <Feather name="check-circle" size={24} color={theme.color} />
                     </View>
                 </Pressable>
             }
@@ -26,8 +29,8 @@ export default function SelectAll({content}) {
                 !isSelectedAll &&
                 <Pressable onPress={()=>selectAll(content)} style={{ alignItems: "center" }}>
                      <View style={{flexDirection:"row", gap:5}}>
-                        <Text>All</Text>
-                        <Feather name="circle" size={24} color="black" />
+                        <Text style={{color:theme.color}}>All</Text>
+                        <Feather name="circle" size={24} color={theme.color} />
                     </View>
                 </Pressable>
             }
