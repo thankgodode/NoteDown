@@ -22,6 +22,8 @@ export default function Home() {
     isPressed,
   } = useContext(InteractionContext);
 
+  console.log(true)
+
   useEffect(() => {
     setContent(data);
   }, [data]);
