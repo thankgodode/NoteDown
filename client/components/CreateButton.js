@@ -34,12 +34,12 @@ function createStyles(theme) {
       container: {
         backgroundColor: theme.createBtn,
         position: "absolute",
-        zIndex:500,
+        // zIndex:50,
         right: 40,
         top:580,
         padding: 15,
         borderRadius: 50,
-        boxShadow:"1px 5px 15px #ccc"
+        boxShadow: theme.theme==="light"?"1px 5px 15px #ccc":""
       }
   }))
 }

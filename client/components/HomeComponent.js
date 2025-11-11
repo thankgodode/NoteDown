@@ -26,8 +26,6 @@ export default function Home() {
     setContent(data);
   }, [data]);
 
-  console.log(theme)
-
   return (
     <View style={{flex:1,backgroundColor:theme.background}}>
       {!isPressed && <NavBar title="All notes" />}

@@ -6,12 +6,18 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export const ThemeContext = createContext({})
 
 export const ThemeProvider = ({ children }) => {
-    const [colorScheme, setColorScheme] = useState(Appearance.getColorScheme())
+    const [colorScheme, setColorScheme] = useState("")
     const [count, setCount] = useState(0)
     const [layout, setLayout] = useState("large")
     
     const layoutOptions = ["large", "small", "list"]
-    const theme = Colors.dark
+    const theme = colorScheme ==="dark"? Colors.dark : Colors.light
+
+    const toggleTheme = async() => {
+        const newTheme = colorScheme ==="light" ? "dark" : "light"
+        setColorScheme(newTheme)
+        await AsyncStorage.setItem("theme", JSON.stringify({theme:newTheme}))
+    }
 
     const toggleLayout = async () => {
         if (count >= 2) {
@@ -22,14 +28,13 @@ export const ThemeProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        async function fetchData(){
+        async function fetchData() {
             try {
                 const storedOpt = await AsyncStorage.getItem("layout")
-                console.log("Layout: ", storedOpt)
 
                 if (storedOpt) {
                     const parsed = JSON.parse(storedOpt)
-                    setCount(JSON.parse(parsed.id))
+                    setCount((parsed.id))
                     
                 } else {
                     await AsyncStorage.setItem("layout", JSON.stringify({id:count, option:layoutOptions[count]}))
@@ -39,9 +44,23 @@ export const ThemeProvider = ({ children }) => {
             }
         }
 
+        async function fetchTheme() {
+            const storedTheme = await AsyncStorage.getItem("theme")
+            const parseTheme = JSON.parse(storedTheme)
+            
+            if (storedTheme) {
+                setColorScheme(parseTheme.theme)
+            } else {
+                const systemTheme = Appearance.getColorScheme()
+                setColorScheme(systemTheme)
+                await AsyncStorage.setItem("theme", JSON.stringify({theme:parseTheme.theme}))
+            }
+        }
+        
+        fetchTheme()
         fetchData()
     }, [])
-    
+
     useEffect(() => {
         async function fetchLS(){
             try {
@@ -59,6 +78,7 @@ export const ThemeProvider = ({ children }) => {
         <ThemeContext.Provider
             value={{
                 theme,
+                toggleTheme,
                 colorScheme,
                 setColorScheme,
                 toggleLayout,

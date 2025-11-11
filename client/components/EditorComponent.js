@@ -16,7 +16,7 @@ export default function EditorComponent({
     showModal,
     route
 }) {
-  const {theme} = useContext(ThemeContext)
+  const { theme } = useContext(ThemeContext)
   const styles = createStyles(theme)
   const _editor = createRef();  
 

@@ -1,6 +1,6 @@
 import { SideMenuContext } from '@/context/SideMenuContext';
 import { ThemeContext } from '@/context/ThemeContext';
-import { AntDesign, Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
+import { AntDesign, Entypo, Fontisto, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useRoute } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { useContext, useEffect, useState } from 'react';
@@ -14,14 +14,14 @@ import Animated, {
 
 export default function SideMenu({data}) {
   const { visible, setVisible } = useContext(SideMenuContext)
-  const {theme} = useContext(ThemeContext)
+  const {theme,setColorScheme, toggleTheme} = useContext(ThemeContext)
   const [hide, setHide] = useState(false)
 
   const router = useRouter()
-  const routePath = useRoute();
+  const routePath = useRoute()
 
   const styles = createStyles(theme)
-
+  
   const clickNotes = () => {
       router.push("/")
       setHide(!hide)
@@ -96,6 +96,10 @@ export default function SideMenu({data}) {
                 {data? data.filter((el, i) => el.favorite===true).length:0}
             </Text>
           </TouchableOpacity>
+          <TouchableOpacity style={[styles.menusItems,{top:"50%"}]} onPress={toggleTheme}>
+            {theme.theme === "light" && <Entypo name="light-up" size={34} color={theme.color} />}
+            {theme.theme === "dark" && <MaterialIcons name="dark-mode" size={34} color={theme.color} />}
+          </TouchableOpacity>
         </Animated.View>}
       </>
   );
@@ -108,6 +112,7 @@ function createStyles(theme) {
       height: 800,
       backgroundColor: theme.fill,
       position: "absolute",
+      zIndex:100,
       top: 80,
       left: 0,
       padding: 8,
