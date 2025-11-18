@@ -1,6 +1,4 @@
-import { useState } from "react"
 import { requestPermission, writeToFile } from "./utils"
-import { shareAsync } from "expo-sharing"
 import { ToastAndroid } from "react-native"
 import {useNetInfo} from "@react-native-community/netinfo"
 import {generatePDF} from "react-native-html-to-pdf"

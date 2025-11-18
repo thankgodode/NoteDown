@@ -5,6 +5,7 @@ import { DeleteModalContext } from '@/context/DeleteModalContext';
 import { useRouter } from 'expo-router';
 import { useContext, useState } from 'react';
 import { ThemeProvider } from '@/context/ThemeContext';
+import { useNavigation } from '@react-navigation/native';
 
 export default function CreateNote() {
   const [title, setTitle] = useState("")
