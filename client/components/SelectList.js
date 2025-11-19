@@ -11,7 +11,7 @@ const {width} = Dimensions.get("window")
 export default function SelectList({ item, defaultSelection, selected, setSelected, layout }) {
     const { isSelectedAll, setIsSelectedAll } = useContext(InteractionContext)
     const {theme} = useContext(ThemeContext)
-    const styles = styleFunc(layout,theme)
+    const styles = styleFunc(layout, theme, selected,item.id)
 
 
     useEffect(() => {
@@ -40,22 +40,24 @@ export default function SelectList({ item, defaultSelection, selected, setSelect
         <Pressable onPress={()=> selection(item.id)}>
             <View style={styles.wrapper}>
                 <View style={styles.fileContainer}>
-                {selected.includes(item.id) ?
-                    <Feather name="check-circle" size={layout==="large" ? 24 : layout==="small" ? 20 :15} color="black" />
-                    :
-                    <Feather name="circle" size={layout==="large" ? 24 : layout==="small" ? 20 :15} color="black" />
-                }
                     <View style={{flex:1}}>
                         <WebView
                             style={{
                                 backgroundColor: "transparent",
                                 overflowY: "hidden",
-                                overflowX: "hidden"
+                                overflowX: "hidden",
                             }}
                             source={{ html: item.content }}
                             scalesPageToFit={false}
                             textZoom={layout === "list"? 50 : layout==="small" ? 80 : 100}
                         />
+                    </View>
+                    <View style={styles.selectIcon}>
+                        {selected.includes(item.id) ?
+                            <Feather name="check-circle" size={layout==="large" ? 24 : layout==="small" ? 20 :15} color="black" />
+                            :
+                            <Feather name="circle" size={layout==="large" ? 24 : layout==="small" ? 20 :15} color="black" />
+                        }
                     </View>
                 </View>
                 <View style={styles.detailsWrapper}>
@@ -72,7 +74,7 @@ export default function SelectList({ item, defaultSelection, selected, setSelect
     )
 }
 
-function styleFunc(layout,theme) {
+function styleFunc(layout,theme,selected,id) {
     return (
         StyleSheet.create({
             wrapper:{
@@ -84,7 +86,7 @@ function styleFunc(layout,theme) {
             fileContainer: {
                 padding: layout==="list" ? 2 : layout==="small" ? 8 : 14,
                 borderRadius: 10,
-                backgroundColor: "#e3e7f3ff",
+                backgroundColor: selected.includes(id) ? "#aab6d2ff" : "#e3e7f3ff",
                 height:100,
                 width: layout==="large" ?  (width/2)-15 : layout=== "small" ? (width/3)-12:60,
                 height: layout === "large" ? 250 : layout==="small" ? 150: 60,
@@ -94,8 +96,17 @@ function styleFunc(layout,theme) {
             },
             detailsWrapper:{
                 width: layout === "large" ? (width / 2) - 15 : layout === "small" ? (width / 3) - 12 : width,
-                alignItems: layout==="list" ? "left" :"center",
+                alignItems: layout === "list" ? "left" : "center",
             },
+            selectIcon: {
+                position: "absolute",
+                backgroundColor: selected.includes(id) ? "#aab6d2ff" : "#e3e7f3ff",
+                width: 200,
+                flex:1,
+                left: 0,
+                bottom:0,
+                padding: layout==="list" ? 3 : layout==="small" ? 5 : 7
+            }
         })
     )
 }
