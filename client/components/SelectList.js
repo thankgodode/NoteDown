@@ -54,7 +54,7 @@ export default function SelectList({ item, defaultSelection, selected, setSelect
                             }}
                             source={{ html: item.content }}
                             scalesPageToFit={false}
-                            textZoom={layout === "list"? 50 : layout==="small" ? 100 : 150}
+                            textZoom={layout === "list"? 50 : layout==="small" ? 80 : 100}
                         />
                     </View>
                 </View>
@@ -82,8 +82,8 @@ function styleFunc(layout,theme) {
                 gap: 10,
             },
             fileContainer: {
-                padding: 14,
-                borderRadius: 15,
+                padding: layout==="list" ? 2 : layout==="small" ? 8 : 14,
+                borderRadius: 10,
                 backgroundColor: "#e3e7f3ff",
                 height:100,
                 width: layout==="large" ?  (width/2)-15 : layout=== "small" ? (width/3)-12:60,

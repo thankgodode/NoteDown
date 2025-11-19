@@ -40,44 +40,44 @@ export default function NoteList({ content, loading }) {
 
     return (
         <SafeAreaProvider>
-        <SafeAreaView>
-        <FlatList
-            data={content}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={{
-                flexDirection:"row",
-                paddingBottom: 50,
-                padding: 10,
-                flexWrap: "wrap",
-                gap: 8,
-            }}
-            renderItem={({ item }) => {
-                return (
-                    <>
-                        {!isPressed &&
-                            <Items
-                                item={item}
-                                setIsPressed={setIsPressed}
-                                setDefaultSelection={setDefaultSelection}
-                                layout={layout}
-                            />
-                        }
-                        {isPressed &&
-                            <SelectList
-                                item={item}
-                                defaultSelection={defaultSelection}
-                                selected={selected}
-                                setSelected={setSelected}
-                                layout={layout}
-                            />
-                        }
-                    </>
-                )
-            }}
-            ListEmptyComponent={<EmptyComponent />}
-            removeClippedSubviews={false}
-        />
-        </SafeAreaView>
+            <SafeAreaView>
+                <FlatList
+                    data={content}
+                    keyExtractor={(item) => item.id}
+                    contentContainerStyle={{
+                        flexDirection:"row",
+                        paddingBottom: 50,
+                        padding: 10,
+                        flexWrap: "wrap",
+                        gap: 8,
+                    }}
+                    renderItem={({ item }) => {
+                        return (
+                            <>
+                                {!isPressed &&
+                                    <Items
+                                        item={item}
+                                        setIsPressed={setIsPressed}
+                                        setDefaultSelection={setDefaultSelection}
+                                        layout={layout}
+                                    />
+                                }
+                                {isPressed &&
+                                    <SelectList
+                                        item={item}
+                                        defaultSelection={defaultSelection}
+                                        selected={selected}
+                                        setSelected={setSelected}
+                                        layout={layout}
+                                    />
+                                }
+                            </>
+                        )
+                    }}
+                    ListEmptyComponent={<EmptyComponent />}
+                    removeClippedSubviews={false}
+                />
+            </SafeAreaView>
         </SafeAreaProvider>
 
     )
@@ -104,11 +104,11 @@ export const Items = ({ item, setIsPressed, setDefaultSelection, layout }) => {
                             }}
                             source={{ html: item.content }}
                             scalesPageToFit={false}
-                            textZoom={layout === "list"? 50 : layout==="small" ? 100 : 150}
+                            textZoom={layout === "list"? 50 : layout==="small" ? 80 : 100}
                         />
                     </View>
                     <View style={styles.detailsWrapper}>
-                        <Text style={styles.title}>{item.title.length<1?"Untitled":item.title}</Text>
+                        <Text style={styles.title}>{item.title.length<1?"Untitled":item.title.length>40?item.title.substr(0,40)+"...":item.title}</Text>
                         <Text>
                             <View style={{flexDirection:"row",gap:10,alignItems:"center"}}>
                                 <Text style={{color:theme.color}}>{new Date(item.createdAt).toLocaleDateString()}</Text>
@@ -144,8 +144,8 @@ function styleFunc(layout,theme) {
             gap: 10,
         },
         fileContainer: {
-            padding: 14,
-            borderRadius: 15,
+            padding: layout==="list" ? 2 : layout==="small" ? 8 : 14,
+            borderRadius: 10,
             backgroundColor: "#e3e7f3ff",
             height:100,
             width: layout==="large" ?  (width/2)-15 : layout=== "small" ? (width/3)-12:60,

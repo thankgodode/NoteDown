@@ -18,7 +18,7 @@ export default function NavBar({ title }) {
     
     return (
         <View style={styles.navContainer}>
-            <StatusBar style="auto" />
+            <StatusBar/>
             <View style={styles.rightSide}>
                 <TouchableOpacity onPress={() => {
                     setVisible(!visible)
@@ -53,7 +53,7 @@ function createStyles(theme) {
                 width: "100%",
                 justifyContent: "space-between",
                 // flex: 1,
-                marginTop: StatusBar.currentHeight || 0,
+                marginTop: StatusBar.currentHeight,
                 alignItems: "center",
                 padding:15
             },

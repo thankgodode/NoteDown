@@ -1,9 +1,24 @@
-import { View } from "react-native";
+import { BackHandler, View } from "react-native";
 import SearchComponent from "@/components/SearchComponent"
 import { ThemeProvider } from "@/context/ThemeContext";
 import InteractionProvider from "@/context/InteractionContext";
+import { useRouter } from "expo-router";
+import { useEffect } from "react";
 
 export default function Search() {
+    const navigation = useRouter()
+
+    useEffect(() => {
+    const backAction = () => {
+        navigation.push("/")
+        return true
+    }
+
+    const handler = BackHandler.addEventListener("hardwareBackPress", backAction)
+
+    return () => handler.remove()
+    },[navigation])
+
     return (
         <>
             <View style={{ flex: 1 }}>
