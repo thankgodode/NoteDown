@@ -1,7 +1,7 @@
 import { deleteFile, writeFile } from "@/services/api";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useContext, useEffect, useState } from "react";
-import {StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {BackHandler, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import DeleteModal from "./DeleteModal";
 import {SaveAsOptions} from "./SaveDropDown"
 
@@ -13,6 +13,8 @@ export default function ActionBar({content,setContent}) {
     const [isFavorite, setIsFavorite] = useState(null)
 
     const {
+        isPressed,
+        isSelectedAll,
         selected,
         setIsPressed,
         defaultSelection,
@@ -84,6 +86,19 @@ export default function ActionBar({content,setContent}) {
         }
     }, [selected])
 
+    useEffect(() => {
+        const backAction = () => {
+            setIsPressed(false)
+            setIsSelectedAll(false)
+
+            return true
+        }
+
+        const handler = BackHandler.addEventListener("hardwareBackPress", backAction)
+
+        return () => handler.remove()
+    },[isPressed,isSelectedAll])
+
     return (
         <>
             <DeleteModal showModal={showModal} setShowModal={setShowModal} deleteNote={deleteSelected}/>
@@ -106,13 +121,13 @@ export default function ActionBar({content,setContent}) {
                     
                     {!isFavorite &&
                         <>
-                        <MaterialIcons name="favorite" size={24} color={selected.length<1 ? "#ccc" :"grey"} />
+                        <MaterialIcons name="favorite" size={24} color={selected.length<1 ? "grey" :theme.color} />
                             <Text style={{color:theme.color, fontSize:12}}>Favorite</Text>
                         </>
                     }
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.actionBtn} onPress={deleteOptions} disabled={selected.length<1}>
-                    <MaterialIcons name="delete" size={24} color={selected.length<1?"#ccc":"red"} />
+                    <MaterialIcons name="delete" size={24} color={selected.length<1?"grey":theme.color} />
                     {selected.length>1 && <Text style={{color:theme.color, fontSize:12}}>Delete All</Text>}
                     {selected.length <= 1 && <Text style={{color:theme.color, fontSize:12}}>Delete</Text>}
                 </TouchableOpacity>

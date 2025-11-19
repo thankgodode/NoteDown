@@ -34,7 +34,7 @@ export const SaveAsOptions = () => {
         <SafeAreaView>
             <TouchableWithoutFeedback onPress={onShow} disabled={selected.length > 1 ? true:selected.length<1 ? true:false}>
                 <View style={{alignItems:"center"}}>
-                    <Entypo name="save" size={24} color={selected.length>1 || selected.length<1?"#ccc":"deepskyblue"}/>
+                    <Entypo name="save" size={24} color={selected.length>1 || selected.length<1?"grey":theme.color}/>
                     <Text style={{color:theme.color}}>
                         Save as
                     </Text>
