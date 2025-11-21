@@ -148,9 +148,8 @@ function createStyles(theme) {
     },
     editor: {
       flex:1,
-      borderColor: 'grey',
-      borderWidth: 1,
       backgroundColor: 'white',
+      paddingHorizontal:10
     },
     navWrapper: {
       backgroundColor: "#eaeaeaff",
