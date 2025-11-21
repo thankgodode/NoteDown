@@ -1,10 +1,11 @@
 import { ThemeContext } from '@/context/ThemeContext';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import React, { createRef, useContext, useEffect, useState } from 'react';
-import { BackHandler, KeyboardAvoidingView, Platform, SafeAreaView, StatusBar, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, BackHandler, ImageBackground, KeyboardAvoidingView, Platform, SafeAreaView, StatusBar, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import QuillEditor, { QuillToolbar } from 'react-native-cn-quill';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
+import * as ImagePicker from "expo-image-picker"
+// import { useRouter } from 'expo-router';
 
 export default function EditorComponent({
     title,
@@ -22,26 +23,32 @@ export default function EditorComponent({
   const styles = createStyles(theme)
   const _editor = createRef();  
 
-  const navigation = useNavigation()
+  const handleInsertImage = async () => {
+    
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
+
+    if (!permissionResult.granted) {
+      Alert.alert("Permission required", "Permission to access the media library is required.")
+      return
+    }
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality:1
+    })
+
+    console.log("Image result ", result)
+
+    if (!result.canceled) {
+      _editor.current?.insertEmbed(0,"image","https://picsum.photos/200/300")
+      console.log("Trying to insert image")
+    }
+    
+  }
 
 
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     const onBackPress = () => {
-  //       // saveNote()
-  //       navigation.goBack() // 👈 go back to previous page
-  //       console.log("Editor content ", content)
-  //       return true; // prevent default behavior (exit app)
-  //     };
-
-  //     const subscription = BackHandler.addEventListener(
-  //       'hardwareBackPress',
-  //       onBackPress
-  //     );
-
-  //     return () => subscription.remove();
-  //   }, [navigation])
-  // );
 
   useEffect(() => {
     const backAction = () => {
@@ -97,7 +104,7 @@ export default function EditorComponent({
             <QuillToolbar
               editor={_editor}
               options={[
-                ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+                ['bold', 'italic', 'underline', 'strike',"image"],        // toggled buttons
                 ['blockquote', 'code-block'],
                 [{ 'header': 1 }, { 'header': 2 }],               // custom button values
                 [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
@@ -111,9 +118,13 @@ export default function EditorComponent({
                 [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
                 [{ 'font': [] }],
                 [{ 'align': [] }],
-
               ]}
-              theme={theme.theme} />
+              custom={{
+                handler: handleInsertImage,
+                actions:["image"]
+              }}
+              theme={theme.theme}
+            />
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>

@@ -44,6 +44,7 @@ export default function CreateNote() {
       }
       
       const parsedData = JSON.parse(data)
+      console.log("Parsed ", parsedData)
       const id = parsedData[parsedData.length - 1].id
       await writeFile(JSON.stringify([...parsedData, { title, content, favorite, folder: [], id: id+1, createdAt: date}]))
 
