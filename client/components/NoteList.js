@@ -103,8 +103,8 @@ export const Items = ({ item, setIsPressed, setDefaultSelection, layout }) => {
                                 overscrollBehavior:"none"
                             }}
                             source={{ html: item.content }}
-                            scalesPageToFit={false}
-                            textZoom={layout === "list"? 50 : layout==="small" ? 80 : 100}
+                            // scalesPageToFit={false}
+                            textZoom={layout === "list"? 50 : layout==="small" ? 80 :200}
                         />
                     </View>
                     <View style={styles.detailsWrapper}>
