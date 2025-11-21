@@ -53,7 +53,6 @@ const requestPermission = async() => {
 
 const writeToFile = async(fileName,buffer) => {
     const path = RNFS.ExternalDirectoryPath + `//${fileName}.docx`
-    console.log("Path ", path)
     
     try {
         await RNFS.writeFile(path, buffer, "base64")

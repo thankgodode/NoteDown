@@ -1,8 +1,9 @@
 import { ThemeContext } from '@/context/ThemeContext';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import React, { createRef, useContext, useEffect, useState } from 'react';
-import { Alert, BackHandler, ImageBackground, KeyboardAvoidingView, Platform, SafeAreaView, StatusBar, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, BackHandler, Image, ImageBackground, KeyboardAvoidingView, Platform, SafeAreaView, StatusBar, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import QuillEditor, { QuillToolbar } from 'react-native-cn-quill';
+import RNFS from "react-native-fs"
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import * as ImagePicker from "expo-image-picker"
 // import { useRouter } from 'expo-router';
@@ -24,7 +25,6 @@ export default function EditorComponent({
   const _editor = createRef();  
 
   const handleInsertImage = async () => {
-    
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
 
     if (!permissionResult.granted) {
@@ -39,11 +39,12 @@ export default function EditorComponent({
       quality:1
     })
 
-    console.log("Image result ", result)
+    const imageBase64 = await RNFS.readFile(result.assets[0].uri, "base64")
+    const length = await _editor.current.getSelection()
+    console.log("Insertion index ", length.index)
 
     if (!result.canceled) {
-      _editor.current?.insertEmbed(0,"image","https://picsum.photos/200/300")
-      console.log("Trying to insert image")
+      _editor.current?.insertEmbed(length.index,"image",`data:image/png;base64,${imageBase64}`)
     }
     
   }

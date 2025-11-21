@@ -29,11 +29,8 @@ export default function SelectList({ item, defaultSelection, selected, setSelect
 
             if (isSelectedAll) {
                 setIsSelectedAll(!isSelectedAll)
-                console.log("jsdflskjfk ", isSelectedAll)
             }
         }
-
-        console.log(selected)
     }
 
     return (
