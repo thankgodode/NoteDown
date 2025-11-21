@@ -93,8 +93,27 @@ export default function EditorComponent({
             onHtmlChange={(text) => setContent(text.html)}
             // onTextChange={(text) => }
           />
-          <View style={{paddingBottom:30}}>
-            <QuillToolbar editor={_editor} options="full" theme={theme.theme} />
+          <View style={{paddingBottom:35}}>
+            <QuillToolbar
+              editor={_editor}
+              options={[
+                ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+                ['blockquote', 'code-block'],
+                [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
+                [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+                [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+                [{ 'direction': 'rtl' }],                         // text direction
+
+                [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+                [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+                [{ 'font': [] }],
+                [{ 'align': [] }],
+
+              ]}
+              theme={theme.theme} />
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
