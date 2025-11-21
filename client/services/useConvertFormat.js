@@ -7,7 +7,6 @@ export default useConvertFormat = () => {
     const {type, isConnected} = useNetInfo()
 
     async function convertToWord(data) {
-        console.log(type, isConnected)
         if (!isConnected) {
             ToastAndroid.showWithGravityAndOffset(
                 'Please connect to the internet to access this feature.',

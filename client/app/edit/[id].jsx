@@ -33,8 +33,6 @@ export default function EditNote() {
             return el
         })
 
-        console.log(mapped)
-
         await writeFile(JSON.stringify(mapped))
         router.push("/")
 
