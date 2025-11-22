@@ -83,7 +83,7 @@ function styleFunc(layout,theme,selected,id) {
             fileContainer: {
                 padding: layout==="list" ? 2 : layout==="small" ? 8 : 14,
                 borderRadius: 10,
-                backgroundColor: selected.includes(id) ? "#aab6d2ff" : theme.theme==="light"?"#fff" : "#e3e7f3ff",
+                backgroundColor: selected.includes(id) ? "#aab6d2ff" : theme.theme==="light"?"#f6fdfdff" : "#e3e7f3ff",
                 height:100,
                 width: layout === "large" ? (width / 2) - 15 : layout === "small" ? (width / 3) - 12 : 60,
                 boxShadow:theme.theme==="light" ? "1px 1px 5px #ddd8d8ff" :"",
@@ -98,7 +98,7 @@ function styleFunc(layout,theme,selected,id) {
             },
             selectIcon: {
                 position: "absolute",
-                backgroundColor: selected.includes(id) ? "#aab6d2ff" : theme.theme==="light"?"#fff" : "#e3e7f3ff",
+                backgroundColor: selected.includes(id) ? "#aab6d2ff" : theme.theme==="light"?"#f6fdfdff" : "#e3e7f3ff",
                 width: 200,
                 flex:1,
                 left: 0,
