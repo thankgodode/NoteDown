@@ -33,12 +33,12 @@ export default function NavBar({ title }) {
             </View>
             <View style={styles.leftSide}>
                 <TouchableOpacity onPress={()=>router.push("/search")}>
-                    <FontAwesome name="search" size={23} color={theme.color} />
+                    <FontAwesome name="search" size={23} color={theme.layoutIcon} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={()=> toggleLayout()}>
-                    {layout==="large" && <Entypo name="grid" size={24} color={theme.color} />}
-                    {layout==="small" && <MaterialCommunityIcons name="dots-grid" size={24} color={theme.color} />}
-                    {layout==="list" && <FontAwesome6 name="list-ul" size={20} color={theme.color} />}
+                    {layout==="large" && <Entypo name="grid" size={24} color={theme.layoutIcon} />}
+                    {layout==="small" && <MaterialCommunityIcons name="dots-grid" size={24} color={theme.layoutIcon} />}
+                    {layout==="list" && <FontAwesome6 name="list-ul" size={20} color={theme.layoutIcon} />}
                 </TouchableOpacity>
             </View>
         </View>
@@ -55,7 +55,8 @@ function createStyles(theme) {
                 // flex: 1,
                 marginTop: StatusBar.currentHeight,
                 alignItems: "center",
-                padding:15
+                padding: 15,
+                backgroundColor: theme.fill,
             },
             rightSide: {
                 flexDirection: "row",

@@ -3,6 +3,7 @@ const cors = require("cors")
 const bodyParser = require("body-parser")
 
 const app = express();
+const PORT = process.env.PORT || 5000
 
 app.use(cors({ origin: "http://localhost:8081", credentials: true }));
 app.use(express.json())
@@ -11,6 +12,6 @@ app.use(express.json({ limit: "5mb" }))
 
 app.use("/api/toDocx", require("./routes/docx"))
 
-app.listen(5000, () => {
-    console.log("Routing...")
+app.listen(PORT, () => {
+    console.log("Routing on Port: ", PORT)
 });
