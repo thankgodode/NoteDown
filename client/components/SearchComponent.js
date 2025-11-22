@@ -32,7 +32,7 @@ export default function SearchComponent() {
     
     return (
         <View style={{flex:1, backgroundColor:theme.background}}>
-            <StatusBar style="auto" />
+            <StatusBar style="auto" backgroundColor={theme.fill} />
             {isPressed && <SelectAll content={content} />}
             {/* Search bar/Searched content */}
             {!isPressed && 
@@ -106,11 +106,12 @@ function createStyles(theme) {
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
+            backgroundColor:theme.fill,
             marginTop: StatusBar.currentHeight || 0,
             gap: 30,
         },
         searchBox: {
-            backgroundColor: "transparent",
+            backgroundColor: theme.search,
             borderWidth: 1,
             borderColor:theme.hairline,
             flex:1,
@@ -125,7 +126,8 @@ function createStyles(theme) {
         textInput: {
             flex: 1,
             fontSize: 12,
-            color:theme.color
+            color: theme.color,
+            backgroundColor:theme.search
         }
     })
 }

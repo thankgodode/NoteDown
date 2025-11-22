@@ -12,23 +12,25 @@ export const Colors = {
         tab: "skyblue",
         layoutIcon: "#fff",
         saveIcon:"skyblue",
-        deleteIcon:"red"
+        deleteIcon: "red",
+        search:"#081820ff"
     },
     light: {
         theme: "light",
         hairline:"#ccc",
-        background: "#fffbfbff",
+        background: "#fff",
         color:"#10222cff",
         noteTitle: "#10222cff",
-        createBtn: "#fa7f31",
-        createBtnIcon: "#fff",
-        fill:"#fbefefff",
+        createBtn: "#fff",
+        createBtnIcon: "#000",
+        fill:"#f1f1f1ff",
         tab: "#fff",
         sideMenuText: "#000",
         sideMenuIcon: "#000",
         navIcon: "#000",
         layoutIcon: "#233D4C",
         saveIcon:"orange",
-        deleteIcon:"red"
+        deleteIcon: "red",
+        search:"#fff"
     }
 }

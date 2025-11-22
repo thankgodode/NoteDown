@@ -39,7 +39,7 @@ function createStyles(theme) {
         top:580,
         padding: 15,
         borderRadius: 50,
-        // boxShadow: theme.theme==="light"?"1px 1px 10px #e8e2e2ff":"1px 1px 10px #233D4C"
+        boxShadow: theme.theme==="light"?"1px 5px 10px #e8e2e2ff":""
       }
   }))
 }

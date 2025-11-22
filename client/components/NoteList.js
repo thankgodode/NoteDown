@@ -146,8 +146,8 @@ function styleFunc(layout,theme) {
         fileContainer: {
             padding: layout==="list" ? 2 : layout==="small" ? 8 : 14,
             borderRadius: 10,
-            backgroundColor: theme.theme === "light" ? "#fff" : "#e3e7f3ff",
-            boxShadow:theme.theme==="light" ? "1px 1px 5px #ddd8d8ff" :"",
+            backgroundColor: theme.theme === "light" ? "#e3e7f3ff" : "#e3e7f3ff",
+            // boxShadow:theme.theme==="light" ? "1px 1px 5px #ddd8d8ff" :"",
             height:100,
             width: layout==="large" ?  (width/2)-15 : layout=== "small" ? (width/3)-12:60,
             height: layout === "large" ? 250 : layout==="small" ? 150: 60,
