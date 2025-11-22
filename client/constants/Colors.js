@@ -12,7 +12,8 @@ export const Colors = {
         tab: "skyblue",
         layoutIcon: "#fff",
         saveIcon:"skyblue",
-        deleteIcon:"red"
+        deleteIcon: "red",
+        search:"#081820ff"
     },
     light: {
         theme: "light",
@@ -29,6 +30,7 @@ export const Colors = {
         navIcon: "#000",
         layoutIcon: "#233D4C",
         saveIcon:"orange",
-        deleteIcon:"red"
+        deleteIcon: "red",
+        search:"#fff"
     }
 }

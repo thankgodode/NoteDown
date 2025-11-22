@@ -7,7 +7,7 @@ export default useConvertFormat = () => {
     const {type, isConnected} = useNetInfo()
 
     async function convertToWord(data) {
-        const fileName = data.title.length > 200 ? data.title.substr(0, 200) : data.length < 1 ? "Untitled" : data.title
+        const fileName = data.title.length > 200 ? data.title.substr(0, 200) : data.title.length < 1 ? "Untitled" : data.title
 
         if (!isConnected) {
             ToastAndroid.showWithGravityAndOffset(
@@ -56,7 +56,7 @@ export default useConvertFormat = () => {
     }
 
     const convertToPDF = async (data) => {
-        const fileName = data.title.length > 200 ? data.title.substr(0, 200) : data.length < 1 ? "Untitled" : data.title
+        const fileName = data.title.length > 200 ? data.title.substr(0, 200) : data.title.length < 1 ? "Untitled" : data.title
         console.log("File name ", fileName)
         
         const options = {
