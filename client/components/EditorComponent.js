@@ -35,16 +35,17 @@ export default function EditorComponent({
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
       allowsEditing: true,
-      aspect: [4, 3],
-      quality:1
+      // aspect: [4, 3],
+      quality: 1,
+      base64:true
     })
 
-    const imageBase64 = await RNFS.readFile(result.assets[0].uri, "base64")
+    console.log("Image result ", result)
+    // const imageBase64 = await RNFS.readFile(result.assets[0].uri, "base64")
     const length = await _editor.current.getSelection()
-    console.log("Insertion index ", length.index)
 
     if (!result.canceled) {
-      _editor.current?.insertEmbed(length.index,"image",`data:image/png;base64,${imageBase64}`)
+      _editor.current?.insertEmbed(length.index,"image",`data:image/png;base64,${result.assets[0].base64}`)
     }
     
   }
