@@ -7,6 +7,8 @@ export default useConvertFormat = () => {
     const {type, isConnected} = useNetInfo()
 
     async function convertToWord(data) {
+        const fileName = data.title.length > 200 ? data.title.substr(0, 200) : data.length < 1 ? "Untitled" : data.title
+
         if (!isConnected) {
             ToastAndroid.showWithGravityAndOffset(
                 'Please connect to the internet to access this feature.',
@@ -20,7 +22,7 @@ export default useConvertFormat = () => {
         }
 
         try {
-            const response = await fetch("http://192.168.43.38:5000/api/toDocx",
+            const response = await fetch("https://notedownapi.onrender.com/api/toDocx",
                 {
                     method: "POST",
                     headers: {
@@ -33,7 +35,7 @@ export default useConvertFormat = () => {
             const permission = await requestPermission()
 
             if (permission === true) {
-                await writeToFile(data.title, result.message, "docx")
+                await writeToFile(fileName, result.message, "docx")
                 ToastAndroid.showWithGravityAndOffset(
                     'Successfully saved as Word!',
                     ToastAndroid.LONG,
@@ -54,9 +56,12 @@ export default useConvertFormat = () => {
     }
 
     const convertToPDF = async (data) => {
+        const fileName = data.title.length > 200 ? data.title.substr(0, 200) : data.length < 1 ? "Untitled" : data.title
+        console.log("File name ", fileName)
+        
         const options = {
             html: data.content,
-            fileName: data.title,
+            fileName: fileName,
             base64: true,
             height: 842,
             width: 595,
@@ -66,7 +71,7 @@ export default useConvertFormat = () => {
             const permission = await requestPermission()
 
             if (permission === true) {
-                await writeToFile(data.title, result.base64, "pdf")
+                await writeToFile(fileName, result.base64, "pdf")
                  ToastAndroid.showWithGravityAndOffset(
                     'Successfully saved as PDF!',
                     ToastAndroid.LONG,

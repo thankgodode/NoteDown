@@ -26,7 +26,7 @@ export const requestPermission = async () => {
     }
 }
 
-export const writeToFile = async(fileName,buffer,format) => {
+export const writeToFile = async (fileName, buffer, format) => {
     const path = RNFS.ExternalDirectoryPath + `//${fileName}.${format}`
     
     try {

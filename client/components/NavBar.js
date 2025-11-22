@@ -18,7 +18,9 @@ export default function NavBar({ title }) {
     
     return (
         <View style={styles.navContainer}>
-            <StatusBar/>
+            <StatusBar
+                backgroundColor={theme.fill}
+            />
             <View style={styles.rightSide}>
                 <TouchableOpacity onPress={() => {
                     setVisible(!visible)
