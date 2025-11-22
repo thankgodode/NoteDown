@@ -12,6 +12,7 @@ export default function SelectAll({content}) {
     } = useContext(InteractionContext)
     
     const {theme} = useContext(ThemeContext)
+    const styles = styleFunc(theme)
 
     return (
         <View style={styles.navContainer}>
@@ -38,14 +39,17 @@ export default function SelectAll({content}) {
     )
 }
 
-const styles = StyleSheet.create({
-    navContainer: {
-        flexDirection: "row",
-        width: "100%",
-        justifyContent: "space-between",
-        // flex: 1,
-        marginTop:StatusBar.currentHeight || 0,
-        alignItems: "center",
-        padding:15
-    },
-})
+function styleFunc(theme) {
+    return StyleSheet.create({
+        navContainer: {
+            flexDirection: "row",
+            width: "100%",
+            justifyContent: "space-between",
+            // flex: 1,
+            marginTop:StatusBar.currentHeight || 0,
+            alignItems: "center",
+            padding: 15,
+            backgroundColor:theme.fill
+        },
+    })
+}

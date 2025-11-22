@@ -18,7 +18,7 @@ export const Colors = {
     light: {
         theme: "light",
         hairline:"#ccc",
-        background: "#fffbfbff",
+        background: "#fff",
         color:"#10222cff",
         noteTitle: "#10222cff",
         createBtn: "#fff",
