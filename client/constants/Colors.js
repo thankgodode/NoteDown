@@ -23,7 +23,7 @@ export const Colors = {
         noteTitle: "#10222cff",
         createBtn: "#fff",
         createBtnIcon: "#000",
-        fill:"#e8e8e8ff",
+        fill:"#f1f1f1ff",
         tab: "#fff",
         sideMenuText: "#000",
         sideMenuIcon: "#000",
