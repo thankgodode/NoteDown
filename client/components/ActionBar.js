@@ -108,7 +108,7 @@ export default function ActionBar({content,setContent}) {
                     setIsSelectedAll(false)
                 }
                 }>
-                    <MaterialIcons name="close" size={24} color="red"/>
+                    <MaterialIcons name="close" size={24} color="#abd0e5ff"/>
                     <Text style={{color:theme.color, fontSize:12}}>Escape</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.actionBtn} disabled={selected.length<1} onPress={addFavorites}>
@@ -127,7 +127,7 @@ export default function ActionBar({content,setContent}) {
                     }
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.actionBtn} onPress={deleteOptions} disabled={selected.length<1}>
-                    <MaterialIcons name="delete" size={24} color={selected.length<1?"grey":theme.color} />
+                    <MaterialIcons name="delete" size={24} color={selected.length<1?"grey":theme.deleteIcon} />
                     {selected.length>1 && <Text style={{color:theme.color, fontSize:12}}>Delete All</Text>}
                     {selected.length <= 1 && <Text style={{color:theme.color, fontSize:12}}>Delete</Text>}
                 </TouchableOpacity>

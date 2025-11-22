@@ -71,7 +71,7 @@ export default function EditorComponent({
             <TouchableOpacity onPress={saveNote}>
               <Ionicons name="chevron-back" size={24} color={theme.color} />
             </TouchableOpacity>
-            <TextInput placeholderTextColor={theme.color} placeholder="Title" value={title} onChangeText={setTitle} style={styles.textInput} maxLength={100}/>
+            <TextInput placeholderTextColor={theme.color} placeholder="Title" value={title} onChangeText={setTitle} style={styles.textInput} maxLength={500}/>
           </View>
           <View style={styles.nav}>
             <TouchableOpacity onPress={()=>setFavorite(!favorite)}>

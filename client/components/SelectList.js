@@ -45,8 +45,8 @@ export default function SelectList({ item, defaultSelection, selected, setSelect
                                 overflowX: "hidden",
                             }}
                             source={{ html: item.content }}
-                            scalesPageToFit={false}
-                            textZoom={layout === "list"? 50 : layout==="small" ? 80 : 100}
+                            // scalesPageToFit={false}
+                            textZoom={layout === "list"? 50 : layout==="small" ? 80 : 200}
                         />
                     </View>
                     <View style={styles.selectIcon}>
@@ -58,7 +58,7 @@ export default function SelectList({ item, defaultSelection, selected, setSelect
                     </View>
                 </View>
                 <View style={styles.detailsWrapper}>
-                    <Text style={{color:theme.noteTitle, fontWeight:"bold",fontSize:15}}>{item.title.length<1?"Untitled":item.title}</Text>
+                    <Text style={{width: layout==="list"?"75%":"",color:theme.noteTitle, fontWeight:"bold",fontSize:15}}>{item.title.length<1?"Untitled":item.title}</Text>
                     <Text>
                         <View style={{flexDirection:"row",gap:10,alignItems:"center"}}>
                             <Text style={{color:theme.color}}>{new Date(item.createdAt).toLocaleDateString()}</Text>
@@ -83,13 +83,14 @@ function styleFunc(layout,theme,selected,id) {
             fileContainer: {
                 padding: layout==="list" ? 2 : layout==="small" ? 8 : 14,
                 borderRadius: 10,
-                backgroundColor: selected.includes(id) ? "#aab6d2ff" : "#e3e7f3ff",
+                backgroundColor: selected.includes(id) ? "#aab6d2ff" : theme.theme==="light"?"#fff" : "#e3e7f3ff",
                 height:100,
-                width: layout==="large" ?  (width/2)-15 : layout=== "small" ? (width/3)-12:60,
+                width: layout === "large" ? (width / 2) - 15 : layout === "small" ? (width / 3) - 12 : 60,
+                boxShadow:theme.theme==="light" ? "1px 1px 5px #ddd8d8ff" :"",
                 height: layout === "large" ? 250 : layout==="small" ? 150: 60,
                 overflow: "hidden",
                 textAlign: "center",
-                zIndex:10
+                zIndex: 10,
             },
             detailsWrapper:{
                 width: layout === "large" ? (width / 2) - 15 : layout === "small" ? (width / 3) - 12 : width,
@@ -97,12 +98,15 @@ function styleFunc(layout,theme,selected,id) {
             },
             selectIcon: {
                 position: "absolute",
-                backgroundColor: selected.includes(id) ? "#aab6d2ff" : "#e3e7f3ff",
+                backgroundColor: selected.includes(id) ? "#aab6d2ff" : theme.theme==="light"?"#fff" : "#e3e7f3ff",
                 width: 200,
                 flex:1,
                 left: 0,
                 bottom:0,
                 padding: layout==="list" ? 3 : layout==="small" ? 5 : 7
+            },
+            title:{
+                width: layout==="list"?"75%":""
             }
         })
     )
