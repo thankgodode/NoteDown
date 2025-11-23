@@ -40,7 +40,6 @@ export default function EditorComponent({
       base64:true
     })
 
-    console.log("Image result ", result)
     // const imageBase64 = await RNFS.readFile(result.assets[0].uri, "base64")
     const length = await _editor.current.getSelection()
 
