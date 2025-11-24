@@ -35,10 +35,9 @@ export default function CreateNote() {
 
     try {
       const data = await readFile()
-      console.log("Content ", data)
       
       if (!data || data.length < 1) {
-        await writeFile(JSON.stringify([{ title, content, favorite, folder: [], id: 1,createdAt: date}]))
+        await writeFile(JSON.stringify([{ title, content, favorite, folder: [], id: 1,createdAt: date, updatedAt:date}]))
         router.push("/")
 
         return
@@ -46,7 +45,7 @@ export default function CreateNote() {
       
       const parsedData = JSON.parse(data)
       const id = parsedData[0].id
-      await writeFile(JSON.stringify([{ title, content, favorite, folder: [], id: id + 1, createdAt: date }, ...parsedData]))
+      await writeFile(JSON.stringify([{ title, content, favorite, folder: [], id: id + 1, createdAt: date, updatedAt:date }, ...parsedData]))
       console.log("Data " ,data)
 
       router.push("/")
