@@ -5,13 +5,15 @@ import { WebView } from "react-native-webview";
 import { Dimensions } from "react-native";
 import {InteractionContext} from "@/context/InteractionContext";
 import { ThemeContext } from "@/context/ThemeContext";
+import { useFormatDay } from "@/services/useFormatDay";
 
 const {width} = Dimensions.get("window")
 
 export default function SelectList({ item, defaultSelection, selected, setSelected, layout }) {
     const { isSelectedAll, setIsSelectedAll } = useContext(InteractionContext)
     const {theme} = useContext(ThemeContext)
-    const styles = styleFunc(layout, theme, selected,item.id)
+    const styles = styleFunc(layout, theme, selected, item.id)
+    const {timeUpdate} = useFormatDay(item.updatedAt)
 
 
     useEffect(() => {
@@ -61,7 +63,7 @@ export default function SelectList({ item, defaultSelection, selected, setSelect
                     <Text style={{width: layout==="list"?"75%":"",color:theme.noteTitle, fontWeight:"bold",fontSize:15}}>{item.title.length<1?"Untitled":item.title}</Text>
                     <Text>
                         <View style={{flexDirection:"row",gap:10,alignItems:"center"}}>
-                            <Text style={{color:theme.color}}>{new Date(item.createdAt).toLocaleDateString()}</Text>
+                            <Text style={{color:theme.color}}>{timeUpdate}</Text>
                             <Text>{item.favorite && <MaterialIcons name="favorite" size={24} color="#edaf11e4" />}</Text>
                         </View>
                     </Text>

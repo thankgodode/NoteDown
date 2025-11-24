@@ -7,27 +7,31 @@ import { useEffect, useState } from "react";
 
 import DeleteModal from "@/components/DeleteModal";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { useFormatDay } from "@/services/useFormatDay";
 
 export default function EditNote() {
     const [content, setContent] = useState("")
     const [title, setTitle] = useState("Untitled")
     const [favorite, setFavorite] = useState(false)
     const [folder, setFolder] = useState([])
+    const [updatedAt, setUpdatedAt] = useState("")
     const [showModal, setShowModal] = useState(false)
 
-    const { id } = useLocalSearchParams()
+    const { id, titleLength, contentLength } = useLocalSearchParams()
     const { data } = useFetch(() => readFile())
 
     const router = useRouter()
 
-    const editNote = async() => {
+    const editNote = async () => {   
+
         const mapped = data.map((el, i) => {
-            if (el.id === parseInt(id)) {
+            if (el.id === parseInt(id) && (title.length !== parseInt(titleLength) || content.length !== parseInt(contentLength))) {
                 return {
                     ...el,
                     title,
                     content,
                     favorite,
+                    updatedAt
                 }
             }
             return el
@@ -63,6 +67,7 @@ export default function EditNote() {
                 setTitle(filtered.title);
                 setFavorite(filtered.favorite);
                 setFolder(filtered.folder);
+                setUpdatedAt(new Date().getTime())
             }
         }
     }, [data]);
