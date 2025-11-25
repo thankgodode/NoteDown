@@ -6,18 +6,21 @@ import Entypo from "@expo/vector-icons/Entypo";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useRouter } from "expo-router";
 import { useContext } from "react";
-import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StatusBar, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function NavBar({ title }) {
     const { visible, setVisible } = useContext(SideMenuContext)
     const { toggleLayout, layout, theme} = useContext(ThemeContext)
 
     const router = useRouter()
+    const { height} = useWindowDimensions()
+    const headerHeight = Math.max(60, height*0.1)
     
-    const styles = createStyles(theme);
+    const styles = createStyles(theme,headerHeight);
     
     return (
-        <View style={styles.navContainer}>
+        <SafeAreaView style={styles.navContainer} edges={["top"]}>
             <StatusBar
                 backgroundColor={theme.fill}
             />
@@ -43,21 +46,22 @@ export default function NavBar({ title }) {
                     {layout==="list" && <FontAwesome6 name="list-ul" size={20} color={theme.layoutIcon} />}
                 </TouchableOpacity>
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 
-function createStyles(theme) {
+function createStyles(theme,headerHeight) {
     return (
         StyleSheet.create({
             navContainer: {
                 flexDirection: "row",
                 width: "100%",
+                height:headerHeight,
                 justifyContent: "space-between",
                 // flex: 1,
-                marginTop: StatusBar.currentHeight,
+                // marginTop: StatusBar.currentHeight,
                 alignItems: "center",
-                padding: 15,
+                paddingHorizontal: 15,
                 backgroundColor: theme.fill,
             },
             rightSide: {

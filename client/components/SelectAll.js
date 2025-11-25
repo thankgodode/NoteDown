@@ -2,7 +2,8 @@ import {InteractionContext} from "@/context/InteractionContext"
 import { ThemeContext } from "@/context/ThemeContext"
 import { Feather } from "@expo/vector-icons"
 import { useContext } from "react"
-import { Pressable, StatusBar, StyleSheet, Text, View } from "react-native"
+import { Pressable, StatusBar, StyleSheet, Text, useWindowDimensions, View } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 export default function SelectAll({content}) {
     const {
@@ -11,11 +12,15 @@ export default function SelectAll({content}) {
         deselectAll, selected
     } = useContext(InteractionContext)
     
-    const {theme} = useContext(ThemeContext)
-    const styles = styleFunc(theme)
+
+    const { theme } = useContext(ThemeContext)
+    const { height } = useWindowDimensions()
+      const headerHeight = Math.max(60,height*0.1)
+    const styles = styleFunc(theme, headerHeight)
 
     return (
-        <View style={styles.navContainer}>
+        <SafeAreaView edges={['top']} style={styles.navContainer}>
+            <StatusBar backgroundColor={theme.fill}/>
             <Text style={{fontSize:20,color:theme.color}}>{selected.length} Selected</Text>
             {
                 isSelectedAll  &&
@@ -35,20 +40,20 @@ export default function SelectAll({content}) {
                     </View>
                 </Pressable>
             }
-        </View>  
+        </SafeAreaView>  
     )
 }
 
-function styleFunc(theme) {
+function styleFunc(theme,headerHeight) {
     return StyleSheet.create({
         navContainer: {
             flexDirection: "row",
-            width: "100%",
+            height:headerHeight,
             justifyContent: "space-between",
             // flex: 1,
-            marginTop:StatusBar.currentHeight || 0,
+            // marginTop:StatusBar.currentHeight || 0,
+            paddingHorizontal:15,
             alignItems: "center",
-            padding: 15,
             backgroundColor:theme.fill
         },
     })

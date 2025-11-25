@@ -1,4 +1,4 @@
-import { FlatListComponent, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
+import { FlatListComponent, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, useWindowDimensions, View } from "react-native"
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from "expo-router";
@@ -12,6 +12,7 @@ import ActionBar from "./ActionBar";
 import NoteList from "./NoteList";
 import { useNavigation } from "@react-navigation/native";
 import { ThemeContext } from "@/context/ThemeContext";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SearchComponent() {
     const { data, loading } = useFetch(() => readFile());
@@ -24,7 +25,9 @@ export default function SearchComponent() {
         isPressed,
     } = useContext(InteractionContext);
 
-    const styles = createStyles(theme)
+    const { height } = useWindowDimensions()
+    const headerHeight = Math.max(60, height*0.1)
+    const styles = createStyles(theme,headerHeight)
 
     useEffect(() => {
         setContent(data);
@@ -32,11 +35,11 @@ export default function SearchComponent() {
     
     return (
         <View style={{flex:1, backgroundColor:theme.background}}>
-            <StatusBar style="auto" backgroundColor={theme.fill} />
+            <StatusBar backgroundColor={theme.fill} />
             {isPressed && <SelectAll content={content} />}
             {/* Search bar/Searched content */}
             {!isPressed && 
-                <View style={styles.searchBar}>
+                <SafeAreaView edges={['top']} style={styles.searchBar}>
                     <View>
                         <TouchableOpacity onPress={()=> router.push("/")}>
                             <Ionicons name="chevron-back" size={24} color={theme.color} />
@@ -46,7 +49,7 @@ export default function SearchComponent() {
                         <FontAwesome name="search" size={16} color={theme.color} />
                         <TextInput style={styles.textInput} placeholderTextColor={theme.color} placeholder="Search notes" value={searchQuery} onChangeText={setSearchQuery}/>
                     </View>
-                </View>
+                </SafeAreaView>
             }
             {content && <SearchedContent
                 content={content ? content.filter((el, i) => el.title.includes(searchQuery)) : []}
@@ -96,19 +99,16 @@ export const SearchedContent = ({content,loading}) => {
     )
 }
 
-function createStyles(theme) {
+function createStyles(theme,headerHeight) {
     return StyleSheet.create({
         searchBar: {
-            paddingLeft: 10,
-            paddingRight: 10,
-            paddingTop: 10,
-            paddingBottom:10,
+            paddingHorizontal:15,
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
-            backgroundColor:theme.fill,
-            marginTop: StatusBar.currentHeight || 0,
-            gap: 30,
+            backgroundColor: theme.fill,
+            height:headerHeight,
+            gap: 15,
         },
         searchBox: {
             backgroundColor: theme.search,

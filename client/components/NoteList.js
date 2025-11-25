@@ -43,7 +43,7 @@ export default function NoteList({ content, loading }) {
         <SafeAreaProvider>
             <SafeAreaView>
                 <FlatList
-                    data={content.sort((a,b)=> b.updatedAt-a.updatedAt)||[]}
+                    data={content && content.sort((a,b)=> b.updatedAt-a.updatedAt)}
                     keyExtractor={(item) => item.id}
                     contentContainerStyle={{
                         flexDirection:"row",

@@ -44,8 +44,8 @@ export default function CreateNote() {
       }
       
       const parsedData = JSON.parse(data)
-      const id = parsedData[0].id
-      await writeFile(JSON.stringify([{ title, content, favorite, folder: [], id: id + 1, createdAt: date, updatedAt:date }, ...parsedData]))
+      const id = parsedData[parsedData.length-1].id
+      await writeFile(JSON.stringify([...parsedData,{ title, content, favorite, folder: [], id: id + 1, createdAt: date, updatedAt:date }]))
       console.log("Data " ,data)
 
       router.push("/")

@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { BackHandler, View } from "react-native";
+import { BackHandler} from "react-native";
 
 import DeleteModal from "@/components/DeleteModal";
 import Favorites from "@/components/FavoritesComponent";
 import { SideMenuProvider } from "@/context/SideMenuContext";
 import InteractionProvider from "@/context/InteractionContext";
 import { ThemeProvider } from "@/context/ThemeContext";
-import { useNavigation } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 
 export default function FavoritesRoute() {
