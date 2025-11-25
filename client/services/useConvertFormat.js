@@ -1,7 +1,8 @@
-import { requestPermission, writeToFile } from "./utils"
+import { requestWriteFile, writeToFile } from "./utils"
 import { ToastAndroid } from "react-native"
 import {useNetInfo} from "@react-native-community/netinfo"
-import {generatePDF} from "react-native-html-to-pdf"
+import { generatePDF } from "react-native-html-to-pdf"
+import * as FileSystem from "expo-file-system"
 
 export default useConvertFormat = () => {
     const {type, isConnected} = useNetInfo()
@@ -34,17 +35,28 @@ export default useConvertFormat = () => {
             const result = await response.json()
             const permission = await requestPermission()
 
-            if (permission === true) {
-                await writeToFile(fileName, result.message, "docx")
+            if (!permission.granted) {
                 ToastAndroid.showWithGravityAndOffset(
-                    'Successfully saved as Word!',
+                    "Couldn't save file because permission was not granted...",
                     ToastAndroid.LONG,
                     ToastAndroid.BOTTOM,
                     25,
                     50,
                 );
+
+                return
             }
+            
+            await writeToFile(fileName, result.message, "docx")
+            ToastAndroid.showWithGravityAndOffset(
+                'Successfully saved as Word!',
+                ToastAndroid.LONG,
+                ToastAndroid.BOTTOM,
+                25,
+                50,
+            );
         } catch (error) {
+            console.log(error)
             ToastAndroid.showWithGravityAndOffset(
                 'Sorry, an unexpected error occured...',
                 ToastAndroid.LONG,
@@ -70,16 +82,27 @@ export default useConvertFormat = () => {
             const result = await generatePDF(options)
             const permission = await requestPermission()
 
-            if (permission === true) {
-                await writeToFile(fileName, result.base64, "pdf")
-                 ToastAndroid.showWithGravityAndOffset(
-                    'Successfully saved as PDF!',
+            if (!permission.granted) {
+                ToastAndroid.showWithGravityAndOffset(
+                    "Couldn't save file because permission was not granted...",
                     ToastAndroid.LONG,
                     ToastAndroid.BOTTOM,
                     25,
                     50,
                 );
+
+                return
             }
+            
+            await writeToFile(permission.path, fileName, result.base64, "pdf")
+
+            ToastAndroid.showWithGravityAndOffset(
+                'Successfully saved as PDF!',
+                ToastAndroid.LONG,
+                ToastAndroid.BOTTOM,
+                25,
+                50,
+            );
         } catch (error) {
             ToastAndroid.showWithGravityAndOffset(
                 'Sorry, an unexpected error occured...',
@@ -90,6 +113,18 @@ export default useConvertFormat = () => {
             );
             console.error(error)
         }
+    }
+
+    const requestPermission = async() => {
+        const permission = await FileSystem.StorageAccessFramework.
+            requestDirectoryPermissionsAsync()
+        
+        if (!permission.granted) {
+            console.log("Permission not granted")
+            return {granted:false}
+        }
+
+        return {granted:true, path:permission.directoryUri}
     }
 
     return {convertToWord,convertToPDF}

@@ -96,7 +96,7 @@ export default function SideMenu({data}) {
                 {data? data.filter((el, i) => el.favorite===true).length:0}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.menusItems,{top:"50%"}]} onPress={toggleTheme}>
+          <TouchableOpacity style={[styles.menusItems]} onPress={toggleTheme}>
             {theme.theme === "light" && <Entypo name="light-up" size={34} color={theme.color} />}
             {theme.theme === "dark" && <MaterialIcons name="dark-mode" size={34} color={theme.color} />}
           </TouchableOpacity>

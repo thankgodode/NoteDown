@@ -20,14 +20,10 @@ export default function Search() {
     },[navigation])
 
     return (
-        <>
-            <View style={{ flex: 1 }}>
-                <ThemeProvider>
-                    <InteractionProvider>
-                        <SearchComponent/>
-                    </InteractionProvider>
-                </ThemeProvider>
-            </View>
-        </>
+        <ThemeProvider>
+            <InteractionProvider>
+                <SearchComponent/>
+            </InteractionProvider>
+        </ThemeProvider>
     )
 }

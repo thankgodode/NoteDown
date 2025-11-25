@@ -32,8 +32,8 @@ export default function Home() {
       {isPressed && <SelectAll content={content}/>}
       <SideMenu data={content} />
       <NoteList content={content} setContent={setContent} loading={loading} />
+      {isPressed ?"": loading ? "" : <CreateButton />}
       {isPressed && <ActionBar content={content} setContent={setContent} />}
-      <CreateButton />
     </View>
   );
 }

@@ -1,9 +1,8 @@
 import { ThemeContext } from '@/context/ThemeContext';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import React, { createRef, useContext, useEffect, useState } from 'react';
-import { Alert, BackHandler, Image, ImageBackground, KeyboardAvoidingView, Platform, SafeAreaView, StatusBar, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, BackHandler, KeyboardAvoidingView, Platform, SafeAreaView, StatusBar, StyleSheet, TextInput, TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import QuillEditor, { QuillToolbar } from 'react-native-cn-quill';
-import RNFS from "react-native-fs"
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import * as ImagePicker from "expo-image-picker"
 // import { useRouter } from 'expo-router';
@@ -21,8 +20,11 @@ export default function EditorComponent({
     route
 }) {
   const { theme } = useContext(ThemeContext)
-  const styles = createStyles(theme)
   const _editor = createRef();  
+  
+  const { height, width} = useWindowDimensions()
+  const headerHeight = Math.max(60,height*0.1)
+  const styles = createStyles(theme,headerHeight,width)
 
   const handleInsertImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
@@ -64,14 +66,14 @@ export default function EditorComponent({
 
   return (
     <>
-      <SafeAreaView style={{...styles.root}}>
-        <StatusBar/>
-        <View style={{...styles.navWrapper,backgroundColor:theme.fill}}>
+      <View style={{...styles.root}}>
+        <StatusBar backgroundColor={theme.fill}/>
+        <SafeAreaView edges={["top"]} style={{...styles.navWrapper,backgroundColor:theme.fill}}>
           <View style={styles.nav}>
             <TouchableOpacity onPress={saveNote}>
               <Ionicons name="chevron-back" size={24} color={theme.color} />
             </TouchableOpacity>
-            <TextInput placeholderTextColor={theme.color} placeholder="Title" value={title} onChangeText={setTitle} style={styles.textInput} maxLength={500}/>
+            <TextInput placeholderTextColor={theme.color} placeholder="Title" value={title} onChangeText={setTitle} style={styles.textInput} maxLength={500} />
           </View>
           <View style={styles.nav}>
             <TouchableOpacity onPress={()=>setFavorite(!favorite)}>
@@ -84,7 +86,7 @@ export default function EditorComponent({
               {route !== "create" && <MaterialIcons name="delete" size={24} color="red" />}
             </TouchableOpacity>
           </View>
-        </View>
+        </SafeAreaView>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={{ flex: 1 }}
@@ -101,7 +103,7 @@ export default function EditorComponent({
             onHtmlChange={(text) => setContent(text.html)}
             // onTextChange={(text) => }
           />
-          <View style={{paddingBottom:35}}>
+          <View style={{paddingBottom:20}}>
             <QuillToolbar
               editor={_editor}
               options={[
@@ -128,13 +130,13 @@ export default function EditorComponent({
             />
           </View>
         </KeyboardAvoidingView>
-      </SafeAreaView>
+      </View>
     </>
       
     )
 }
 
-function createStyles(theme) {
+function createStyles(theme,headerHeight,width) {
   return StyleSheet.create({
     title: {
       fontWeight: 'bold',
@@ -142,8 +144,7 @@ function createStyles(theme) {
       paddingVertical: 5,
     },
     root: {
-      flex:1,
-      marginTop: StatusBar.currentHeight,
+      flex: 1,
       backgroundColor: theme.fill,
     },
     editor: {
@@ -152,18 +153,18 @@ function createStyles(theme) {
       paddingHorizontal:10
     },
     navWrapper: {
-      backgroundColor: "#eaeaeaff",
       flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
+      height: headerHeight,
+      justifyContent: "center",
+      width:width,
       gap: 10,
-      position: "fixed",
+      paddingHorizontal:10
     },
     nav: {
-      flexDirection: "row",
+      flexDirection:"row",
       alignItems: "center",
+      top:10,
       gap: 20,
-      padding: 5,
     },
     textInput: {
       color: theme.color,

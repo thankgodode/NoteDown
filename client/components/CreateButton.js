@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, useWindowDimensions, View } from 'react-native';
 
 import { ThemeContext } from "@/context/ThemeContext";
 import { useContext } from 'react';
@@ -10,7 +10,9 @@ export default function CreateButton() {
   const { theme } = useContext(ThemeContext)
   const router = useRouter();
 
-  const styles = createStyles(theme)
+  const { height,width } = useWindowDimensions()
+  const headerHeight = Math.max(60,height*0.1)
+  const styles = createStyles(theme,headerHeight,width/2)
 
   const navCreateNote = () => {
     router.push("/create")
@@ -28,18 +30,23 @@ export default function CreateButton() {
   );
 }
 
-function createStyles(theme) {
+function createStyles(theme,headerHeight) {
   return (
     StyleSheet.create({
       container: {
         backgroundColor: theme.createBtn,
-        position: "absolute",
+        // position: "absolute",
         // zIndex:50,
-        right: 40,
-        top:580,
+        bottom: headerHeight,
+        left:"70%",
         padding: 15,
+        height: 60,
+        width: 60,
+        justifyContent: "center",
+        alignItems:"center",
         borderRadius: 50,
-        boxShadow: theme.theme==="light"?"1px 5px 10px #e8e2e2ff":""
+        boxShadow: theme.theme===
+        "light"?"1px 5px 10px #dcdadaff":""
       }
   }))
 }
