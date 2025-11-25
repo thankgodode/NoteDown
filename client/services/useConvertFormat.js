@@ -47,7 +47,7 @@ export default useConvertFormat = () => {
                 return
             }
             
-            await writeToFile(fileName, result.message, "docx")
+            await writeToFile(permission.path, fileName, result.message, "docx")
             ToastAndroid.showWithGravityAndOffset(
                 'Successfully saved as Word!',
                 ToastAndroid.LONG,
@@ -58,7 +58,7 @@ export default useConvertFormat = () => {
         } catch (error) {
             console.log(error)
             ToastAndroid.showWithGravityAndOffset(
-                'Sorry, an unexpected error occured...',
+                'Server failure. Please check your internet connection',
                 ToastAndroid.LONG,
                 ToastAndroid.BOTTOM,
                 25,
