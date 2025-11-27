@@ -1,11 +1,9 @@
 import { readFile, writeFile } from '@/services/api';
 
 import EditorComponent from "@/components/EditorComponent";
-import { DeleteModalContext } from '@/context/DeleteModalContext';
 import { useRouter } from 'expo-router';
-import { useContext, useState } from 'react';
 import { ThemeProvider } from '@/context/ThemeContext';
-import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
 
 export default function CreateNote() {
   const [title, setTitle] = useState("")
@@ -16,6 +14,9 @@ export default function CreateNote() {
   const router = useRouter()
 
   const createNote = async () => {
+
+      console.log("Favorite status: ", favorite)
+
     const date = new Date().getTime()
 
     // Checks to know whether to save or not save newly created note file
@@ -46,7 +47,7 @@ export default function CreateNote() {
       const parsedData = JSON.parse(data)
       const id = parsedData[parsedData.length-1].id
       await writeFile(JSON.stringify([...parsedData,{ title, content, favorite, folder: [], id: id + 1, createdAt: date, updatedAt:date }]))
-      console.log("Data " ,data)
+      
 
       router.push("/")
       

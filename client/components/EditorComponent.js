@@ -1,10 +1,11 @@
 import { ThemeContext } from '@/context/ThemeContext';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import React, { createRef, useContext, useEffect, useState } from 'react';
-import { Alert, BackHandler, KeyboardAvoidingView, Platform, SafeAreaView, StatusBar, StyleSheet, TextInput, TouchableOpacity, useWindowDimensions, View } from 'react-native';
+import { Alert, BackHandler, KeyboardAvoidingView, Keyboard, Platform, SafeAreaView, StatusBar, StyleSheet, TextInput, TouchableOpacity, useWindowDimensions, View } from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import QuillEditor, { QuillToolbar } from 'react-native-cn-quill';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import * as ImagePicker from "expo-image-picker"
+import NavEditor from "./NavEditor"
 // import { useRouter } from 'expo-router';
 
 export default function EditorComponent({
@@ -19,12 +20,15 @@ export default function EditorComponent({
     showModal,
     route
 }) {
+  const [showKeyboard, setShowKeyboard] = useState(false)
   const { theme } = useContext(ThemeContext)
   const _editor = createRef();  
   
   const { height, width} = useWindowDimensions()
   const headerHeight = Math.max(60,height*0.1)
-  const styles = createStyles(theme,headerHeight,width)
+  const styles = createStyles(theme, headerHeight, width)
+  
+  const insets = useSafeAreaInsets()
 
   const handleInsertImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
@@ -62,21 +66,21 @@ export default function EditorComponent({
     const handler = BackHandler.addEventListener("hardwareBackPress", backAction)
 
     return () => handler.remove()
-  },[title,content])
+  }, [title, favorite, content])
 
   return (
     <>
       <View style={{...styles.root}}>
         <StatusBar backgroundColor={theme.fill}/>
-        <SafeAreaView edges={["top"]} style={{...styles.navWrapper,backgroundColor:theme.fill}}>
-          <View style={styles.nav}>
+        <NavEditor>
+          <View style={{...styles.nav}}>
             <TouchableOpacity onPress={saveNote}>
               <Ionicons name="chevron-back" size={24} color={theme.color} />
             </TouchableOpacity>
-            <TextInput placeholderTextColor={theme.color} placeholder="Title" value={title} onChangeText={setTitle} style={styles.textInput} maxLength={500} />
           </View>
-          <View style={styles.nav}>
-            <TouchableOpacity onPress={()=>setFavorite(!favorite)}>
+          <TextInput placeholderTextColor={theme.color} placeholder="Title" value={title} onChangeText={setTitle} style={styles.textInput} maxLength={500} />
+          <View style={{ ...styles.nav}}>
+            <TouchableOpacity onPress={()=> setFavorite(!favorite)}>
             {favorite
               ? <MaterialIcons name="favorite" size={24} color="#edaf11e4" />
               : <MaterialIcons name="favorite" size={24} color="grey" />
@@ -86,12 +90,35 @@ export default function EditorComponent({
               {route !== "create" && <MaterialIcons name="delete" size={24} color="red" />}
             </TouchableOpacity>
           </View>
-        </SafeAreaView>
+        </NavEditor>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={{ flex: 1 }}
-          keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
         >
+          <QuillToolbar
+            editor={_editor}
+            options={[
+              ['bold', 'italic', 'underline', 'strike', "image"],        // toggled buttons
+              ['blockquote', 'code-block'],
+              [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+              [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
+              [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+              [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+              [{ 'direction': 'rtl' }],                         // text direction
+
+              [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+              [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+              [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+              [{ 'font': [] }],
+              [{ 'align': [] }],
+            ]}
+            custom={{
+              handler: handleInsertImage,
+              actions: ["image"]
+            }}
+            theme={theme.theme}
+          />
           <QuillEditor
             // key={content}
             webview={{
@@ -103,32 +130,6 @@ export default function EditorComponent({
             onHtmlChange={(text) => setContent(text.html)}
             // onTextChange={(text) => }
           />
-          <View style={{paddingBottom:20}}>
-            <QuillToolbar
-              editor={_editor}
-              options={[
-                ['bold', 'italic', 'underline', 'strike',"image"],        // toggled buttons
-                ['blockquote', 'code-block'],
-                [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
-                [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-                [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-                [{ 'direction': 'rtl' }],                         // text direction
-
-                [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-
-                [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-                [{ 'font': [] }],
-                [{ 'align': [] }],
-              ]}
-              custom={{
-                handler: handleInsertImage,
-                actions:["image"]
-              }}
-              theme={theme.theme}
-            />
-          </View>
         </KeyboardAvoidingView>
       </View>
     </>
@@ -152,25 +153,21 @@ function createStyles(theme,headerHeight,width) {
       backgroundColor: 'white',
       paddingHorizontal:10
     },
-    navWrapper: {
-      flexDirection: "row",
-      height: headerHeight,
-      justifyContent: "center",
-      width:width,
-      gap: 10,
-      paddingHorizontal:10
-    },
     nav: {
-      flexDirection:"row",
+      flexDirection: "row",
       alignItems: "center",
-      top:10,
-      gap: 20,
+      gap: 15,
     },
     textInput: {
       color: theme.color,
-      width: 200,
       fontSize: 20,
+      width: width * 0.6,
+      // borderWidth: 1,
+      borderColor: "#ccc",
+      borderRadius: 10,
       paddingTop: 5,
+      paddingLeft: 10,
+      paddingRight:10,
       paddingBottom:5
     }
   })

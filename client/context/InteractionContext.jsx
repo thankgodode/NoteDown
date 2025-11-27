@@ -23,7 +23,7 @@ export default InteractionProvider = ({ children }) => {
         setSelected([])
         setIsSelectedAll(false)
     }
-    
+
     return (
         <InteractionContext.Provider
             value={{

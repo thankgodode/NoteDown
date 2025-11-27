@@ -28,7 +28,7 @@ export default function Home() {
 
   return (
     <View style={{flex:1,backgroundColor:theme.background}}>
-      {!isPressed && <NavBar title="All notes" />}
+      {!isPressed && <NavBar title="All notes" screen="notes"/>}
       {isPressed && <SelectAll content={content}/>}
       <SideMenu data={content} />
       <NoteList content={content} setContent={setContent} loading={loading} />
