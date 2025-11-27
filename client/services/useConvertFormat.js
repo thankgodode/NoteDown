@@ -1,4 +1,4 @@
-import { requestWriteFile, writeToFile } from "./utils"
+import { writeToFile } from "./utils"
 import { ToastAndroid } from "react-native"
 import {useNetInfo} from "@react-native-community/netinfo"
 import { generatePDF } from "react-native-html-to-pdf"
@@ -23,6 +23,8 @@ export default useConvertFormat = () => {
         }
 
         try {
+            const permission = await requestPermission()
+            
             const response = await fetch("https://notedownapi.onrender.com/api/toDocx",
                 {
                     method: "POST",
@@ -32,9 +34,8 @@ export default useConvertFormat = () => {
                     body:JSON.stringify({html:data.content})
                 }
             )
+            
             const result = await response.json()
-            const permission = await requestPermission()
-
             if (!permission.granted) {
                 ToastAndroid.showWithGravityAndOffset(
                     "Couldn't save file because permission was not granted...",

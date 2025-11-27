@@ -12,13 +12,8 @@
       "supportsTablet": true
     },
     "android": {
-      "permissions":[
-        "android.permission.READ_EXTERNAL_STORAGE", 
-        "android.permission.WRITE_EXTERNAL_STORAGE",
-        "android.permission.CAMERA",
-        "android.permission.ACCESS_MEDIA_LOCATION",
-        "android.permission.READ_MEDIA_IMAGES"
-      ],
+      "softwareKeyboardLayoutMode": "resize",
+      "permissions":[],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
