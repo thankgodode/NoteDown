@@ -93,9 +93,23 @@ export default function EditorComponent({
         </NavEditor>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={insets.top}
           style={{ flex: 1 }}
         >
+          
+          <QuillEditor
+            // key={content}
+            webview={{
+              dataDetectorTypes:["none"]
+            }}
+            style={styles.editor}
+            ref={_editor}
+            initialHtml={content}
+            onHtmlChange={(text) => setContent(text.html)}
+            // onTextChange={(text) => }
+          />
           <QuillToolbar
+            
             editor={_editor}
             options={[
               ['bold', 'italic', 'underline', 'strike', "image"],        // toggled buttons
@@ -119,17 +133,6 @@ export default function EditorComponent({
             }}
             theme={theme.theme}
           />
-          <QuillEditor
-            // key={content}
-            webview={{
-              dataDetectorTypes:["none"]
-            }}
-            style={styles.editor}
-            ref={_editor}
-            initialHtml={content}
-            onHtmlChange={(text) => setContent(text.html)}
-            // onTextChange={(text) => }
-          />
         </KeyboardAvoidingView>
       </View>
     </>
@@ -149,7 +152,9 @@ function createStyles(theme,headerHeight,width) {
       backgroundColor: theme.fill,
     },
     editor: {
-      flex:1,
+      flex: 1,
+      height:"100%",
+      
       backgroundColor: 'white',
       paddingHorizontal:10
     },

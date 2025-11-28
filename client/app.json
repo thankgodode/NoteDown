@@ -4,7 +4,7 @@
     "slug": "NoteDown",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/darkblueIcon.png",
+    "icon": "./assets/images/adaptive-icon.png",
     "scheme": "note",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -37,7 +37,7 @@
           "backgroundColor": "#ffffff",
           "dark": {
             "image": "./assets/images/adaptive-icon.png",
-            "backgroundColor": "#000000"
+            "backgroundColor": "#0000"
           },
         }
       ],
