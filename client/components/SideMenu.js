@@ -3,7 +3,7 @@ import { ThemeContext } from '@/context/ThemeContext';
 import { AntDesign, Entypo, Fontisto, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useRoute } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useState } from 'react';
 import { TouchableWithoutFeedback, useWindowDimensions, View } from 'react-native';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import Animated, {
@@ -44,12 +44,6 @@ export default function SideMenu({data}) {
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
-      transform: [
-        // { translateX: visible ? withSpring(200) :"0"},
-        // { translateY: offset.value.y },
-        // { scale: withSpring(isPressed.value ? 1.2 : 1) },
-      ],
-      // backgroundColor: isPressed.value ? 'yellow' : 'blue',
       left: visible ?
             withTiming("0%", {
             duration: 500,
