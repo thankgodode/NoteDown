@@ -20,7 +20,6 @@ export default function EditorComponent({
     showModal,
     route
 }) {
-  const [showKeyboard, setShowKeyboard] = useState(false)
   const { theme } = useContext(ThemeContext)
   const _editor = createRef();  
   
@@ -54,8 +53,6 @@ export default function EditorComponent({
     }
     
   }
-
-
 
   useEffect(() => {
     const backAction = () => {
@@ -93,10 +90,9 @@ export default function EditorComponent({
         </NavEditor>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
-          keyboardVerticalOffset={insets.top}
+          keyboardVerticalOffset={insets.top*0.1}
           style={{ flex: 1 }}
         >
-          
           <QuillEditor
             // key={content}
             webview={{
@@ -109,7 +105,6 @@ export default function EditorComponent({
             // onTextChange={(text) => }
           />
           <QuillToolbar
-            
             editor={_editor}
             options={[
               ['bold', 'italic', 'underline', 'strike', "image"],        // toggled buttons
@@ -149,7 +144,7 @@ function createStyles(theme,headerHeight,width) {
     },
     root: {
       flex: 1,
-      backgroundColor: theme.fill,
+      backgroundColor: theme.theme==="dark"?"#1c1e21":"#ebedf0"
     },
     editor: {
       flex: 1,

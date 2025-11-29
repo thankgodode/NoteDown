@@ -25,17 +25,6 @@ export default useConvertFormat = () => {
         try {
             const permission = await requestPermission()
             
-            const response = await fetch("https://notedownapi.onrender.com/api/toDocx",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type":"application/json"
-                    },
-                    body:JSON.stringify({html:data.content})
-                }
-            )
-            
-            const result = await response.json()
             if (!permission.granted) {
                 ToastAndroid.showWithGravityAndOffset(
                     "Couldn't save file because permission was not granted...",
@@ -47,7 +36,28 @@ export default useConvertFormat = () => {
 
                 return
             }
+
+            ToastAndroid.showWithGravityAndOffset(
+                "File is being converted. Feel free to continue with other tasks.",
+                ToastAndroid.LONG,
+                ToastAndroid.BOTTOM,
+                25,
+                50,
+            );
+
+        
+            const response = await fetch("https://notedownapi.onrender.com/api/toDocx",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":"application/json"
+                    },
+                    body:JSON.stringify({html:data.content})
+                }
+            )
             
+            const result = await response.json()
+
             await writeToFile(permission.path, fileName, result.message, "docx")
             ToastAndroid.showWithGravityAndOffset(
                 'Successfully saved as Word!',
