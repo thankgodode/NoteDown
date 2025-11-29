@@ -63,6 +63,7 @@ function createStyles(theme,headerHeight) {
                 alignItems: "center",
                 paddingHorizontal: 15,
                 backgroundColor: theme.fill,
+                zIndex:50
             },
             rightSide: {
                 flexDirection: "row",

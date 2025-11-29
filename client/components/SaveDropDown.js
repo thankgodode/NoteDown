@@ -12,7 +12,6 @@ import { useContext, useState } from "react";
 import { Entypo } from "@expo/vector-icons";
 import {InteractionContext} from "@/context/InteractionContext";
 import useConvertFormat from "@/services/useConvertFormat";
-import Message from "./SuccessModal";
 import { ThemeContext } from "@/context/ThemeContext";
 
 const deviceHeight = Dimensions.get("window").height
@@ -53,10 +52,9 @@ const OptionsMenu = ({ show, onTouchOutside, title }) => {
     const { selectedNote } = useContext(InteractionContext)
     const { convertToWord, convertToPDF, msg } = useConvertFormat()
 
-    const renderOutsideTouchable = (isShow) => {
-        const view = <View style={{ flex: 1, width:"100%"}} />
-        
-        if (!isShow) return view
+    const renderOutsideTouchable = () => {
+        const view = <View style={{ flex: 1, backgroundColor: "transparent"}}
+        />
         
         return (
             <TouchableWithoutFeedback onPress={onTouchOutside}>
@@ -78,48 +76,39 @@ const OptionsMenu = ({ show, onTouchOutside, title }) => {
     return (
         <Modal
             animationType="slide"
-            transparent={true}
+            // transparent={true}
+            backdropColor={"#00000077"}
             visible={show}
-            onRequestClose={onTouchOutside}
+            // onRequestClose={onTouchOutside}
         >
+            {renderOutsideTouchable()}
             <View
                 style={{
-                    flex:1,                    
-                    backgroundColor: "#00000077",
-                    justifyContent: "flex-end",
+                    backgroundColor: "#ffff",
+                    borderTopRightRadius: 15,
+                    borderTopLeftRadius: 15,
+                    paddingHorizontal: 16,
+                    paddingVertical:16,
                 }}
             >
-                {renderOutsideTouchable(show)}
-                <View
-                    style={{
-                        backgroundColor: "#ffff",
-                        width: "100%",
-                        borderTopRightRadius: 10,
-                        borderTopLeftRadius: 10,
-                        paddingHorizontal: 16,
-                        paddingVertical:16,
-                        minHeight:deviceHeight*0.15
-                    }}
-                >
-                    <View>
-                        <Text
-                            style={{
-                                color: "#0080ffff",
-                                fontSize: 20,
-                                fontWeight:"500"
-                            }}
-                        >
-                            {title}
-                        </Text>
-                    </View>
-                    <View style={{marginTop:10,gap:14}}>
-                        <TouchableOpacity onPress={saveAsPDF}> 
-                            <Text style={{fontSize:18}}>To PDF</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={saveAsWord}>
-                            <Text style={{fontSize:18}}>To Word</Text>
-                        </TouchableOpacity>
-                    </View>
+                <View>
+                    <Text
+                        style={{
+                            color: "#0080ffff",
+                            fontSize: 20,
+                            fontWeight:"500"
+                        }}
+                    >
+                        {title}
+                    </Text>
+                </View>
+                <View style={{marginTop:10,gap:14}}>
+                    <TouchableOpacity onPress={saveAsPDF}> 
+                        <Text style={{fontSize:18}}>To PDF</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={saveAsWord}>
+                        <Text style={{fontSize:18}}>To Word</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         </Modal>
