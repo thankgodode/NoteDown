@@ -14,7 +14,6 @@ export default function EditNote() {
     const [title, setTitle] = useState("Untitled")
     const [favorite, setFavorite] = useState(false)
     const [folder, setFolder] = useState([])
-    const [updatedAt, setUpdatedAt] = useState("")
     const [showModal, setShowModal] = useState(false)
 
     const { id, titleLength, contentLength } = useLocalSearchParams()
@@ -23,6 +22,7 @@ export default function EditNote() {
     const router = useRouter()
 
     const editNote = async () => {   
+        const date = new Date().getTime()
 
         const mapped = data.map((el, i) => {
             if (el.id === parseInt(id) && (title.length !== parseInt(titleLength) || content.length !== parseInt(contentLength))) {
@@ -31,7 +31,7 @@ export default function EditNote() {
                     title,
                     content,
                     favorite,
-                    updatedAt
+                    updatedAt: date
                 }
             }
             return el
@@ -67,7 +67,6 @@ export default function EditNote() {
                 setTitle(filtered.title);
                 setFavorite(filtered.favorite);
                 setFolder(filtered.folder);
-                setUpdatedAt(new Date().getTime())
             }
         }
     }, [data]);

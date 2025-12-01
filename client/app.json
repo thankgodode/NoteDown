@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "NoteDown",
+    "name": "Note Down",
     "slug": "NoteDown",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -12,6 +12,7 @@
       "supportsTablet": true
     },
     "android": {
+      
       "softwareKeyboardLayoutMode": "resize",
       "permissions":[],
       "adaptiveIcon": {
