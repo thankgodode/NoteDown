@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "NoteDown",
+    "name": "Note Down",
     "slug": "NoteDown",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/darkblueIcon.png",
+    "icon": "./assets/images/icon.png",
     "scheme": "note",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -12,6 +12,7 @@
       "supportsTablet": true
     },
     "android": {
+      
       "softwareKeyboardLayoutMode": "resize",
       "permissions":[],
       "adaptiveIcon": {
@@ -24,20 +25,20 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/darkblueIcon.png"
+      "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/darkblueIcon.png",
+          "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
           "dark": {
-            "image": "./assets/images/adaptive-icon.png",
-            "backgroundColor": "#000000"
+            "image": "./assets/images/splash-icon.png",
+            "backgroundColor": "#080f1cff"
           },
         }
       ],

@@ -122,7 +122,7 @@ export const Items = ({ item, setIsPressed, setDefaultSelection, layout }) => {
                         <Text style={styles.title}>{item.title.length<1?"Untitled":item.title.length>40?item.title.substr(0,40)+"...":item.title}</Text>
                         <Text>
                             <View style={{flexDirection:"row",gap:10,alignItems:"center"}}>
-                                <Text style={{color:theme.color}}>{timeUpdate}</Text>
+                                <Text style={{ textAlign:"center", color:theme.color, fontSize:layout==="large" ? 15:layout==="small"?12:layout==="list"?10:""}}>{timeUpdate}</Text>
                                 <Text>{item.favorite && <MaterialIcons name="favorite" size={24} color="#edaf11e4" />}</Text>
                             </View>
                         </Text>

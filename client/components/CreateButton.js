@@ -50,34 +50,3 @@ function createStyles(theme,headerHeight) {
       }
   }))
 }
-
-const styless = StyleSheet.create({
-    container: {
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        alignSelf:"center",
-        backgroundColor: "#030d7fff",
-        position: "absolute",
-        zIndex:100,
-        bottom: 40,
-        borderRadius: 30,
-        width: "80%",
-        // padding: 8,
-    },
-    tabItem: {
-        flex:1,
-        flexDirection: "row",
-        height: 36,
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 20,
-        gap: 5,
-        backgroundColor: "blue",
-        transitionDuration: "0.3s",
-    },
-    text: {
-        color: "black",
-        marginLeft: 0,
-    }
-})

@@ -20,7 +20,6 @@ export default function EditorComponent({
     showModal,
     route
 }) {
-  const [showKeyboard, setShowKeyboard] = useState(false)
   const { theme } = useContext(ThemeContext)
   const _editor = createRef();  
   
@@ -54,8 +53,6 @@ export default function EditorComponent({
     }
     
   }
-
-
 
   useEffect(() => {
     const backAction = () => {
@@ -93,8 +90,20 @@ export default function EditorComponent({
         </NavEditor>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={insets.top*0.1}
           style={{ flex: 1 }}
         >
+          <QuillEditor
+            // key={content}
+            webview={{
+              dataDetectorTypes:["none"]
+            }}
+            style={styles.editor}
+            ref={_editor}
+            initialHtml={content}
+            onHtmlChange={(text) => setContent(text.html)}
+            // onTextChange={(text) => }
+          />
           <QuillToolbar
             editor={_editor}
             options={[
@@ -119,17 +128,6 @@ export default function EditorComponent({
             }}
             theme={theme.theme}
           />
-          <QuillEditor
-            // key={content}
-            webview={{
-              dataDetectorTypes:["none"]
-            }}
-            style={styles.editor}
-            ref={_editor}
-            initialHtml={content}
-            onHtmlChange={(text) => setContent(text.html)}
-            // onTextChange={(text) => }
-          />
         </KeyboardAvoidingView>
       </View>
     </>
@@ -146,10 +144,12 @@ function createStyles(theme,headerHeight,width) {
     },
     root: {
       flex: 1,
-      backgroundColor: theme.fill,
+      backgroundColor: theme.theme==="dark"?"#1c1e21":"#ebedf0"
     },
     editor: {
-      flex:1,
+      flex: 1,
+      height:"100%",
+      
       backgroundColor: 'white',
       paddingHorizontal:10
     },

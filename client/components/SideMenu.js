@@ -3,7 +3,8 @@ import { ThemeContext } from '@/context/ThemeContext';
 import { AntDesign, Entypo, Fontisto, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useRoute } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
+import { TouchableWithoutFeedback, useWindowDimensions, View } from 'react-native';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import Animated, {
   Easing,
@@ -13,14 +14,18 @@ import Animated, {
 } from 'react-native-reanimated';
 
 export default function SideMenu({data}) {
-  const { visible, setVisible } = useContext(SideMenuContext)
-  const {theme,setColorScheme, toggleTheme} = useContext(ThemeContext)
+  const { visible,setVisible} = useContext(SideMenuContext)
+  const {theme, toggleTheme} = useContext(ThemeContext)
   const [hide, setHide] = useState(false)
+
+  
+  const { height,width } = useWindowDimensions()
+  const headerHeight = Math.max(70, height*0.115)
 
   const router = useRouter()
   const routePath = useRoute()
 
-  const styles = createStyles(theme)
+  const styles = createStyles(theme,headerHeight,width)
   
   const clickNotes = () => {
       router.push("/")
@@ -39,23 +44,50 @@ export default function SideMenu({data}) {
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
-      transform: [
-        // { translateX: visible ? withSpring(200) :"0"},
-        // { translateY: offset.value.y },
-        // { scale: withSpring(isPressed.value ? 1.2 : 1) },
-      ],
-      // backgroundColor: isPressed.value ? 'yellow' : 'blue',
       left: visible ?
             withTiming("0%", {
-            duration: 1000,
+            duration: 500,
             easing: Easing.inOut(Easing.quad),
             reduceMotion: ReduceMotion.System,
           }) : withTiming("-100%")
     };
   });
 
+  const animatedStyles_two = useAnimatedStyle(() => {
+    return {
+      left: visible ?
+            withTiming("0%", {
+            duration: 200,
+            easing: Easing.inOut(Easing.quad),
+            reduceMotion: ReduceMotion.System,
+          }) : withTiming("-100%")
+    }
+  })
+
+  const onClose = () => {
+    setVisible(false)
+  }
+
+  const renderOutsideTouchable = () => {
+    const view = <Animated.View style={[{ height: "100%",
+      position: "absolute",
+      width:"100%",
+      zIndex:3,
+      left: 0,
+      padding: 8,
+      borderRadius: 10,
+      backgroundColor: "#00000077" },animatedStyles_two]} />
+    
+    return (
+      <TouchableWithoutFeedback onPress={onClose}>
+        {view}
+      </TouchableWithoutFeedback>
+    )
+  }
+
   return (
     <>
+      {visible && renderOutsideTouchable()}
       {visible &&
         <Animated.View
           style={[styles.sideContainer, animatedStyles]}>
@@ -105,15 +137,15 @@ export default function SideMenu({data}) {
   );
 }
 
-function createStyles(theme) {
+function createStyles(theme,headerHeight,width) {
   return StyleSheet.create({
     sideContainer: {
-      width: 350,
-      height: 800,
+      width: width*0.75,
+      height: "100%",
       backgroundColor: theme.fill,
       position: "absolute",
       zIndex:100,
-      top: 80,
+      top: headerHeight,
       left: 0,
       padding: 8,
       borderRadius: 10,
@@ -132,7 +164,3 @@ function createStyles(theme) {
     }
   })
 }
-
-const styles = StyleSheet.create({
-  
-})
