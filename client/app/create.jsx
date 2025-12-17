@@ -14,8 +14,7 @@ export default function CreateNote() {
   const router = useRouter()
 
   const createNote = async () => {
-
-      console.log("Favorite status: ", favorite)
+    console.log("Favorite status: ", favorite)
 
     const date = new Date().getTime()
 
@@ -30,7 +29,7 @@ export default function CreateNote() {
 
     // If both are empty, skip saving
     if (isTitleEmpty && isContentEmpty) {
-      router.push("/");
+      router.back()
       return;
     }
 
@@ -39,7 +38,7 @@ export default function CreateNote() {
       
       if (!data || data.length < 1) {
         await writeFile(JSON.stringify([{ title, content, favorite, folder: [], id: 1,createdAt: date, updatedAt:date}]))
-        router.push("/")
+        router.back()
 
         return
       }
@@ -49,7 +48,7 @@ export default function CreateNote() {
       await writeFile(JSON.stringify([...parsedData,{ title, content, favorite, folder: [], id: id + 1, createdAt: date, updatedAt:date }]))
       
 
-      router.push("/")
+      router.back()
       
     } catch (error) {
       console.log(error)

@@ -1,10 +1,12 @@
 
+import { useRouter } from "expo-router"
 import { useEffect, useState } from "react"
 
 export default function useFetch(fetchFunction) {
     const [data, setData] = useState(null)
     const [loading, setLoading] = useState(true)
 
+    const router = useRouter()
 
     const fetchData = async () => {
         try {
@@ -32,7 +34,7 @@ export default function useFetch(fetchFunction) {
 
     useEffect(() => {
         fetchData()
-    }, [])
+    }, [router.canGoBack()])
     
     return {data, fetchData, writeData,loading}
 }
