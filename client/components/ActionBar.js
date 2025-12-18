@@ -7,6 +7,7 @@ import {SaveAsOptions} from "./SaveDropDown"
 
 import {InteractionContext} from "@/context/InteractionContext";
 import { ThemeContext, ThemeProvider } from "@/context/ThemeContext";
+import { NoteContext, useNotes } from "@/context/NotesContext";
 
 export default function ActionBar({content,setContent}) {
     const [showModal, setShowModal] = useState(false)
@@ -23,25 +24,15 @@ export default function ActionBar({content,setContent}) {
     } = useContext(InteractionContext)
     const {theme} = useContext(ThemeContext)
 
+    const {deleteSelected} = useNotes()
     const styles = createStyles(theme)
 
     const deleteOptions = () => {
         setShowModal(!showModal)
     }
 
-    const deleteSelected = async () => {
-        const noteSelected = content.filter(el => !selected.includes(el.id))
-        
-        if (noteSelected.length<1) {
-            await deleteFile()
-            setContent(noteSelected)
-            
-            setIsPressed(false)
-            return
-        }
-
-        await writeFile(JSON.stringify(noteSelected))
-        setContent(noteSelected)
+    const deleteItem = async () => {
+        deleteSelected(selected)
         setIsPressed(false)
     }
 
@@ -101,7 +92,7 @@ export default function ActionBar({content,setContent}) {
 
     return (
         <>
-            <DeleteModal showModal={showModal} setShowModal={setShowModal} deleteNote={deleteSelected}/>
+            <DeleteModal showModal={showModal} setShowModal={setShowModal} deleteNote={deleteItem}/>
             <View style={styles.container}>
                 <TouchableOpacity style={styles.actionBtn} onPress={() => {
                     setIsPressed(false)

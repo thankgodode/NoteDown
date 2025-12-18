@@ -3,73 +3,68 @@ import { readFile, writeFile } from '@/services/api';
 import EditorComponent from "@/components/EditorComponent";
 import { useRouter } from 'expo-router';
 import { ThemeProvider } from '@/context/ThemeContext';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import NoteProvider, { NoteContext, useNotes } from '@/context/NotesContext';
 
 export default function CreateNote() {
-  const [title, setTitle] = useState("")
-  const [content, setContent] = useState("<p><br></p>")
-  const [favorite, setFavorite] = useState(false)
-  const [folder, setFolder] = useState([])
 
-  const router = useRouter()
+  // const [title, setTitle] = useState("")
+  // const [content, setContent] = useState("<p><br></p>")
+  // const [favorite, setFavorite] = useState(false)
+  // const [folder, setFolder] = useState([])
 
-  const createNote = async () => {
-    console.log("Favorite status: ", favorite)
+  // const router = useRouter()
 
-    const date = new Date().getTime()
+  // const createNote = async () => {
+  //   console.log("Favorite status: ", favorite)
 
-    // Checks to know whether to save or not save newly created note file
-    const plainTextContent = content
-    .replace(/<[^>]+>/g, '') // remove HTML tags
-    .replace(/&nbsp;/g, '')  // remove non-breaking spaces
-    .trim();
+  //   const date = new Date().getTime()
 
-    const isTitleEmpty = title.trim() === "";
-    const isContentEmpty = plainTextContent.length < 1;
+  //   // Checks to know whether to save or not save newly created note file
+  //   const plainTextContent = content
+  //   .replace(/<[^>]+>/g, '') // remove HTML tags
+  //   .replace(/&nbsp;/g, '')  // remove non-breaking spaces
+  //   .trim();
 
-    // If both are empty, skip saving
-    if (isTitleEmpty && isContentEmpty) {
-      router.back()
-      return;
-    }
+  //   const isTitleEmpty = title.trim() === "";
+  //   const isContentEmpty = plainTextContent.length < 1;
 
-    try {
-      const data = await readFile()
+  //   // If both are empty, skip saving
+  //   if (isTitleEmpty && isContentEmpty) {
+  //     router.back()
+  //     return;
+  //   }
+
+  //   try {
+  //     const data = await readFile()
       
-      if (!data || data.length < 1) {
-        await writeFile(JSON.stringify([{ title, content, favorite, folder: [], id: 1,createdAt: date, updatedAt:date}]))
-        router.back()
+  //     if (!data || data.length < 1) {
+  //       await writeFile(JSON.stringify([{ title, content, favorite, folder: [], id: 1,createdAt: date, updatedAt:date}]))
+  //       router.back()
 
-        return
-      }
+  //       return
+  //     }
       
-      const parsedData = JSON.parse(data)
-      const id = parsedData[parsedData.length-1].id
-      await writeFile(JSON.stringify([...parsedData,{ title, content, favorite, folder: [], id: id + 1, createdAt: date, updatedAt:date }]))
+  //     const parsedData = JSON.parse(data)
+  //     const id = parsedData[parsedData.length-1].id
+  //     await writeFile(JSON.stringify([...parsedData,{ title, content, favorite, folder: [], id: id + 1, createdAt: date, updatedAt:date }]))
       
 
-      router.back()
+  //     router.back()
       
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
   return (
     <>
       <ThemeProvider>
-        <EditorComponent
-          title={title}
-          setTitle={setTitle}
-          content={content}
-          setContent={setContent}
-          favorite={favorite}
-          setFavorite={setFavorite}
-          folder={folder}
-          setFolder={setFolder}
-          saveNote={createNote}
-          route={"create"}
-        />
+        <NoteProvider>
+          <EditorComponent
+            route={"create"}
+          />
+        </NoteProvider>
       </ThemeProvider>
     </>
   );

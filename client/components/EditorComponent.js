@@ -6,20 +6,29 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import QuillEditor, { QuillToolbar } from 'react-native-cn-quill';
 import * as ImagePicker from "expo-image-picker"
 import NavEditor from "./NavEditor"
+import { NoteContext, useNotes } from '@/context/NotesContext';
+import { useLocalSearchParams } from 'expo-router';
 // import { useRouter } from 'expo-router';
 
 export default function EditorComponent({
+  setShowModal,
+  showModal,
+  route
+}) {
+
+  const {
     title,
     setTitle,
     content,
     setContent,
     favorite,
     setFavorite,
-    saveNote,
-    setShowModal,
-    showModal,
-    route
-}) {
+    createNote: saveNote,
+    editNote,
+    getById
+  } = useContext(NoteContext)
+
+  const [initialText,setInitialText] = useState(false)
   const { theme } = useContext(ThemeContext)
   const _editor = createRef();  
   
@@ -28,6 +37,7 @@ export default function EditorComponent({
   const styles = createStyles(theme, headerHeight, width)
   
   const insets = useSafeAreaInsets()
+  const { id,titleLength, contentLength} = useLocalSearchParams()
 
   const handleInsertImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
@@ -50,14 +60,35 @@ export default function EditorComponent({
 
     if (!result.canceled) {
       _editor.current?.insertEmbed(length.index,"image",`data:image/png;base64,${result.assets[0].base64}`)
-    }
-    
+      console.log("Image embedded")
+    }   
   }
 
   useEffect(() => {
+    async function fetch() {
+      if (route === "edit") {
+        const notes = await getById(id)
+
+        setTitle(notes.title)
+        setContent(notes.content)
+        setFavorite(notes.favorite)
+        setInitialText(true)
+      }
+    }
+
+    fetch()
+  },[])
+
+  useEffect(() => {
     const backAction = () => {
-      saveNote()
-      return true
+      if (route === "create") {
+        saveNote()
+        return true
+      } else if (route === "edit") {
+        editNote(id,titleLength, contentLength)
+        return true
+      }
+
     }
 
     const handler = BackHandler.addEventListener("hardwareBackPress", backAction)
@@ -93,17 +124,31 @@ export default function EditorComponent({
           keyboardVerticalOffset={insets.top*0.1}
           style={{ flex: 1 }}
         >
-          <QuillEditor
+          {initialText && <QuillEditor
             // key={content}
             webview={{
-              dataDetectorTypes:["none"]
+              dataDetectorTypes: ["none"]
             }}
             style={styles.editor}
             ref={_editor}
             initialHtml={content}
-            onHtmlChange={(text) => setContent(text.html)}
-            // onTextChange={(text) => }
-          />
+            onHtmlChange={(text) => {
+              console.log("Input ", text.html)
+              setContent(text.html)
+            }}
+          />}
+          {!initialText && <QuillEditor
+            // key={content}
+            webview={{
+              dataDetectorTypes: ["none"]
+            }}
+            style={styles.editor}
+            ref={_editor}
+            initialHtml={content}
+            onHtmlChange={(text) => {
+              setContent(text.html)
+            }}
+          />}
           <QuillToolbar
             editor={_editor}
             options={[

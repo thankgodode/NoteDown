@@ -9,11 +9,13 @@ import SelectList from "@/components/SelectList";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useContext } from "react";
 import { InteractionContext } from "@/context/InteractionContext";
-import {useFormatDay} from "../services/useFormatDay"
 
 import { Dimensions } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { ThemeContext, ThemeProvider } from "@/context/ThemeContext";
+
+import dayjs from "dayjs"
+import calendar from 'dayjs/plugin/calendar'
 
 const {width} = Dimensions.get("window")
 
@@ -80,15 +82,28 @@ export default function NoteList({ content, loading }) {
                 />
             </SafeAreaView>
         </SafeAreaProvider>
-
     )
 }
 
 export const Items = ({ item, setIsPressed, setDefaultSelection, layout }) => {
-    const { timeUpdate } = useFormatDay(item.updatedAt)
-
     const {theme} = useContext(ThemeContext)
-    const styles = styleFunc(layout,theme)
+    const styles = styleFunc(layout, theme)
+    
+    const format = (date) => {
+        dayjs.extend(calendar)
+
+        const formated = dayjs(date).calendar(null, {
+            sameDay: '[Today at] h:mm A', // The same day ( Today at 2:30 AM )
+            nextDay: '[Tomorrow]', // The next day ( Tomorrow at 2:30 AM )
+            nextWeek: 'dddd', // The next week ( Sunday at 2:30 AM )
+            lastDay: '[Yesterday]', // The day before ( Yesterday at 2:30 AM )
+            lastWeek: '[Last] dddd', // Last week ( Last Monday at 2:30 AM )
+            sameElse: 'DD/MM/YYYY' // Everything else ( 7/10/2011 )
+        })
+        // console.log(formated)
+        
+        return formated
+    }
     
     return (
         <Link href={{
@@ -98,7 +113,6 @@ export const Items = ({ item, setIsPressed, setDefaultSelection, layout }) => {
                 contentLength: item.content.length
             }
         }}
-            
             asChild>
             <Pressable onLongPress={() => {
                 setDefaultSelection(item.id)
@@ -122,7 +136,7 @@ export const Items = ({ item, setIsPressed, setDefaultSelection, layout }) => {
                         <Text style={styles.title}>{item.title.length<1?"Untitled":item.title.length>40?item.title.substr(0,40)+"...":item.title}</Text>
                         <Text>
                             <View style={{flexDirection:"row",gap:10,alignItems:"center"}}>
-                                <Text style={{ textAlign:"center", color:theme.color, fontSize:layout==="large" ? 15:layout==="small"?12:layout==="list"?10:""}}>{timeUpdate}</Text>
+                                <Text style={{ textAlign:"center", color:theme.color, fontSize:layout==="large" ? 15:layout==="small"?12:layout==="list"?10:""}}>{format(item.updatedAT)}</Text>
                                 <Text>{item.favorite && <MaterialIcons name="favorite" size={24} color="#edaf11e4" />}</Text>
                             </View>
                         </Text>

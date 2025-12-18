@@ -1,6 +1,7 @@
 import DeleteModal from "@/components/DeleteModal";
 import Home from "@/components/HomeComponent";
 import InteractionProvider from "@/context/InteractionContext";
+import NoteProvider from "@/context/NotesContext";
 
 import { SideMenuProvider } from "@/context/SideMenuContext";
 import { ThemeContext, ThemeProvider } from "@/context/ThemeContext";
@@ -23,12 +24,14 @@ export default function IndexRoute() {
     
     return (
         <ThemeProvider>
-            <DeleteModal showModal={showModal} setShowModal={setShowModal}/>
-            <SideMenuProvider>
-                <InteractionProvider>
-                    <Home />
-                </InteractionProvider>
-            </SideMenuProvider>
+            <NoteProvider>
+                <DeleteModal showModal={showModal} setShowModal={setShowModal}/>
+                <SideMenuProvider>
+                    <InteractionProvider>
+                        <Home />
+                    </InteractionProvider>
+                </SideMenuProvider>
+            </NoteProvider>
         </ThemeProvider>
     )
 }

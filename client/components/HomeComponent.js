@@ -12,19 +12,20 @@ import { readFile } from "@/services/api";
 import { InteractionContext } from "@/context/InteractionContext";
 import { Text, View } from "react-native";
 import { ThemeContext } from "@/context/ThemeContext";
+import { useNotes } from "@/context/NotesContext";
 
 export default function Home() {
   const {theme} = useContext(ThemeContext)
-  const { data, loading } = useFetch(() => readFile());
-  const [content, setContent] = useState(data);
+  const { notes, loading } = useNotes();
+  const [content, setContent] = useState(notes);
 
   const {
     isPressed,
   } = useContext(InteractionContext);
 
   useEffect(() => {
-    setContent(data);
-  }, [data]);
+    setContent(notes);
+  }, [notes]);
 
   return (
     <View style={{flex:1,backgroundColor:theme.background}}>

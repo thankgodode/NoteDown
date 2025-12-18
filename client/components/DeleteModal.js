@@ -1,10 +1,14 @@
+import { useNotes } from "@/context/NotesContext";
+import { useLocalSearchParams } from "expo-router";
 import {
     Modal, StyleSheet, Text, TouchableOpacity,
     View
 } from "react-native";
 
-export default function DeleteModal({showModal, setShowModal, deleteNote}) {
-    
+export default function DeleteModal({showModal, setShowModal}) {
+    const { deleteNote } = useNotes()
+    const {id} = useLocalSearchParams()
+
     return (
         <Modal transparent={true} animationType="slide" backdropColor="red" visible={showModal}>
             <View style={styles.modalView}>
@@ -13,7 +17,7 @@ export default function DeleteModal({showModal, setShowModal, deleteNote}) {
                     <TouchableOpacity onPress={() => setShowModal(!showModal)}>
                         <Text style={[styles.deleteOptions]}>Cancel</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={deleteNote}>
+                    <TouchableOpacity onPress={()=> deleteNote(parseInt(id))}>
                         <Text style={[styles.deleteOptions]}>Move to Trash</Text>
                     </TouchableOpacity>
                 </View>
