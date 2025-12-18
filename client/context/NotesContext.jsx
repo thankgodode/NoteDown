@@ -19,7 +19,6 @@ export default function NoteProvider({children}) {
     const fetchData = async () => {
         const result = await db.getAllAsync("SELECT * FROM notes ORDER BY updatedAT DESC;")
 
-        console.log("Result ", result)
         setNotes(result)
         setLoading(false)
     }

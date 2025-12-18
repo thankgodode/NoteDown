@@ -26,7 +26,7 @@ export default function EditorComponent({
     createNote: saveNote,
     editNote,
     getById
-  } = useContext(NoteContext)
+  } = useNotes()
 
   const [initialText,setInitialText] = useState(false)
   const { theme } = useContext(ThemeContext)
@@ -57,10 +57,11 @@ export default function EditorComponent({
 
     // const imageBase64 = await RNFS.readFile(result.assets[0].uri, "base64")
     const length = await _editor.current.getSelection()
+    console.log("LENGTH ", length)
 
     if (!result.canceled) {
-      _editor.current?.insertEmbed(length.index,"image",`data:image/png;base64,${result.assets[0].base64}`)
       console.log("Image embedded")
+      _editor.current?.insertEmbed(length.index,"image",`data:image/png;base64,${result.assets[0].base64}`)
     }   
   }
 
@@ -88,7 +89,6 @@ export default function EditorComponent({
         editNote(id,titleLength, contentLength)
         return true
       }
-
     }
 
     const handler = BackHandler.addEventListener("hardwareBackPress", backAction)
@@ -146,6 +146,7 @@ export default function EditorComponent({
             ref={_editor}
             initialHtml={content}
             onHtmlChange={(text) => {
+              console.log("Input ", text.html)
               setContent(text.html)
             }}
           />}
