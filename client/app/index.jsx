@@ -24,14 +24,12 @@ export default function IndexRoute() {
     
     return (
         <ThemeProvider>
-            <NoteProvider>
-                <DeleteModal showModal={showModal} setShowModal={setShowModal}/>
-                <SideMenuProvider>
-                    <InteractionProvider>
-                        <Home />
-                    </InteractionProvider>
-                </SideMenuProvider>
-            </NoteProvider>
+            <DeleteModal showModal={showModal} setShowModal={setShowModal}/>
+            <SideMenuProvider>
+                <InteractionProvider>
+                    <Home />
+                </InteractionProvider>
+            </SideMenuProvider>
         </ThemeProvider>
     )
 }

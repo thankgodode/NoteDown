@@ -1,23 +1,26 @@
+import NoteProvider from "@/context/NotesContext";
 import { Stack } from "expo-router";
 import {SQLiteDatabase, SQLiteProvider} from "expo-sqlite"
 
 export default function RootLayout() {
     return (
-        <SQLiteProvider
-            databaseName="user_notes.db"
-            onInit={migrateDbIfNeeded}
-        >
-            <Stack>
-                    {/* <Stack.Screen name="index" options={{headerShown:false}}/> */}
-                    <Stack.Screen name="index" options={{headerShown:false}}/>
-                    <Stack.Screen name="favorites" options={{headerShown:false}}/>
-                    <Stack.Screen name="folders" options={{headerShown:false}}/>
-                    <Stack.Screen name="search" options={{headerShown:false}}/>
-                    <Stack.Screen name="create" options={{headerShown:false}}/>
-                    <Stack.Screen name="edit/[id]" options={{headerShown:false}}/>
-                    <Stack.Screen name="manage/[id]" options={{ headerShown: false }} />
-            </Stack>
-        </SQLiteProvider>
+      <SQLiteProvider
+          databaseName="user_notes.db"
+          onInit={migrateDbIfNeeded}
+      >
+      <NoteProvider>
+        <Stack>
+          {/* <Stack.Screen name="index" options={{headerShown:false}}/> */}
+          <Stack.Screen name="index" options={{headerShown:false}}/>
+          <Stack.Screen name="favorites" options={{headerShown:false}}/>
+          <Stack.Screen name="folders" options={{headerShown:false}}/>
+          <Stack.Screen name="search" options={{headerShown:false}}/>
+          <Stack.Screen name="create" options={{headerShown:false}}/>
+          <Stack.Screen name="edit/[id]" options={{headerShown:false}}/>
+          <Stack.Screen name="manage/[id]" options={{ headerShown: false }} />
+        </Stack>
+        </NoteProvider>
+      </SQLiteProvider>
     )
 }
 

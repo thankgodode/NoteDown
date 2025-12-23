@@ -1,3 +1,4 @@
+import { useLocalSearchParams } from "expo-router";
 import { createContext, useEffect, useState} from "react";
 
 export const InteractionContext = createContext({})
@@ -11,6 +12,7 @@ export default InteractionProvider = ({ children }) => {
 
     const selectAll = (data) => {
         const arr = []
+        
         data.forEach((el) => {
             arr.push(el.id)
         })

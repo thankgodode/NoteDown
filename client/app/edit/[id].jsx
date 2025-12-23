@@ -15,6 +15,7 @@ export default function EditNote() {
     // const [favorite, setFavorite] = useState(false)
     // const [folder, setFolder] = useState([])
     const [showModal, setShowModal] = useState(false)
+    const {id} = useLocalSearchParams()
 
     // const { id, titleLength, contentLength } = useLocalSearchParams()
     // const db = useSQLiteContext()
@@ -79,14 +80,14 @@ export default function EditNote() {
     //     }
     // }, [data]);
 
-
-
     return (
         <>
             <NoteProvider>
                 <DeleteModal
                     showModal={showModal}
                     setShowModal={setShowModal}
+                    id={[parseInt(id)]}
+                    route={"edit"}
                     // deleteNote={deleteNote}
                 />
                 <ThemeProvider>

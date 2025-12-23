@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 export const NoteContext = createContext({})
 
@@ -16,15 +16,15 @@ export default function NoteProvider({children}) {
 
     const router = useRouter()
 
-    const fetchData = async () => {
+    const fetchData = useCallback(async() =>{
         const result = await db.getAllAsync("SELECT * FROM notes ORDER BY updatedAT DESC;")
 
         setNotes(result)
+        console.log("Fetch ", result)
         setLoading(false)
-    }
+    },[])
 
     const createNote = async () => {
-
         const plainTextContent = content
         .replace(/<[^>]+>/g, '') // remove HTML tags
         .replace(/&nbsp;/g, '')  // remove non-breaking spaces
@@ -49,6 +49,7 @@ export default function NoteProvider({children}) {
             ]
         )
 
+        await fetchData()
         router.back()
     }
 
@@ -65,6 +66,7 @@ export default function NoteProvider({children}) {
             )
         }
 
+        await fetchData()
         router.back()
     }
 
@@ -74,24 +76,32 @@ export default function NoteProvider({children}) {
         return result
     }
 
-    const deleteNote = async (id) => {
-        await db.runAsync("DELETE FROM notes WHERE id = ?;", [id])
-
-        router.back()
+    const deleteNote = async (selected) => {
+        const placeholder = selected.map(()=> "?").join(", ")   
+        
+        if (router.canGoBack()) {
+            await db.runAsync("DELETE FROM notes WHERE id = ?;", selected)
+            fetchData()
+            console.log("Delete single ", selected)
+            router.back();
+        }
+        
+        console.log("Delete multiple ", selected)
+        await db.runAsync(`DELETE FROM notes WHERE id IN  (${placeholder});`, selected)
+        
+        await fetchData()
     }
 
-    const deleteSelected = async (selected) => {
-        const placeholder = selected.map(()=> "?").join(", ")
-        await db.runAsync(`DELETE FROM notes WHERE id IN  (${placeholder});`, selected)
+    const addFavorites = async(selected,favorite) => {
+        const placeholder = selected.map(() => "?").join(", ")
+
+        await db.runAsync(`UPDATE notes SET favorite = ? WHERE id IN  (${placeholder});`, [favorite, ...selected]) 
+        await fetchData()
     }
 
     useEffect(() => {
         fetchData()
-    }, [notes]) 
-    
-    // useEffect(() => {
-    //     fetchData()
-    // },[router.canGoBack()])
+    }, []) 
 
     return (
         <NoteContext.Provider
@@ -99,8 +109,8 @@ export default function NoteProvider({children}) {
                 createNote,
                 editNote,
                 deleteNote,
-                deleteSelected,
                 fetchData,
+                addFavorites,
                 getById,
                 title,
                 setTitle,

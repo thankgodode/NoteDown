@@ -12,16 +12,19 @@ import { InteractionContext } from "@/context/InteractionContext";
 
 import { Dimensions } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { ThemeContext, ThemeProvider } from "@/context/ThemeContext";
+import { ThemeContext } from "@/context/ThemeContext";
 
 import dayjs from "dayjs"
 import calendar from 'dayjs/plugin/calendar'
+import { useNotes } from "@/context/NotesContext";
 
 const {width} = Dimensions.get("window")
 
 
 export default function NoteList({ content, loading }) {
-    const {layout} = useContext(ThemeContext)
+    const { layout } = useContext(ThemeContext)
+    const { notes } = useNotes()
+    
     const {
         isPressed,
         setIsPressed,

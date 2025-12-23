@@ -57,7 +57,6 @@ export default function EditorComponent({
 
     // const imageBase64 = await RNFS.readFile(result.assets[0].uri, "base64")
     const length = await _editor.current.getSelection()
-    console.log("LENGTH ", length)
 
     if (!result.canceled) {
       console.log("Image embedded")
@@ -81,7 +80,7 @@ export default function EditorComponent({
   },[])
 
   useEffect(() => {
-    const backAction = () => {
+    const backAction = async() => {
       if (route === "create") {
         saveNote()
         return true
@@ -102,7 +101,15 @@ export default function EditorComponent({
         <StatusBar backgroundColor={theme.fill}/>
         <NavEditor>
           <View style={{...styles.nav}}>
-            <TouchableOpacity onPress={saveNote}>
+            <TouchableOpacity onPress={async() => {
+              if (route === "create") {
+                await saveNote()
+                return true
+              } else if (route === "edit") {
+                await editNote(id,titleLength, contentLength)
+                return true
+              }
+            }}>
               <Ionicons name="chevron-back" size={24} color={theme.color} />
             </TouchableOpacity>
           </View>
@@ -133,7 +140,6 @@ export default function EditorComponent({
             ref={_editor}
             initialHtml={content}
             onHtmlChange={(text) => {
-              console.log("Input ", text.html)
               setContent(text.html)
             }}
           />}
@@ -146,11 +152,10 @@ export default function EditorComponent({
             ref={_editor}
             initialHtml={content}
             onHtmlChange={(text) => {
-              console.log("Input ", text.html)
               setContent(text.html)
             }}
           />}
-          <QuillToolbar
+          {initialText && <QuillToolbar
             editor={_editor}
             options={[
               ['bold', 'italic', 'underline', 'strike', "image"],        // toggled buttons
@@ -173,7 +178,31 @@ export default function EditorComponent({
               actions: ["image"]
             }}
             theme={theme.theme}
-          />
+          />}
+          {!initialText && <QuillToolbar
+            editor={_editor}
+            options={[
+              ['bold', 'italic', 'underline', 'strike', "image"],        // toggled buttons
+              ['blockquote', 'code-block'],
+              [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+              [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
+              [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+              [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+              [{ 'direction': 'rtl' }],                         // text direction
+
+              [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+              [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+              [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+              [{ 'font': [] }],
+              [{ 'align': [] }],
+            ]}
+            custom={{
+              handler: handleInsertImage,
+              actions: ["image"]
+            }}
+            theme={theme.theme}
+          />}
         </KeyboardAvoidingView>
       </View>
     </>
