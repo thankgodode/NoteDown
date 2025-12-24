@@ -103,10 +103,10 @@ export default function EditorComponent({
           <View style={{...styles.nav}}>
             <TouchableOpacity onPress={async() => {
               if (route === "create") {
-                await saveNote()
+                saveNote()
                 return true
               } else if (route === "edit") {
-                await editNote(id,titleLength, contentLength)
+                editNote(id,titleLength, contentLength)
                 return true
               }
             }}>

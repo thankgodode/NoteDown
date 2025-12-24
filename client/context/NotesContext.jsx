@@ -49,7 +49,7 @@ export default function NoteProvider({children}) {
             ]
         )
 
-        await fetchData()
+        fetchData()
         router.back()
     }
 
@@ -66,7 +66,7 @@ export default function NoteProvider({children}) {
             )
         }
 
-        await fetchData()
+        fetchData()
         router.back()
     }
 
@@ -89,19 +89,19 @@ export default function NoteProvider({children}) {
         console.log("Delete multiple ", selected)
         await db.runAsync(`DELETE FROM notes WHERE id IN  (${placeholder});`, selected)
         
-        await fetchData()
+        fetchData()
     }
 
     const addFavorites = async(selected,favorite) => {
         const placeholder = selected.map(() => "?").join(", ")
 
         await db.runAsync(`UPDATE notes SET favorite = ? WHERE id IN  (${placeholder});`, [favorite, ...selected]) 
-        await fetchData()
+        fetchData()
     }
 
     useEffect(() => {
         fetchData()
-    }, []) 
+    }, [db]) 
 
     return (
         <NoteContext.Provider
