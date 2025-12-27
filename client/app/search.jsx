@@ -11,7 +11,7 @@ export default function Search() {
 
     useEffect(() => {
     const backAction = () => {
-        navigation.push("/")
+        navigation.back()
         return true
     }
 

@@ -19,7 +19,7 @@ export default function DeleteModal({showModal, setShowModal,id,route}) {
                         <Text style={[styles.deleteOptions]}>Cancel</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => {
-                        deleteNote(id)
+                        deleteNote(id,route)
                         setShowModal(!showModal)
                         if (route === "index") {
                             setIsPressed(!isPressed)

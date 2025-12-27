@@ -7,7 +7,6 @@ import NoteList from "./NoteList";
 import SelectAll from "./SelectAll";
 import SideMenu from "./SideMenu";
 
-import { readFile } from "@/services/api";
 import { InteractionContext } from "@/context/InteractionContext";
 import { Text, View } from "react-native";
 import { ThemeContext } from "@/context/ThemeContext";

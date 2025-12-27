@@ -41,7 +41,7 @@ export default function NoteProvider({children}) {
 
         await db.runAsync("INSERT INTO notes (title, content, favorite, updatedAt, createdAt) VALUES (?, ?, ?, ?, ?);",
             [
-                title,
+                title.length < 1 ? "Untitled" : title,
                 content,
                 favorite,
                 new Date().toISOString(),
@@ -76,10 +76,10 @@ export default function NoteProvider({children}) {
         return result
     }
 
-    const deleteNote = async (selected) => {
+    const deleteNote = async (selected,route) => {
         const placeholder = selected.map(()=> "?").join(", ")   
         
-        if (router.canGoBack()) {
+        if (route==="edit") {
             await db.runAsync("DELETE FROM notes WHERE id = ?;", selected)
             fetchData()
             console.log("Delete single ", selected)
