@@ -15,7 +15,7 @@ export default function FavoritesRoute() {
 
   useEffect(() => {
     const backAction = () => {
-      navigation.push("/")
+      navigation.back()
       return true
     }
 
@@ -26,14 +26,12 @@ export default function FavoritesRoute() {
 
   return (
     <ThemeProvider>
-      <NoteProvider>
-          <DeleteModal showModal={showModal} setShowModal={setShowModal} />
-          <SideMenuProvider>
-            <InteractionProvider>
-              <Favorites />
-            </InteractionProvider>
-          </SideMenuProvider>
-      </NoteProvider>
+      <DeleteModal showModal={showModal} setShowModal={setShowModal} />
+      <SideMenuProvider>
+        <InteractionProvider>
+          <Favorites />
+        </InteractionProvider>
+      </SideMenuProvider>
     </ThemeProvider>
   );
 }

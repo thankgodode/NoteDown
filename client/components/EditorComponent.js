@@ -82,10 +82,10 @@ export default function EditorComponent({
   useEffect(() => {
     const backAction = async() => {
       if (route === "create") {
-        saveNote()
+        await saveNote()
         return true
       } else if (route === "edit") {
-        editNote(id,titleLength, contentLength)
+        await editNote(id,titleLength, contentLength)
         return true
       }
     }

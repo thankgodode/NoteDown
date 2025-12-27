@@ -1,7 +1,7 @@
 import DeleteModal from "@/components/DeleteModal";
 import Home from "@/components/HomeComponent";
 import InteractionProvider from "@/context/InteractionContext";
-import NoteProvider from "@/context/NotesContext";
+import NoteProvider, { useNotes } from "@/context/NotesContext";
 
 import { SideMenuProvider } from "@/context/SideMenuContext";
 import { ThemeContext, ThemeProvider } from "@/context/ThemeContext";
@@ -10,7 +10,7 @@ import { BackHandler, View } from "react-native";
 
 export default function IndexRoute() {
     const [showModal, setShowModal] = useState(false)
-    
+
     useEffect(() => {
         const backAction = () => {
             BackHandler.exitApp()

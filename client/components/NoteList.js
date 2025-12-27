@@ -16,14 +16,12 @@ import { ThemeContext } from "@/context/ThemeContext";
 
 import dayjs from "dayjs"
 import calendar from 'dayjs/plugin/calendar'
-import { useNotes } from "@/context/NotesContext";
 
 const {width} = Dimensions.get("window")
 
 
 export default function NoteList({ content, loading }) {
     const { layout } = useContext(ThemeContext)
-    const { notes } = useNotes()
     
     const {
         isPressed,
@@ -48,7 +46,7 @@ export default function NoteList({ content, loading }) {
         <SafeAreaProvider>
             <SafeAreaView>
                 <FlatList
-                    data={content && content.sort((a,b)=> b.updatedAt-a.updatedAt)}
+                    data={content}
                     keyExtractor={(item) => item.id}
                     contentContainerStyle={{
                         flexDirection:"row",
@@ -140,7 +138,7 @@ export const Items = ({ item, setIsPressed, setDefaultSelection, layout }) => {
                         <Text>
                             <View style={{flexDirection:"row",gap:10,alignItems:"center"}}>
                                 <Text style={{ textAlign:"center", color:theme.color, fontSize:layout==="large" ? 15:layout==="small"?12:layout==="list"?10:""}}>{format(item.updatedAT)}</Text>
-                                <Text>{item.favorite && <MaterialIcons name="favorite" size={24} color="#edaf11e4" />}</Text>
+                                <Text>{item.favorite==1 && <MaterialIcons name="favorite" size={24} color="#edaf11e4" />}</Text>
                             </View>
                         </Text>
                     </View>

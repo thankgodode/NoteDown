@@ -31,8 +31,6 @@ export default function SelectList({ item, defaultSelection, selected, setSelect
         return formated
     }
     
-
-
     useEffect(() => {
        setSelected([defaultSelection]) 
     },[])
@@ -81,7 +79,7 @@ export default function SelectList({ item, defaultSelection, selected, setSelect
                     <Text>
                         <View style={{flexDirection:"row",gap:10,alignItems:"center"}}>
                             <Text style={{ textAlign:"center", color:theme.color, fontSize:layout==="large" ? 15:layout==="small"?12:layout==="list"?10:""}}>{format(item.updatedAT)}</Text>
-                            <Text>{item.favorite && <MaterialIcons name="favorite" size={24} color="#edaf11e4" />}</Text>
+                            <Text>{item.favorite===1 && <MaterialIcons name="favorite" size={24} color="#edaf11e4" />}</Text>
                         </View>
                     </Text>
                 </View>
