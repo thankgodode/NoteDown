@@ -2,6 +2,8 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 import { Link, useRouter } from "expo-router";
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import Animated, { BounceIn, BounceInDown, FadeIn,SlideInLeft } from 'react-native-reanimated';
+
 import { WebView } from "react-native-webview";
 
 import SelectList from "@/components/SelectList";
@@ -119,30 +121,30 @@ export const Items = ({ item, setIsPressed, setDefaultSelection, layout }) => {
                 setDefaultSelection(item.id)
                 setIsPressed(true)
             }}>
-                <View style={styles.wrapper}>
-                    <View style={styles.fileContainer}>
-                        <WebView
-                            style={{
-                                backgroundColor: "transparent",
-                                overflowY: "hidden",
-                                overflowX: "hidden",
-                                overscrollBehavior:"none"
-                            }}
-                            source={{ html: item.content }}
-                            // scalesPageToFit={false}
-                            textZoom={layout === "list"? 50 : layout==="small" ? 80 :200}
-                        />
-                    </View>
-                    <View style={styles.detailsWrapper}>
-                        <Text style={styles.title}>{item.title.length<1?"Untitled":item.title.length>40?item.title.substr(0,40)+"...":item.title}</Text>
-                        <Text>
-                            <View style={{flexDirection:"row",gap:10,alignItems:"center"}}>
-                                <Text style={{ textAlign:"center", color:theme.color, fontSize:layout==="large" ? 15:layout==="small"?12:layout==="list"?10:""}}>{format(item.updatedAT)}</Text>
-                                <Text>{item.favorite==1 && <MaterialIcons name="favorite" size={24} color="#edaf11e4" />}</Text>
-                            </View>
-                        </Text>
-                    </View>
+            <Animated.View entering={FadeIn} style={styles.wrapper}>
+                <View style={styles.fileContainer}>
+                    <WebView
+                        style={{
+                            backgroundColor: "transparent",
+                            overflowY: "hidden",
+                            overflowX: "hidden",
+                            overscrollBehavior:"none"
+                        }}
+                        source={{ html: item.content }}
+                        // scalesPageToFit={false}
+                        textZoom={layout === "list"? 50 : layout==="small" ? 80 :200}
+                    />
                 </View>
+                <View style={styles.detailsWrapper}>
+                    <Text style={styles.title}>{item.title.length<1?"Untitled":item.title.length>40?item.title.substr(0,40)+"...":item.title}</Text>
+                    <Text>
+                        <View style={{flexDirection:"row",gap:10,alignItems:"center"}}>
+                            <Text style={{ textAlign:"center", color:theme.color, fontSize:layout==="large" ? 15:layout==="small"?12:layout==="list"?10:""}}>{format(item.updatedAT)}</Text>
+                            <Text>{item.favorite==1 && <MaterialIcons name="favorite" size={24} color="#edaf11e4" />}</Text>
+                        </View>
+                    </Text>
+                </View>
+                </Animated.View>
             </Pressable>
         </Link>
     )

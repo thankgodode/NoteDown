@@ -8,6 +8,7 @@ export default function NoteProvider({children}) {
     const [notes, setNotes] = useState([])
     const [title, setTitle] = useState("")
     const [content, setContent] = useState("<p><br></p>")
+    const [wordCount, setWordCount] = useState(0)
     const [favorite, setFavorite] = useState(false)
     const [folder, setFolder] = useState("")
     const [loading, setLoading] = useState(true)
@@ -20,7 +21,6 @@ export default function NoteProvider({children}) {
         const result = await db.getAllAsync("SELECT * FROM notes ORDER BY updatedAT DESC;")
 
         setNotes(result)
-        console.log("Fetch ", result)
         setLoading(false)
     },[])
 
@@ -120,6 +120,8 @@ export default function NoteProvider({children}) {
                 setFavorite,
                 folder,
                 setFolder,
+                wordCount,
+                setWordCount,
                 loading,
                 notes,
             }}

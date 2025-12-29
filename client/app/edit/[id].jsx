@@ -10,75 +10,12 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import NoteProvider from "@/context/NotesContext";
 
 export default function EditNote() {
-    // const [content, setContent] = useState("")
-    // const [title, setTitle] = useState("Untitled")
-    // const [favorite, setFavorite] = useState(false)
-    // const [folder, setFolder] = useState([])
     const [showModal, setShowModal] = useState(false)
     const {id} = useLocalSearchParams()
-
-    // const { id, titleLength, contentLength } = useLocalSearchParams()
-    // const db = useSQLiteContext()
-
-    // const router = useRouter()
-
-    // // const editNote = async () => {   
-    // //     const date = new Date().getTime()
-
-    // //     const mapped = data.map((el, i) => {
-    // //         if (el.id === parseInt(id) && (title.length !== parseInt(titleLength) || content.length !== parseInt(contentLength))) {
-    // //             return {
-    // //                 ...el,
-    // //                 title,
-    // //                 content,
-    // //                 favorite,
-    // //                 updatedAt: date
-    // //             }
-    // //         }
-    // //         return el
-    // //     })
-
-    // //     await writeFile(JSON.stringify(mapped))
-    // //     router.push("/")
-
-    // // }
 
     const deleteOptions = () => {
         setShowModal(!showModal)
     }
-
-    // const deleteNote = async () => {
-    //     const filtered = data.filter((el, i) => el.id !== parseInt(id))
-        
-    //     if (filtered.length < 1) {
-    //         await deleteFile()
-    //         router.push("/")
-    //         return
-    //     }
-
-    //     await writeFile(JSON.stringify(filtered))
-    //     router.push("/")
-    // }
-
-    // useEffect(() => {
-    //     async function fetchData() {
-    //         const result = await db.getAllAsync("SELECT * notes WHERE id = ?", [id])
-
-
-    //     }
-    // })
-
-    // useEffect(() => {
-    //     if (data) {
-    //         const filtered = data.find((el) => el.id === parseInt(id));
-    //         if (filtered) {
-    //             setContent(filtered.content);
-    //             setTitle(filtered.title);
-    //             setFavorite(filtered.favorite);
-    //             setFolder(filtered.folder);
-    //         }
-    //     }
-    // }, [data]);
 
     return (
         <>
@@ -88,7 +25,6 @@ export default function EditNote() {
                     setShowModal={setShowModal}
                     id={[parseInt(id)]}
                     route={"edit"}
-                    // deleteNote={deleteNote}
                 />
                 <ThemeProvider>
                     <EditorComponent

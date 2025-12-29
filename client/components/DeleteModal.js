@@ -8,7 +8,7 @@ import {
 
 export default function DeleteModal({showModal, setShowModal,id,route}) {
     const { deleteNote } = useNotes()
-    const {isPressed, setIsPressed, setSelected}  = useContext(InteractionContext)
+    const {isPressed, setIsPressed, setSelected,setIsSelectedAll}  = useContext(InteractionContext)
 
     return (
         <Modal transparent={true} animationType="slide" backdropColor="red" visible={showModal}>
@@ -24,6 +24,7 @@ export default function DeleteModal({showModal, setShowModal,id,route}) {
                         if (route === "index") {
                             setIsPressed(!isPressed)
                             setSelected([])
+                            setIsSelectedAll(false)
                         }
                     }}>
                         <Text style={[styles.deleteOptions]}>Move to Trash</Text>
