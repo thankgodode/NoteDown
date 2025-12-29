@@ -24,7 +24,7 @@ export default function NoteProvider({children}) {
         setLoading(false)
     },[])
 
-    const createNote = async () => {
+    const createNote = async (id) => {
         const plainTextContent = content
         .replace(/<[^>]+>/g, '') // remove HTML tags
         .replace(/&nbsp;/g, '')  // remove non-breaking spaces
@@ -39,6 +39,11 @@ export default function NoteProvider({children}) {
             return;
         }
 
+        const isExist = notes.find((el,i) => el.id===id)
+        console.log("Exists ", isExist)
+
+        if (isExist) return
+        
         await db.runAsync("INSERT INTO notes (title, content, favorite, updatedAt, createdAt) VALUES (?, ?, ?, ?, ?);",
             [
                 title.length < 1 ? "Untitled" : title,
@@ -51,6 +56,38 @@ export default function NoteProvider({children}) {
 
         fetchData()
         router.back()
+    }
+
+    const saveNote = async (id) => {
+        const currentNote = notes.find((el,i) => el.id===id)
+        console.log("SAVE ", currentNote)
+
+        if (currentNote) {
+            await db.runAsync("UPDATE notes SET title = ?, content = ?, favorite = ?, updatedAT = ? WHERE id = ?",
+                [
+                    title,
+                    content,
+                    favorite,
+                    new Date().toISOString(),
+                    id
+                ]
+            )
+            console.log("Update save")
+        } else {
+            console.log("Default save")
+            await db.runAsync("INSERT INTO notes (title, content, favorite, updatedAt, createdAt) VALUES (?, ?, ?, ?, ?);",
+                [
+                    title.length < 1 ? "Untitled" : title,
+                    content,
+                    favorite,
+                    new Date().toISOString(),
+                    new Date().getTime().toString()
+                ]
+            )
+        }
+
+        fetchData()
+
     }
 
     const editNote = async (id,titleLength,contentLength) => {   
@@ -108,6 +145,7 @@ export default function NoteProvider({children}) {
             value={{
                 createNote,
                 editNote,
+                saveNote,
                 deleteNote,
                 fetchData,
                 addFavorites,

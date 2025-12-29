@@ -1,9 +1,12 @@
 import { StyleSheet } from 'react-native';
 import QuillEditor, { QuillToolbar } from 'react-native-cn-quill';
 import * as ImagePicker from "expo-image-picker"
+import { useContext } from 'react';
+import {InteractionContext} from '@/context/InteractionContext';
 
 export const Editor = ({_editor, content, setContent}) => {
     const styles = createStyles()
+    const {toggleSaved, setToggleSaved} = useContext(InteractionContext)
 
     return (
       <QuillEditor
@@ -15,6 +18,7 @@ export const Editor = ({_editor, content, setContent}) => {
         ref={_editor}
         initialHtml={content}
         onHtmlChange={(text) => {
+          setToggleSaved(true)
           setContent(text.html)
         }}
       />

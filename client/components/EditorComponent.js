@@ -7,6 +7,7 @@ import { useNotes } from '@/context/NotesContext';
 import { useLocalSearchParams } from 'expo-router';
 import { Editor, Toolbar } from "./QuillComponent"
 import WordCountSaver from "@/components/WordCountSaver"
+import InteractionProvider from "@/context/InteractionContext"
 
 export default function EditorComponent({
   route
@@ -23,8 +24,10 @@ export default function EditorComponent({
     editNote,
     getById,
   } = useNotes()
+  
 
-  const [initialText,setInitialText] = useState(false)
+  const [initialText, setInitialText] = useState(false)
+  
   const { theme } = useContext(ThemeContext)
   const _editor = createRef();  
   
@@ -53,7 +56,7 @@ export default function EditorComponent({
   useEffect(() => {
     const backAction = async() => {
       if (route === "create") {
-        await saveNote()
+        await saveNote(id)
         return true
       } else if (route === "edit") {
         await editNote(id,titleLength, contentLength)
@@ -68,10 +71,11 @@ export default function EditorComponent({
 
   return (
     <>
+      <InteractionProvider>
       <View style={{...styles.root}}>
         <StatusBar backgroundColor={theme.fill}/>
         <NavEditor route={route} />
-        <WordCountSaver content={content} />
+        <WordCountSaver content={content} id={id} />
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           keyboardVerticalOffset={insets.top*0.1}
@@ -105,6 +109,7 @@ export default function EditorComponent({
           }
         </KeyboardAvoidingView>
       </View>
+      </InteractionProvider>
     </>
       
     )
