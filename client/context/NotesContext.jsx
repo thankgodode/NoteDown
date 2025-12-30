@@ -40,7 +40,6 @@ export default function NoteProvider({children}) {
         }
 
         const isExist = notes.find((el,i) => el.id===id)
-        console.log("Exists ", isExist)
 
         if (isExist) {
             router.back()
