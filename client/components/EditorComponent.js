@@ -7,7 +7,7 @@ import { useNotes } from '@/context/NotesContext';
 import { useLocalSearchParams } from 'expo-router';
 import { Editor, Toolbar } from "./QuillComponent"
 import WordCountSaver from "@/components/WordCountSaver"
-import InteractionProvider from "@/context/InteractionContext"
+import InteractionProvider, { InteractionContext } from "@/context/InteractionContext"
 
 export default function EditorComponent({
   route
@@ -24,8 +24,8 @@ export default function EditorComponent({
     editNote,
     getById,
   } = useNotes()
+  const {activeNoteId, setActiveNoteId} = useContext(InteractionContext)
   
-
   const [initialText, setInitialText] = useState(false)
   
   const { theme } = useContext(ThemeContext)
@@ -47,6 +47,7 @@ export default function EditorComponent({
         setContent(notes.content)
         setFavorite(notes.favorite)
         setInitialText(true)
+        setActiveNoteId(parseInt(id))
       }
     }
 
@@ -56,7 +57,7 @@ export default function EditorComponent({
   useEffect(() => {
     const backAction = async() => {
       if (route === "create") {
-        await saveNote(id)
+        await saveNote(activeNoteId)
         return true
       } else if (route === "edit") {
         await editNote(id,titleLength, contentLength)
@@ -71,7 +72,6 @@ export default function EditorComponent({
 
   return (
     <>
-      <InteractionProvider>
       <View style={{...styles.root}}>
         <StatusBar backgroundColor={theme.fill}/>
         <NavEditor route={route} />
@@ -109,7 +109,6 @@ export default function EditorComponent({
           }
         </KeyboardAvoidingView>
       </View>
-      </InteractionProvider>
     </>
       
     )

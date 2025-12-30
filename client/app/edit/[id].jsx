@@ -1,13 +1,13 @@
 import EditorComponent from "@/components/EditorComponent";
-import { deleteFile, readFile, writeFile } from "@/services/api";
-import useFetch from "@/services/useFetch";
+
 import { useLocalSearchParams, useRouter } from "expo-router";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import DeleteModal from "@/components/DeleteModal";
 import { ThemeProvider } from "@/context/ThemeContext";
 import NoteProvider from "@/context/NotesContext";
+import InteractionProvider from "@/context/InteractionContext"
 
 export default function EditNote() {
     const [showModal, setShowModal] = useState(false)
@@ -19,22 +19,24 @@ export default function EditNote() {
 
     return (
         <>
-            <NoteProvider>
-                <DeleteModal
-                    showModal={showModal}
-                    setShowModal={setShowModal}
-                    id={[parseInt(id)]}
-                    route={"edit"}
-                />
+            <InteractionProvider>
                 <ThemeProvider>
-                    <EditorComponent
-                        setShowModal={setShowModal}
-                        showModal={showModal}
-                        deleteNote={deleteOptions}
-                        route={"edit"}
-                    />
+                    <NoteProvider>
+                        <DeleteModal
+                            showModal={showModal}
+                            setShowModal={setShowModal}
+                            id={[parseInt(id)]}
+                            route={"edit"}
+                        />
+                            <EditorComponent
+                                setShowModal={setShowModal}
+                                showModal={showModal}
+                                deleteNote={deleteOptions}
+                                route={"edit"}
+                            />
+                    </NoteProvider>
                 </ThemeProvider>
-            </NoteProvider>
+            </InteractionProvider>
         </>
     )
 }

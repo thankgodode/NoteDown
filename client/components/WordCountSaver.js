@@ -9,7 +9,7 @@ import { useLocalSearchParams } from "expo-router";
 export default function WordCountSaver({ content }) {
 
     const {saveNote} = useNotes()
-    const { toggleSaved, setToggleSaved } = useContext(InteractionContext)
+    const { toggleSaved, setToggleSaved,activeNoteId, setActiveNoteId } = useContext(InteractionContext)
     const { id,titleLength, contentLength} = useLocalSearchParams()
     
 
@@ -32,7 +32,7 @@ export default function WordCountSaver({ content }) {
                 <Text>Word count: {text[0]==="" ? 0 :charCount}</Text>
             </View>
             <TouchableOpacity onPress={() => {
-                saveNote(id, titleLength, contentLength) 
+                saveNote(activeNoteId, setActiveNoteId),
                 setToggleSaved(false)
             }} disabled={!toggleSaved}>
                 {toggleSaved && <Feather name="check" size={24} color="grey" />}

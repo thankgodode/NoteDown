@@ -10,7 +10,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function NavEditor({route}) {
     const { theme } = useContext(ThemeContext)
     const { createNote, editNote, favorite, setFavorite, title, setTitle } = useNotes();
-    const {setToggleSaved} = useContext(InteractionContext)
+    const {activeNoteId, setToggleSaved} = useContext(InteractionContext)
 
     const { height,width} = useWindowDimensions()
     const headerHeight = Math.max(60, height*0.1)
@@ -26,11 +26,11 @@ export default function NavEditor({route}) {
                 <View style={{...styles.nav}}>
                     <TouchableOpacity onPress={async() => {
                         if (route === "create") {
-                            createNote(id)
+                            createNote(activeNoteId)
                             setToggleSaved(false)
                             return true
                         } else if (route === "edit") {
-                            editNote(id,titleLength, contentLength)
+                            editNote(activeNoteId,titleLength, contentLength)
                             setToggleSaved(false)
                             return true
                         }

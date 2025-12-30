@@ -6,7 +6,7 @@ import {InteractionContext} from '@/context/InteractionContext';
 
 export const Editor = ({_editor, content, setContent}) => {
     const styles = createStyles()
-    const {toggleSaved, setToggleSaved} = useContext(InteractionContext)
+    const {setToggleSaved} = useContext(InteractionContext)
 
     return (
       <QuillEditor

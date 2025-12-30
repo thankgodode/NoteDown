@@ -10,6 +10,7 @@ export default InteractionProvider = ({ children }) => {
     const [isSelectedAll, setIsSelectedAll] = useState(false)
     const [selectedNote, setSelectedNote] = useState([])
     const [toggleSaved, setToggleSaved] = useState(false)
+    const [activeNoteId, setActiveNoteId] = useState(null)
 
     const selectAll = (data) => {
         const arr = []
@@ -40,6 +41,8 @@ export default InteractionProvider = ({ children }) => {
                 setSelected,
                 selectedNote,
                 toggleSaved,
+                activeNoteId,
+                setActiveNoteId,
                 setToggleSaved,
                 setSelectedNote,
                 selectAll,

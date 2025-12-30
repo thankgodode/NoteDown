@@ -42,7 +42,10 @@ export default function NoteProvider({children}) {
         const isExist = notes.find((el,i) => el.id===id)
         console.log("Exists ", isExist)
 
-        if (isExist) return
+        if (isExist) {
+            router.back()
+            return
+        }
         
         await db.runAsync("INSERT INTO notes (title, content, favorite, updatedAt, createdAt) VALUES (?, ?, ?, ?, ?);",
             [
@@ -55,12 +58,13 @@ export default function NoteProvider({children}) {
         )
 
         fetchData()
+        console.log("Created...")
         router.back()
     }
 
-    const saveNote = async (id) => {
-        const currentNote = notes.find((el,i) => el.id===id)
-        console.log("SAVE ", currentNote)
+    const saveNote = async (activeNoteId,setActiveNoteId) => {
+        const currentNote = notes.find((el,i) => el.id===activeNoteId)
+        console.log("SAVE ", activeNoteId)
 
         if (currentNote) {
             await db.runAsync("UPDATE notes SET title = ?, content = ?, favorite = ?, updatedAT = ? WHERE id = ?",
@@ -69,13 +73,13 @@ export default function NoteProvider({children}) {
                     content,
                     favorite,
                     new Date().toISOString(),
-                    id
+                    activeNoteId
                 ]
             )
             console.log("Update save")
         } else {
             console.log("Default save")
-            await db.runAsync("INSERT INTO notes (title, content, favorite, updatedAt, createdAt) VALUES (?, ?, ?, ?, ?);",
+            const result = await db.runAsync("INSERT INTO notes (title, content, favorite, updatedAt, createdAt) VALUES (?, ?, ?, ?, ?);",
                 [
                     title.length < 1 ? "Untitled" : title,
                     content,
@@ -84,14 +88,15 @@ export default function NoteProvider({children}) {
                     new Date().getTime().toString()
                 ]
             )
+
+            fetchData()
+            setActiveNoteId(result.lastInsertRowId)
         }
-
-        fetchData()
-
     }
 
     const editNote = async (id,titleLength,contentLength) => {   
         if ((title.length !== parseInt(titleLength) || content.length !== parseInt(contentLength))) {
+            console.log("Edited...")
             await db.runAsync("UPDATE notes SET title = ?, content = ?, favorite = ?, updatedAT = ? WHERE id = ?",
                 [
                     title,
