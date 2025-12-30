@@ -10,7 +10,9 @@ import WordCountSaver from "@/components/WordCountSaver"
 import InteractionProvider, { InteractionContext } from "@/context/InteractionContext"
 
 export default function EditorComponent({
-  route
+  route,
+  setShowModal,
+  showModal
 }) {
 
   const {
@@ -74,7 +76,11 @@ export default function EditorComponent({
     <>
       <View style={{...styles.root}}>
         <StatusBar backgroundColor={theme.fill}/>
-        <NavEditor route={route} />
+        <NavEditor
+          route={route}
+          setShowModal={setShowModal}
+          showModal={showModal}
+        />
         <WordCountSaver content={content} id={id} />
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
