@@ -147,21 +147,17 @@ export default function NoteProvider({children}) {
 
         console.log("JSON file: ", users)
 
-        // const statement = await db.prepareAsync(
-        //     "INSERT INTO notes (title, content, favorite, updatedAt, createdAt) VALUES (?, ?, ?, ?, ?);"
-        // );
+        const statement = await db.prepareAsync(
+            "INSERT INTO notes (title, content, favorite, updatedAt, createdAt) VALUES (?, ?, ?, ?, ?);"
+        );
 
-        // for (const user of users) {
-        //     console.log("User notes ", user)
-        // }
-
-        // try {
-        //     for (const user of users) {
-        //         await statement.executeAsync([user.title, user.content,user.favorite,user.createdAt,]);
-        //     }
-        // } finally {
-        //     await statement.finalizeAsync();
-        // }
+        try {
+            for (const user of JSON.parse(users)) {
+                await statement.executeAsync([user.title, user.content,user.favorite,user.updatedAt,user.createdAt]);
+            }
+        } finally {
+            await statement.finalizeAsync();
+        }
     }
 
     useEffect(() => {
