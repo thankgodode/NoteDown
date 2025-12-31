@@ -20,6 +20,7 @@ export default function NoteProvider({children}) {
 
     const fetchData = useCallback(async() =>{
         const result = await db.getAllAsync("SELECT * FROM notes ORDER BY updatedAT DESC;")
+        console.log("RES ", result)
 
         setNotes(result)
         setLoading(false)
@@ -149,6 +150,10 @@ export default function NoteProvider({children}) {
         // const statement = await db.prepareAsync(
         //     "INSERT INTO notes (title, content, favorite, updatedAt, createdAt) VALUES (?, ?, ?, ?, ?);"
         // );
+
+        // for (const user of users) {
+        //     console.log("User notes ", user)
+        // }
 
         // try {
         //     for (const user of users) {
