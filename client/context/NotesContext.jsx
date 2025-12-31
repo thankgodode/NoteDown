@@ -1,3 +1,4 @@
+import { readFile } from "@/services/api";
 import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
@@ -140,9 +141,31 @@ export default function NoteProvider({children}) {
         fetchData()
     }
 
+    const insertPrevNotes = async () => {
+        const users = await readFile()
+
+        console.log("JSON file: ", users)
+
+        // const statement = await db.prepareAsync(
+        //     "INSERT INTO notes (title, content, favorite, updatedAt, createdAt) VALUES (?, ?, ?, ?, ?);"
+        // );
+
+        // try {
+        //     for (const user of users) {
+        //         await statement.executeAsync([user.title, user.content,user.favorite,user.createdAt,]);
+        //     }
+        // } finally {
+        //     await statement.finalizeAsync();
+        // }
+    }
+
     useEffect(() => {
         fetchData()
     }, [db]) 
+
+    useEffect(() => {
+       insertPrevNotes() 
+    },[])
 
     return (
         <NoteContext.Provider
