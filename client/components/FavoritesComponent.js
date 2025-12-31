@@ -4,35 +4,36 @@ import NoteList from "@/components/NoteList";
 import SelectAll from "@/components/SelectAll";
 import SideMenu from "@/components/SideMenu";
 import {InteractionContext} from "@/context/InteractionContext";
+import { useNotes } from "@/context/NotesContext";
 import { ThemeContext } from "@/context/ThemeContext";
-import { readFile } from '@/services/api';
-import useFetch from "@/services/useFetch";
-import { useContext, useEffect, useState } from "react";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useContext } from "react";
 import { View } from "react-native";
 
 export default function Favorites() {
     const {theme} = useContext(ThemeContext)
-    const { data,loading } = useFetch(() => readFile())
-    const [content, setContent] = useState(data)
+    const { notes,fetchData, loading } = useNotes()
     
     const {
         isPressed,
     } = useContext(InteractionContext)
 
-    useEffect(() => {
-        setContent(data)
-    }, [data]);
+    useFocusEffect(
+        useCallback(() => {
+            fetchData()
+        },[fetchData])
+    )
 
     return (
         <View style={{flex:1,backgroundColor:theme.background}}>
             {!isPressed && <NavBar title="Favorites" />}
-            {isPressed && <SelectAll content={content}/>}
-            <SideMenu data={content} />
+            {isPressed && <SelectAll content={notes}/>}
+            <SideMenu data={notes} />
             <NoteList
-                content={content ? content.filter((el, i) => el.favorite === true) : null}
+                content={notes.filter((el, i) => el.favorite === 1)}
                 loading={loading}
             />
-            {isPressed && <ActionBar content={content} setContent={setContent}/>}
+            {isPressed && <ActionBar content={notes}/>}
         </View>
     )
 }

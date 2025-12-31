@@ -7,6 +7,7 @@ import { SideMenuProvider } from "@/context/SideMenuContext";
 import InteractionProvider from "@/context/InteractionContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { useRouter } from "expo-router";
+import NoteProvider from "@/context/NotesContext";
 
 export default function FavoritesRoute() {
   const [showModal, setShowModal] = useState(false);
@@ -14,7 +15,7 @@ export default function FavoritesRoute() {
 
   useEffect(() => {
     const backAction = () => {
-      navigation.push("/")
+      navigation.back()
       return true
     }
 
@@ -26,11 +27,11 @@ export default function FavoritesRoute() {
   return (
     <ThemeProvider>
       <DeleteModal showModal={showModal} setShowModal={setShowModal} />
-        <SideMenuProvider>
-          <InteractionProvider>
-            <Favorites />
-          </InteractionProvider>
-        </SideMenuProvider>
+      <SideMenuProvider>
+        <InteractionProvider>
+          <Favorites />
+        </InteractionProvider>
+      </SideMenuProvider>
     </ThemeProvider>
   );
 }

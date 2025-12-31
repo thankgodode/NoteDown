@@ -5,7 +5,8 @@ import { WebView } from "react-native-webview";
 import { Dimensions } from "react-native";
 import {InteractionContext} from "@/context/InteractionContext";
 import { ThemeContext } from "@/context/ThemeContext";
-import { useFormatDay } from "@/services/useFormatDay";
+import dayjs from "dayjs"
+import calendar from 'dayjs/plugin/calendar'
 
 const {width} = Dimensions.get("window")
 
@@ -13,9 +14,23 @@ export default function SelectList({ item, defaultSelection, selected, setSelect
     const { isSelectedAll, setIsSelectedAll } = useContext(InteractionContext)
     const {theme} = useContext(ThemeContext)
     const styles = styleFunc(layout, theme, selected, item.id)
-    const {timeUpdate} = useFormatDay(item.updatedAt)
+    
+    const format = (date) => {
+        dayjs.extend(calendar)
 
+        const formated = dayjs(date).calendar(null, {
+            sameDay: '[Today at] h:mm A', // The same day ( Today at 2:30 AM )
+            nextDay: '[Tomorrow]', // The next day ( Tomorrow at 2:30 AM )
+            nextWeek: 'dddd', // The next week ( Sunday at 2:30 AM )
+            lastDay: '[Yesterday]', // The day before ( Yesterday at 2:30 AM )
+            lastWeek: '[Last] dddd', // Last week ( Last Monday at 2:30 AM )
+            sameElse: 'DD/MM/YYYY' // Everything else ( 7/10/2011 )
+        })
+        // console.log(formated)
 
+        return formated
+    }
+    
     useEffect(() => {
        setSelected([defaultSelection]) 
     },[])
@@ -63,8 +78,8 @@ export default function SelectList({ item, defaultSelection, selected, setSelect
                     <Text style={{width: layout==="list"?"75%":"",color:theme.noteTitle, fontWeight:"bold",fontSize:15}}>{item.title.length<1?"Untitled":item.title}</Text>
                     <Text>
                         <View style={{flexDirection:"row",gap:10,alignItems:"center"}}>
-                            <Text style={{ textAlign:"center", color:theme.color, fontSize:layout==="large" ? 15:layout==="small"?12:layout==="list"?10:""}}>{timeUpdate}</Text>
-                            <Text>{item.favorite && <MaterialIcons name="favorite" size={24} color="#edaf11e4" />}</Text>
+                            <Text style={{ textAlign:"center", color:theme.color, fontSize:layout==="large" ? 15:layout==="small"?12:layout==="list"?10:""}}>{format(item.updatedAT)}</Text>
+                            <Text>{item.favorite===1 && <MaterialIcons name="favorite" size={24} color="#edaf11e4" />}</Text>
                         </View>
                     </Text>
                 </View>

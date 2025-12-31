@@ -17,7 +17,6 @@ export default function SideMenu({data}) {
   const { visible,setVisible} = useContext(SideMenuContext)
   const {theme, toggleTheme} = useContext(ThemeContext)
   const [hide, setHide] = useState(false)
-
   
   const { height,width } = useWindowDimensions()
   const headerHeight = Math.max(70, height*0.115)
@@ -113,7 +112,7 @@ export default function SideMenu({data}) {
                 Folders
             </Text>
             <Text style={{color:theme.color }}>
-                {data ? data.filter((el, i) => el.folder.length>0).length :0}
+                {0}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -125,7 +124,7 @@ export default function SideMenu({data}) {
                 Favorites
             </Text>
             <Text style={{color:theme.color}}>
-                {data? data.filter((el, i) => el.favorite===true).length:0}
+                {data ? data.filter((el, i) => el.favorite===1).length:0}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.menusItems]} onPress={toggleTheme}>

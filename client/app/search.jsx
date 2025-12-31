@@ -4,13 +4,14 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import InteractionProvider from "@/context/InteractionContext";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
+import NoteProvider from "@/context/NotesContext";
 
 export default function Search() {
     const navigation = useRouter()
 
     useEffect(() => {
     const backAction = () => {
-        navigation.push("/")
+        navigation.back()
         return true
     }
 
@@ -20,10 +21,12 @@ export default function Search() {
     },[navigation])
 
     return (
+        <NoteProvider>
         <ThemeProvider>
             <InteractionProvider>
                 <SearchComponent/>
             </InteractionProvider>
         </ThemeProvider>
+        </NoteProvider>
     )
 }

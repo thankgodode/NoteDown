@@ -7,8 +7,9 @@ import {SaveAsOptions} from "./SaveDropDown"
 
 import {InteractionContext} from "@/context/InteractionContext";
 import { ThemeContext, ThemeProvider } from "@/context/ThemeContext";
+import { NoteContext, useNotes } from "@/context/NotesContext";
 
-export default function ActionBar({content,setContent}) {
+export default function ActionBar({content}) {
     const [showModal, setShowModal] = useState(false)
     const [isFavorite, setIsFavorite] = useState(null)
 
@@ -19,47 +20,16 @@ export default function ActionBar({content,setContent}) {
         setIsPressed,
         defaultSelection,
         setSelectedNote,
-        setIsSelectedAll
+        setIsSelectedAll,
+        setSelected
     } = useContext(InteractionContext)
-    const {theme} = useContext(ThemeContext)
+    const { theme } = useContext(ThemeContext)
+    const {addFavorites} = useNotes()
 
     const styles = createStyles(theme)
 
     const deleteOptions = () => {
         setShowModal(!showModal)
-    }
-
-    const deleteSelected = async () => {
-        const noteSelected = content.filter(el => !selected.includes(el.id))
-        
-        if (noteSelected.length<1) {
-            await deleteFile()
-            setContent(noteSelected)
-            
-            setIsPressed(false)
-            return
-        }
-
-        await writeFile(JSON.stringify(noteSelected))
-        setContent(noteSelected)
-        setIsPressed(false)
-    }
-
-    const addFavorites = async () => {
-        const toggleFavorite = content.map((el, i) => {
-            if (selected.includes(el.id)) {
-                return {
-                    ...el, favorite: !isFavorite
-                }
-            }
-
-            return el
-        })
-
-        setIsFavorite(!isFavorite)
-        setContent(toggleFavorite)
-        setIsPressed(false)
-        await writeFile(JSON.stringify(toggleFavorite))
     }
 
     useEffect(() => {
@@ -90,6 +60,7 @@ export default function ActionBar({content,setContent}) {
         const backAction = () => {
             setIsPressed(false)
             setIsSelectedAll(false)
+            setSelected([])
 
             return true
         }
@@ -101,7 +72,7 @@ export default function ActionBar({content,setContent}) {
 
     return (
         <>
-            <DeleteModal showModal={showModal} setShowModal={setShowModal} deleteNote={deleteSelected}/>
+            <DeleteModal showModal={showModal} setShowModal={setShowModal} id={selected} route={"index"} />
             <View style={styles.container}>
                 <TouchableOpacity style={styles.actionBtn} onPress={() => {
                     setIsPressed(false)
@@ -111,7 +82,11 @@ export default function ActionBar({content,setContent}) {
                     <MaterialIcons name="close" size={24} color="#abd0e5ff"/>
                     <Text style={{color:theme.color, fontSize:12}}>Escape</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.actionBtn} disabled={selected.length<1} onPress={addFavorites}>
+                <TouchableOpacity style={styles.actionBtn} disabled={selected.length < 1} onPress={() => {
+                    addFavorites(selected, !isFavorite)
+                    setIsPressed(!isPressed)
+                    setSelected([])
+                }}>
                     {isFavorite &&
                         <>
                             <MaterialIcons name="favorite" size={24} color={selected.length<1 ? "#ccc" :"#edaf11e4"} />
@@ -133,7 +108,6 @@ export default function ActionBar({content,setContent}) {
                 </TouchableOpacity>
                 <SaveAsOptions/>
             </View>
-
         </>
     )
 }

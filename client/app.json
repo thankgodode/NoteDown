@@ -9,12 +9,13 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false
     },
     "android": {
-      
       "softwareKeyboardLayoutMode": "resize",
-      "permissions":[],
+      "permissions": [
+        "com.google.android.gms.permission.AD_ID"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -39,15 +40,16 @@
           "dark": {
             "image": "./assets/images/splash-icon.png",
             "backgroundColor": "#080f1cff"
-          },
+          }
         }
       ],
       [
         "expo-image-picker",
         {
-          "photosPermission":"The app access your photos to let you insert it in your notes."
+          "photosPermission": "The app access your photos to let you insert it in your notes."
         }
-      ]
+      ],
+      "expo-sqlite"
     ],
     "experiments": {
       "typedRoutes": true

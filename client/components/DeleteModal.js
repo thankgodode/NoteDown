@@ -1,10 +1,15 @@
+import {InteractionContext} from "@/context/InteractionContext";
+import { useNotes } from "@/context/NotesContext";
+import { useContext } from "react";
 import {
     Modal, StyleSheet, Text, TouchableOpacity,
     View
 } from "react-native";
 
-export default function DeleteModal({showModal, setShowModal, deleteNote}) {
-    
+export default function DeleteModal({showModal, setShowModal,id,route}) {
+    const { deleteNote } = useNotes()
+    const {isPressed, setIsPressed, setSelected,setIsSelectedAll}  = useContext(InteractionContext)
+
     return (
         <Modal transparent={true} animationType="slide" backdropColor="red" visible={showModal}>
             <View style={styles.modalView}>
@@ -13,7 +18,15 @@ export default function DeleteModal({showModal, setShowModal, deleteNote}) {
                     <TouchableOpacity onPress={() => setShowModal(!showModal)}>
                         <Text style={[styles.deleteOptions]}>Cancel</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={deleteNote}>
+                    <TouchableOpacity onPress={() => {
+                        deleteNote(id,route)
+                        setShowModal(!showModal)
+                        if (route === "index") {
+                            setIsPressed(!isPressed)
+                            setSelected([])
+                            setIsSelectedAll(false)
+                        }
+                    }}>
                         <Text style={[styles.deleteOptions]}>Move to Trash</Text>
                     </TouchableOpacity>
                 </View>

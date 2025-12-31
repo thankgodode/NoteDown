@@ -1,3 +1,4 @@
+import { useLocalSearchParams } from "expo-router";
 import { createContext, useEffect, useState} from "react";
 
 export const InteractionContext = createContext({})
@@ -8,9 +9,12 @@ export default InteractionProvider = ({ children }) => {
     const [selected, setSelected] = useState([])
     const [isSelectedAll, setIsSelectedAll] = useState(false)
     const [selectedNote, setSelectedNote] = useState([])
+    const [toggleSaved, setToggleSaved] = useState(false)
+    const [activeNoteId, setActiveNoteId] = useState(null)
 
     const selectAll = (data) => {
         const arr = []
+        
         data.forEach((el) => {
             arr.push(el.id)
         })
@@ -36,6 +40,10 @@ export default InteractionProvider = ({ children }) => {
                 setIsSelectedAll,
                 setSelected,
                 selectedNote,
+                toggleSaved,
+                activeNoteId,
+                setActiveNoteId,
+                setToggleSaved,
                 setSelectedNote,
                 selectAll,
                 deselectAll
