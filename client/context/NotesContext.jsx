@@ -19,7 +19,7 @@ export default function NoteProvider({children}) {
 
     const fetchData = useCallback(async() =>{
         const result = await db.getAllAsync("SELECT * FROM notes ORDER BY updatedAT DESC;")
-
+        
         setNotes(result)
         setLoading(false)
     },[])
