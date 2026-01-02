@@ -22,7 +22,7 @@ export default function EditorComponent({
     setContent,
     favorite,
     setFavorite,
-    createNote: saveNote,
+    createNote,
     editNote,
     isSaved,
     getById,
@@ -65,7 +65,7 @@ export default function EditorComponent({
       }
 
       if (route === "create" && !isSaved.current) {
-        await saveNote(activeNoteId)
+        await createNote(activeNoteId)
         return true
       } else if (route === "edit") {
         await editNote(id,titleLength, contentLength)
