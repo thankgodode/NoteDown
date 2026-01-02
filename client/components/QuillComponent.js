@@ -50,13 +50,13 @@ export const Toolbar = ({ _editor, theme }) => {
     if (!result.canceled) {
       console.log("Image embedded")
 
-      if (result.assets[0].fileSize > MAX_SIZE) {
-        return Alert.alert("Image size too large",
-          `Image size must be less than 2MB.
+      // if (result.assets[0].fileSize > MAX_SIZE) {
+      //   return Alert.alert("Image size too large",
+      //     `Image size must be less than 2MB.
 
-          NOTE: Inserting too much images causes the app the malfunction.
-          `)
-      }
+      //     NOTE: Inserting too much images causes the app the malfunction.
+      //     `)
+      // }
 
       _editor.current?.insertEmbed(length.index,"image",`data:image/png;base64,${result.assets[0].base64}`)
     }   

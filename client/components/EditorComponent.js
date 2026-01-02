@@ -1,13 +1,13 @@
 import { ThemeContext } from '@/context/ThemeContext';
 import React, { createRef, useContext, useEffect, useState } from 'react';
-import { BackHandler, KeyboardAvoidingView, Platform,StatusBar, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { ActivityIndicator, BackHandler, KeyboardAvoidingView, Platform,StatusBar, StyleSheet, useWindowDimensions, View } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import NavEditor from "./NavEditor"
 import { useNotes } from '@/context/NotesContext';
 import { useLocalSearchParams } from 'expo-router';
 import { Editor, Toolbar } from "./QuillComponent"
 import WordCountSaver from "@/components/WordCountSaver"
-import { InteractionContext } from "@/context/InteractionContext"
+import InteractionProvider, { InteractionContext } from "@/context/InteractionContext"
 
 export default function EditorComponent({
   route,
@@ -26,7 +26,6 @@ export default function EditorComponent({
     editNote,
     getById,
   } = useNotes()
-  
   const {activeNoteId, setActiveNoteId} = useContext(InteractionContext)
   
   const [initialText, setInitialText] = useState(false)
@@ -73,7 +72,13 @@ export default function EditorComponent({
     return () => handler.remove()
   }, [title, favorite, content])
 
-  return (
+  return !initialText&&route==="edit" ?
+    <ActivityIndicator
+      size="large"
+      color="#0000ff"
+      style={{ alignSelf: "center", flex:1 }}
+    />
+    : (
     <>
       <View style={{...styles.root}}>
         <StatusBar backgroundColor={theme.fill}/>
@@ -88,36 +93,19 @@ export default function EditorComponent({
           keyboardVerticalOffset={insets.top*0.1}
           style={{ flex: 1 }}
         >
-          {initialText &&
-            <Editor
-              _editor={_editor}
-              content={content}
-              setContent={setContent}
-            />
-          }
-          {!initialText && 
-            <Editor
-              _editor={_editor}
-              content={content}
-              setContent={setContent}
-            />
-          }
-          {initialText &&
-            <Toolbar
-              _editor={_editor}
-              theme={theme}
-            />
-          }
-          {!initialText && 
-            <Toolbar
-              _editor={_editor}
-              theme={theme}
-            />
-          }
+          <Editor
+            _editor={_editor}
+            content={content}
+            setContent={setContent}
+          />
+        
+          <Toolbar
+            _editor={_editor}
+            theme={theme}
+          />
         </KeyboardAvoidingView>
       </View>
     </>
-      
     )
 }
 
