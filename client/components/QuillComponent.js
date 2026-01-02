@@ -26,7 +26,7 @@ export const Editor = ({_editor, content, setContent}) => {
 }
 
 export const Toolbar = ({ _editor, theme }) => {
-  const MAX_SIZE = 3 * 1024 * 1024;
+  const MAX_SIZE = 2 * 1024 * 1024;
 
   const handleInsertImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
@@ -52,8 +52,8 @@ export const Toolbar = ({ _editor, theme }) => {
 
       if (result.assets[0].fileSize > MAX_SIZE) {
         return Alert.alert("Image size too large",
-          `Image size must be less than 3MB.
-          
+          `Image size must be less than 2MB.
+
           NOTE: Inserting too much images causes the app the malfunction.
           `)
       }
