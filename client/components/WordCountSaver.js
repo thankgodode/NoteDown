@@ -26,11 +26,10 @@ export default function WordCountSaver({ content }) {
             backgroundColor: "#e0e0e0ff",
             padding: 8,
             flexDirection: "row",
+            alignItems:"center",
             justifyContent: "space-between"
         }}>
-            <View>
-                <Text>Word count: {text[0]==="" ? 0 :charCount}</Text>
-            </View>
+            <Text>Word count: {text[0]==="" ? 0 :charCount}</Text>
             <TouchableOpacity onPress={() => {
                 saveNote(activeNoteId, setActiveNoteId),
                 setToggleSaved(false)

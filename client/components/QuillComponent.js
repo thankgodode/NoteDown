@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Alert, StyleSheet } from 'react-native';
 import QuillEditor, { QuillToolbar } from 'react-native-cn-quill';
 import * as ImagePicker from "expo-image-picker"
 import { useContext } from 'react';
@@ -26,6 +26,8 @@ export const Editor = ({_editor, content, setContent}) => {
 }
 
 export const Toolbar = ({ _editor, theme }) => {
+  const MAX_SIZE = 3 * 1024 * 1024;
+
   const handleInsertImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
 
@@ -47,6 +49,15 @@ export const Toolbar = ({ _editor, theme }) => {
 
     if (!result.canceled) {
       console.log("Image embedded")
+
+      if (result.assets[0].fileSize > MAX_SIZE) {
+        return Alert.alert("Image size too large",
+          `Image size must be less than 3MB.
+          
+          NOTE: Inserting too much images causes the app the malfunction.
+          `)
+      }
+
       _editor.current?.insertEmbed(length.index,"image",`data:image/png;base64,${result.assets[0].base64}`)
     }   
   }

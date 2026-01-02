@@ -56,7 +56,7 @@ export default function NoteProvider({children}) {
             ]
         )
 
-        fetchData()
+        // fetchData()
         console.log("Created...")
         router.back()
     }
