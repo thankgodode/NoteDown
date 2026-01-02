@@ -7,7 +7,7 @@ import { useNotes } from '@/context/NotesContext';
 import { useLocalSearchParams } from 'expo-router';
 import { Editor, Toolbar } from "./QuillComponent"
 import WordCountSaver from "@/components/WordCountSaver"
-import InteractionProvider, { InteractionContext } from "@/context/InteractionContext"
+import { InteractionContext } from "@/context/InteractionContext"
 
 export default function EditorComponent({
   route,
@@ -26,6 +26,7 @@ export default function EditorComponent({
     editNote,
     getById,
   } = useNotes()
+  
   const {activeNoteId, setActiveNoteId} = useContext(InteractionContext)
   
   const [initialText, setInitialText] = useState(false)
