@@ -4,7 +4,7 @@ import { ActivityIndicator, BackHandler, KeyboardAvoidingView, Platform,StatusBa
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import NavEditor from "./NavEditor"
 import { useNotes } from '@/context/NotesContext';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { Editor, Toolbar } from "./QuillComponent"
 import WordCountSaver from "@/components/WordCountSaver"
 import InteractionProvider, { InteractionContext } from "@/context/InteractionContext"
@@ -24,6 +24,7 @@ export default function EditorComponent({
     setFavorite,
     createNote: saveNote,
     editNote,
+    isSaved,
     getById,
   } = useNotes()
   const {activeNoteId, setActiveNoteId} = useContext(InteractionContext)
@@ -58,12 +59,14 @@ export default function EditorComponent({
 
   useEffect(() => {
     const backAction = async() => {
-      if (route === "create") {
+      if (route === "create" && !isSaved.current) {
         await saveNote(activeNoteId)
         return true
       } else if (route === "edit") {
         await editNote(id,titleLength, contentLength)
         return true
+      } else {
+        router.back()
       }
     }
 
