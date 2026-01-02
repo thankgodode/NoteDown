@@ -24,7 +24,11 @@ export default function NavEditor({route,setShowModal,showModal}) {
                 backgroundColor={theme.fill}
             />
                 <View style={{...styles.nav}}>
-                    <TouchableOpacity onPress={async() => {
+                <TouchableOpacity onPress={async () => {
+                        if (route === "create" && activeNoteId) {
+                            await editNote(activeNoteId, titleLength, contentLength)
+                            return true
+                        }
                         if (route === "create") {
                             createNote(activeNoteId)
                             setToggleSaved(false)

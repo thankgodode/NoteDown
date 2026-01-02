@@ -74,7 +74,6 @@ export default function NoteProvider({children}) {
 
     const saveNote = async (activeNoteId,setActiveNoteId) => {
         const currentNote = notes.find((el,i) => el.id===activeNoteId)
-        console.log("SAVE ", activeNoteId)
 
         if (currentNote) {
             await db.runAsync("UPDATE notes SET title = ?, content = ?, favorite = ?, updatedAT = ? WHERE id = ?",
@@ -102,7 +101,6 @@ export default function NoteProvider({children}) {
                     ]
                 )
                 
-                console.log("Default save")
                 fetchData()
                 setActiveNoteId(result.lastInsertRowId)
             } catch (error) {
@@ -116,10 +114,9 @@ export default function NoteProvider({children}) {
 
     const editNote = async (id,titleLength,contentLength) => {   
         if ((title.length !== parseInt(titleLength) || content.length !== parseInt(contentLength))) {
-            console.log("Edited...")
             await db.runAsync("UPDATE notes SET title = ?, content = ?, favorite = ?, updatedAT = ? WHERE id = ?",
                 [
-                    title,
+                    title.length < 1 ? "Untitled" : title,
                     content,
                     favorite,
                     new Date().toISOString(),
@@ -134,7 +131,6 @@ export default function NoteProvider({children}) {
 
     const getById = async(id) => {
         const result = await db.getFirstAsync("SELECT * FROM notes WHERE id = ?", [parseInt(id)])
-
         return result
     }
 
@@ -144,13 +140,10 @@ export default function NoteProvider({children}) {
         if (route==="edit") {
             await db.runAsync("DELETE FROM notes WHERE id = ?;", selected)
             fetchData()
-            console.log("Delete single ", selected)
             router.back();
         }
         
-        console.log("Delete multiple ", selected)
         await db.runAsync(`DELETE FROM notes WHERE id IN  (${placeholder});`, selected)
-        
         fetchData()
     }
 

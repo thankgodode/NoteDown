@@ -58,7 +58,12 @@ export default function EditorComponent({
   },[])
 
   useEffect(() => {
-    const backAction = async() => {
+    const backAction = async () => {
+      if (route === "create" && activeNoteId) {
+        await editNote(activeNoteId, titleLength, contentLength)
+        return true
+      }
+
       if (route === "create" && !isSaved.current) {
         await saveNote(activeNoteId)
         return true
@@ -101,7 +106,6 @@ export default function EditorComponent({
             content={content}
             setContent={setContent}
           />
-        
           <Toolbar
             _editor={_editor}
             theme={theme}

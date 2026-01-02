@@ -9,9 +9,7 @@ import { useLocalSearchParams } from "expo-router";
 export default function WordCountSaver({ content }) {
 
     const {saveNote} = useNotes()
-    const { toggleSaved, setToggleSaved,activeNoteId, setActiveNoteId } = useContext(InteractionContext)
-    const { id,titleLength, contentLength} = useLocalSearchParams()
-    
+    const { toggleSaved, setToggleSaved,activeNoteId, setActiveNoteId } = useContext(InteractionContext)    
 
     const doc = parseDocument(content)
     
