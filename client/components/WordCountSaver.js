@@ -4,20 +4,43 @@ import {parseDocument, DomUtils} from "htmlparser2"
 import { useContext } from "react";
 import {InteractionContext} from "@/context/InteractionContext";
 import { useNotes } from "@/context/NotesContext";
-import { useLocalSearchParams } from "expo-router";
 
 export default function WordCountSaver({ content }) {
 
     const {saveNote} = useNotes()
     const { toggleSaved, setToggleSaved,activeNoteId, setActiveNoteId } = useContext(InteractionContext)    
 
-    const doc = parseDocument(content)
+    console.log("CONTENT ", content)
+
+    function extractTextFromHtml(html) {
+        if (!html) return [];
+
+        const document = parseDocument(html);
+        const words = [];
+
+        function traverse(node) {
+            if (node.type === 'text') {
+            // Normalize whitespace and split into words
+                const textWords = node.data
+                    .replace(/\s+/g, ' ')  // replace multiple spaces/newlines/tabs with a single space
+                    .trim()                // remove leading/trailing spaces
+                    .split(' ')
+                    .filter(Boolean);      // remove empty strings
+
+                words.push(...textWords);
+            }
+
+            // Recursively process children
+            if (node.children) {
+                node.children.forEach(traverse);
+            }
+        }
+
+        document.children.forEach(traverse);
+        return words;
+    }
     
-    const text = DomUtils.textContent(doc)
-    // .replace(/\s+/g, ' ')
-    .trim().split(" ");
-    
-    const charCount = text.length
+    const charCount = extractTextFromHtml(content).length
 
     return (
         <View style={{
@@ -27,7 +50,7 @@ export default function WordCountSaver({ content }) {
             alignItems:"center",
             justifyContent: "space-between"
         }}>
-            <Text>Word count: {text[0]==="" ? 0 :charCount}</Text>
+            <Text>Word count: {charCount}</Text>
             <TouchableOpacity onPress={() => {
                 saveNote(activeNoteId, setActiveNoteId),
                 setToggleSaved(false)
