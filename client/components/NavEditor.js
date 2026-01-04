@@ -7,7 +7,7 @@ import { useContext } from "react";
 import { StatusBar, StyleSheet, TextInput, TouchableOpacity, useWindowDimensions, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function NavEditor({route}) {
+export default function NavEditor({route,setShowModal,showModal}) {
     const { theme } = useContext(ThemeContext)
     const { createNote, editNote, favorite, setFavorite, title, setTitle } = useNotes();
     const {activeNoteId, setToggleSaved} = useContext(InteractionContext)
@@ -24,7 +24,11 @@ export default function NavEditor({route}) {
                 backgroundColor={theme.fill}
             />
                 <View style={{...styles.nav}}>
-                    <TouchableOpacity onPress={async() => {
+                <TouchableOpacity onPress={async () => {
+                        if (route === "create" && activeNoteId) {
+                            await editNote(activeNoteId, titleLength, contentLength)
+                            return true
+                        }
                         if (route === "create") {
                             createNote(activeNoteId)
                             setToggleSaved(false)

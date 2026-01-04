@@ -1,6 +1,7 @@
 import NoteProvider from "@/context/NotesContext";
 import { Stack } from "expo-router";
-import {SQLiteDatabase, SQLiteProvider} from "expo-sqlite"
+import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite"
+import * as SQLite from 'expo-sqlite';
 
 export default function RootLayout() {
     return (
@@ -27,6 +28,10 @@ export default function RootLayout() {
 async function migrateDbIfNeeded(db:SQLiteDatabase) {
   const DATABASE_VERSION = 1;
 
+  // await db.closeAsync();
+  // await SQLite.deleteDatabaseAsync('user_notes.db');
+
+
   let result = await db.getFirstAsync<{ user_version: number } | null>("PRAGMA user_version")
   let currentDbVersion = result?.user_version ?? 0;
 
@@ -47,7 +52,4 @@ async function migrateDbIfNeeded(db:SQLiteDatabase) {
   } else {
     console.log("DB version: ", currentDbVersion)
   }
-
-
-  
 }

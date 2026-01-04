@@ -6,7 +6,7 @@ import {
     View
 } from "react-native";
 
-export default function DeleteModal({showModal, setShowModal,id,route}) {
+export default function DeleteModal({showModal, setShowModal, id, route}) {
     const { deleteNote } = useNotes()
     const {isPressed, setIsPressed, setSelected,setIsSelectedAll}  = useContext(InteractionContext)
 

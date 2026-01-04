@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { createContext, createRef, useCallback, useContext, useEffect, useState } from "react";
 
 export const NoteContext = createContext({})
 
@@ -16,55 +16,64 @@ export default function NoteProvider({children}) {
     const db = useSQLiteContext()
 
     const router = useRouter()
+    const isSaving = createRef(false)
+    const isSaved= createRef(false)
 
     const fetchData = useCallback(async() =>{
         const result = await db.getAllAsync("SELECT * FROM notes ORDER BY updatedAT DESC;")
-
+        
         setNotes(result)
         setLoading(false)
     },[])
 
     const createNote = async (id) => {
-        const plainTextContent = content
-        .replace(/<[^>]+>/g, '') // remove HTML tags
-        .replace(/&nbsp;/g, '')  // remove non-breaking spaces
-        .trim();
+        if (isSaving.current) return
+        isSaving.current = true
 
-        const isTitleEmpty = title.trim() === "";
-        const isContentEmpty = plainTextContent.length < 1;
-
-        // If both are empty, skip saving
-        if (isTitleEmpty && isContentEmpty) {
+        try {
+            const plainTextContent = content
+            .replace(/<[^>]+>/g, '') // remove HTML tags
+            .replace(/&nbsp;/g, '')  // remove non-breaking spaces
+            .trim();
+    
+            const isTitleEmpty = title.trim() === "";
+            const isContentEmpty = plainTextContent.length < 1;
+    
+            // If both are empty, skip saving
+            if (isTitleEmpty && isContentEmpty) {
+                router.back()
+                return;
+            }
+    
+            const isExist = notes.find((el,i) => el.id===id)
+    
+            if (isExist) {
+                router.back()
+                return
+            }
+            
+            await db.runAsync("INSERT INTO notes (title, content, favorite, updatedAt, createdAt) VALUES (?, ?, ?, ?, ?);",
+                [
+                    title.length < 1 ? "Untitled" : title,
+                    content,
+                    favorite,
+                    new Date().toISOString(),
+                    new Date().getTime().toString()
+                ]
+            )
+    
+            // fetchData()
+            console.log("Created...")
             router.back()
-            return;
+        } catch (error) {
+            console.log(error)
+         } finally {
+            isSaving.current = false
         }
-
-        const isExist = notes.find((el,i) => el.id===id)
-        console.log("Exists ", isExist)
-
-        if (isExist) {
-            router.back()
-            return
-        }
-        
-        await db.runAsync("INSERT INTO notes (title, content, favorite, updatedAt, createdAt) VALUES (?, ?, ?, ?, ?);",
-            [
-                title.length < 1 ? "Untitled" : title,
-                content,
-                favorite,
-                new Date().toISOString(),
-                new Date().getTime().toString()
-            ]
-        )
-
-        fetchData()
-        console.log("Created...")
-        router.back()
     }
 
     const saveNote = async (activeNoteId,setActiveNoteId) => {
         const currentNote = notes.find((el,i) => el.id===activeNoteId)
-        console.log("SAVE ", activeNoteId)
 
         if (currentNote) {
             await db.runAsync("UPDATE notes SET title = ?, content = ?, favorite = ?, updatedAT = ? WHERE id = ?",
@@ -78,28 +87,36 @@ export default function NoteProvider({children}) {
             )
             console.log("Update save")
         } else {
-            console.log("Default save")
-            const result = await db.runAsync("INSERT INTO notes (title, content, favorite, updatedAt, createdAt) VALUES (?, ?, ?, ?, ?);",
-                [
-                    title.length < 1 ? "Untitled" : title,
-                    content,
-                    favorite,
-                    new Date().toISOString(),
-                    new Date().getTime().toString()
-                ]
-            )
+            if (isSaving.current) return
+            isSaving.current = true
 
-            fetchData()
-            setActiveNoteId(result.lastInsertRowId)
+            try {
+                const result = await db.runAsync("INSERT INTO notes (title, content, favorite, updatedAt, createdAt) VALUES (?, ?, ?, ?, ?);",
+                    [
+                        title.length < 1 ? "Untitled" : title,
+                        content,
+                        favorite,
+                        new Date().toISOString(),
+                        new Date().getTime().toString()
+                    ]
+                )
+                
+                fetchData()
+                setActiveNoteId(result.lastInsertRowId)
+            } catch (error) {
+                console.log(error)
+            } finally {
+                isSaving.current = false
+                isSaved.current = true
+            }
         }
     }
 
     const editNote = async (id,titleLength,contentLength) => {   
         if ((title.length !== parseInt(titleLength) || content.length !== parseInt(contentLength))) {
-            console.log("Edited...")
             await db.runAsync("UPDATE notes SET title = ?, content = ?, favorite = ?, updatedAT = ? WHERE id = ?",
                 [
-                    title,
+                    title.length < 1 ? "Untitled" : title,
                     content,
                     favorite,
                     new Date().toISOString(),
@@ -114,7 +131,6 @@ export default function NoteProvider({children}) {
 
     const getById = async(id) => {
         const result = await db.getFirstAsync("SELECT * FROM notes WHERE id = ?", [parseInt(id)])
-
         return result
     }
 
@@ -124,13 +140,10 @@ export default function NoteProvider({children}) {
         if (route==="edit") {
             await db.runAsync("DELETE FROM notes WHERE id = ?;", selected)
             fetchData()
-            console.log("Delete single ", selected)
             router.back();
         }
         
-        console.log("Delete multiple ", selected)
         await db.runAsync(`DELETE FROM notes WHERE id IN  (${placeholder});`, selected)
-        
         fetchData()
     }
 
@@ -163,6 +176,7 @@ export default function NoteProvider({children}) {
                 setFavorite,
                 folder,
                 setFolder,
+                isSaved,
                 wordCount,
                 setWordCount,
                 loading,

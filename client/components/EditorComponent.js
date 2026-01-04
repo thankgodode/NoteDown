@@ -1,16 +1,18 @@
 import { ThemeContext } from '@/context/ThemeContext';
 import React, { createRef, useContext, useEffect, useState } from 'react';
-import { BackHandler, KeyboardAvoidingView, Platform,StatusBar, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { ActivityIndicator, BackHandler, KeyboardAvoidingView, Platform,StatusBar, StyleSheet, useWindowDimensions, View } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import NavEditor from "./NavEditor"
 import { useNotes } from '@/context/NotesContext';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { Editor, Toolbar } from "./QuillComponent"
 import WordCountSaver from "@/components/WordCountSaver"
 import InteractionProvider, { InteractionContext } from "@/context/InteractionContext"
 
 export default function EditorComponent({
-  route
+  route,
+  setShowModal,
+  showModal
 }) {
 
   const {
@@ -20,8 +22,9 @@ export default function EditorComponent({
     setContent,
     favorite,
     setFavorite,
-    createNote: saveNote,
+    createNote,
     editNote,
+    isSaved,
     getById,
   } = useNotes()
   const {activeNoteId, setActiveNoteId} = useContext(InteractionContext)
@@ -55,13 +58,20 @@ export default function EditorComponent({
   },[])
 
   useEffect(() => {
-    const backAction = async() => {
-      if (route === "create") {
-        await saveNote(activeNoteId)
+    const backAction = async () => {
+      if (route === "create" && activeNoteId) {
+        await editNote(activeNoteId, titleLength, contentLength)
+        return true
+      }
+
+      if (route === "create" && !isSaved.current) {
+        await createNote(activeNoteId)
         return true
       } else if (route === "edit") {
         await editNote(id,titleLength, contentLength)
         return true
+      } else {
+        router.back()
       }
     }
 
@@ -70,47 +80,39 @@ export default function EditorComponent({
     return () => handler.remove()
   }, [title, favorite, content])
 
-  return (
+  return !initialText&&route==="edit" ?
+    <ActivityIndicator
+      size="large"
+      color="#0000ff"
+      style={{ alignSelf: "center", flex:1 }}
+    />
+    : (
     <>
       <View style={{...styles.root}}>
         <StatusBar backgroundColor={theme.fill}/>
-        <NavEditor route={route} />
+        <NavEditor
+          route={route}
+          setShowModal={setShowModal}
+          showModal={showModal}
+        />
         <WordCountSaver content={content} id={id} />
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           keyboardVerticalOffset={insets.top*0.1}
           style={{ flex: 1 }}
         >
-          {initialText &&
-            <Editor
-              _editor={_editor}
-              content={content}
-              setContent={setContent}
-            />
-          }
-          {!initialText && 
-            <Editor
-              _editor={_editor}
-              content={content}
-              setContent={setContent}
-            />
-          }
-          {initialText &&
-            <Toolbar
-              _editor={_editor}
-              theme={theme}
-            />
-          }
-          {!initialText && 
-            <Toolbar
-              _editor={_editor}
-              theme={theme}
-            />
-          }
+          <Editor
+            _editor={_editor}
+            content={content}
+            setContent={setContent}
+          />
+          <Toolbar
+            _editor={_editor}
+            theme={theme}
+          />
         </KeyboardAvoidingView>
       </View>
     </>
-      
     )
 }
 
